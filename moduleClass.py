@@ -9,9 +9,6 @@ import numpy
 import copy as py_copy
 import config
 
-ROW = config.ROW
-COL = config.COL
-
 #Key function here: measure the consensus of actions
 #This function should capture two things
 #1. How much is the expected reward (signaled by learned value, related to reward when training)
