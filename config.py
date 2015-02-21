@@ -17,10 +17,10 @@ ACTIONS = [UP,DOWN,LEFT,RIGHT]
 
 '''Reinforcement learning paramters'''
 R_PRIZE = 10
-GAMMA_PRIZE = 0.9
+GAMMA_PRIZE = 0.7
 
 R_OBS = -10 
-GAMMA_OBS = 0
+GAMMA_OBS = 0.2
 
 R_PRED = -100 
 GAMMA_PRED = 0.1
@@ -35,20 +35,20 @@ SELECT = False
 
 '''Test world'''
 #Obstacle and price probabilities
-P_OBS = 0.0
-P_PRIZE = 0.1
+P_OBS = 0.1
+P_PRIZE = 0.3
 
-NUM_PREDATOR = 1
+NUM_PREDATOR = 0
 P_CHASE = P_OBS #actually, see implementation
 P_PRED_RAND = 1 - P_CHASE
 
 #Test Maze size
-TESTR = 9
-TESTC = 9
+TESTR = 8
+TESTC = 8
 MAX_STEP = 500
 
 #test trial numbers
-MAX_TRIAL = 200
+MAX_TRIAL = 20
 DRAW = True
 MOUSE = False
 
