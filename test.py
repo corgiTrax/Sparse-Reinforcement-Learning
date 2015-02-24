@@ -4,10 +4,12 @@ from config import *
 import world
 import agent
 import reinforcement 
-
+import modularIRL
 
 class Experiment():
-    def __init__(self):
+    def __init__(self, trial, data_file):
+        self.data_file = data_file
+        self.trial = trial
         self.mouse = MOUSE 
         self.draw = DRAW
         #generate a Maze
@@ -27,9 +29,6 @@ class Experiment():
         self.stepCount = 0
         self.max_step = MAX_STEP
 
-    def store_data(self, filename):
-        pass
-
     def run(self):                
         if self.draw: 
             self.testMaze.drawSelf(True)
@@ -39,7 +38,7 @@ class Experiment():
         while (self.stepCount <= self.max_step and (self.captured == 0) and (not self.success)):
             #Module class #1: prize, calculate Q values for each of the prize object in the maze
             prizeQvalues = reinforcement.calc_Qvalues('prize', self.myAgent.pos, self.testMaze.prizes, self.testMaze)
-             
+
             #Module class #2: obstacle, calculate Q values for each of the obstacle object in the maze
             obsQvalues = reinforcement.calc_Qvalues('obstacle', self.myAgent.pos, self.testMaze.obstacles, self.testMaze)
                
@@ -57,8 +56,32 @@ class Experiment():
             action = reinforcement.softmax_act(globalQvalue)
             #print("prizes: ", testMaze.prizes)
             #print("prize Q values: ", prizeQvalues)
-            #print("Global Q values: ", globalQvalue)
-    
+            #print("Global Q values: ", globalQvalue)i
+
+            '''IRL task: data recording'''
+            if RECORDING:
+                new_instances = []
+                #prize instances
+                for prizePos in self.testMaze.prizes:
+                    xs = reinforcement.calc_dists(self.myAgent.pos, prizePos, self.testMaze)
+                    new_instance = modularIRL.observed_instance(self.trial, self.stepCount, PRIZE, action, xs)
+                    new_instances.append(new_instance)
+            
+                #obstacle instances
+                for obsPos in self.testMaze.obstacles:
+                    xs = reinforcement.calc_dists(self.myAgent.pos, obsPos, self.testMaze)
+                    new_instance = modularIRL.observed_instance(self.trial, self.stepCount, OBS, action, xs)
+                    new_instances.append(new_instance)
+
+                self.data_file.write(str(self.trial) + ',' + str(self.stepCount))
+                for instance in new_instances:
+                    self.data_file.write(',')
+                    instance.record(self.data_file)
+                    #print(instance)
+                self.data_file.write('\n')
+                del new_instances
+            '''end IRL part'''
+
             #move one step only when mouse clicks
             if self.mouse: self.testMaze.window.getMouse()
                     
@@ -71,7 +94,7 @@ class Experiment():
             self.myAgent.cum_reward += self.testMaze.calc_reward(self.myAgent.pos)
             
             if (self.captured > 0): 
-                print("Captured by predator!")
+                #print("Captured by predator!")
                 self.myAgent.cum_reward -= R_PRED #config
     
             #Visualization
@@ -82,24 +105,28 @@ class Experiment():
                     predator.drawSelf(False)
                      
             if len(self.testMaze.prizes) == 0:
-                print("Success!")
+                #print("Success!")
                 self.success = True
                 
             self.stepCount +=1
             #print("StepCount: ", stepCount)
-       
-        self.testMaze.window.close()
+
+        if self.draw: self.testMaze.window.close()
 
 #Experiment
 total_success = 0
- 
+data_file = open("empty",'w')
+data_file.write(str(R_PRIZE) + ',' + str(R_OBS) + ',' + str(GAMMA_PRIZE) + ',' + str(GAMMA_OBS) + '\n')
+
 for trial in range(MAX_TRIAL):
     print("trial #", trial)
-    experiment = Experiment()
+    experiment = Experiment(trial, data_file)
     experiment.run()
     total_success += experiment.success
 
-print("total success: ", total_success)     
+print("total success: ", total_success)
+data_file.close()
+
 #Hold graph window
 #raw_input("Press enter to exit")
 

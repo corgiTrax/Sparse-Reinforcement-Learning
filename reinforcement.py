@@ -3,6 +3,20 @@
 from config import *
 import agent
 
+def calc_dists(agentPos, objPos, maze):
+    '''for a module instance, for each action, calculate the 'x' variable in log likelihood function'''
+    dists = [] 
+    for act in ACTIONS:
+        #suppose the agent really takes the current action act
+        testAgent = agent.Agent(agentPos, maze)
+        testAgent.move(act)
+        #calc number of steps away from the object
+        dist = abs(testAgent.pos[ROW] - objPos[ROW]) + abs(testAgent.pos[COL] - objPos[COL])
+        dists.append(dist)
+        del testAgent
+
+    return dists
+
 def calc_Qvalues(moduleClass, agentPos, objList, maze):
     '''given module class, agent position and instances' positions, calculate Q values'''
     Qvalues = []

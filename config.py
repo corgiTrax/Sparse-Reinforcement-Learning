@@ -16,11 +16,11 @@ UP = 0; DOWN = 1; LEFT = 2; RIGHT = 3;
 ACTIONS = [UP,DOWN,LEFT,RIGHT]
 
 '''Reinforcement learning paramters'''
-R_PRIZE = 10
-GAMMA_PRIZE = 0.7
+R_PRIZE = 5
+GAMMA_PRIZE = 0.9
 
 R_OBS = -10 
-GAMMA_OBS = 0.2
+GAMMA_OBS = 0.1
 
 R_PRED = -100 
 GAMMA_PRED = 0.1
@@ -34,27 +34,33 @@ VOTE = False
 SELECT = False
 
 '''Test world'''
+#Index
+PRIZE = 0
+OBS = 1
+PRED = 2
+
 #Obstacle and price probabilities
 P_OBS = 0.1
-P_PRIZE = 0.3
+P_PRIZE = 0.2
 
 NUM_PREDATOR = 0
 P_CHASE = P_OBS #actually, see implementation
 P_PRED_RAND = 1 - P_CHASE
 
 #Test Maze size
-TESTR = 8
-TESTC = 8
-MAX_STEP = 500
+TESTR = 5
+TESTC = 5
+MAX_STEP = 100
 
 #test trial numbers
-MAX_TRIAL = 20
+MAX_TRIAL = 100
 DRAW = True
-MOUSE = False
+MOUSE = True
 
 #Graphic visualization
 #Maze cell size in pixel, everything else depends on this
 CELL_SIZE = 30
 
-
+'''IRL stuff'''
+RECORDING = False
 
