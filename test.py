@@ -1,3 +1,4 @@
+#! /usr/bin/python
 '''experiment file'''
 
 from config import *
@@ -113,20 +114,21 @@ class Experiment():
 
         if self.draw: self.testMaze.window.close()
 
-#Experiment
-total_success = 0
-data_file = open("empty",'w')
-data_file.write(str(R_PRIZE) + ',' + str(R_OBS) + ',' + str(GAMMA_PRIZE) + ',' + str(GAMMA_OBS) + '\n')
+if __name__ == "main":
+    #Experiment
+    total_success = 0
+    data_file = open(RECORD_FILENAME,'w')
+    data_file.write(str(R_PRIZE) + ',' + str(R_OBS) + ',' + str(GAMMA_PRIZE) + ',' + str(GAMMA_OBS) + ',' + str(ETA) + '\n')
 
-for trial in range(MAX_TRIAL):
-    print("trial #", trial)
-    experiment = Experiment(trial, data_file)
-    experiment.run()
-    total_success += experiment.success
+    for trial in range(MAX_TRIAL):
+        print("trial #", trial)
+        experiment = Experiment(trial, data_file)
+        experiment.run()
+        total_success += experiment.success
 
-print("total success: ", total_success)
-data_file.close()
+    print("total success: ", total_success)
+    data_file.close()
 
-#Hold graph window
-#raw_input("Press enter to exit")
+    #Hold graph window
+    #raw_input("Press enter to exit")
 

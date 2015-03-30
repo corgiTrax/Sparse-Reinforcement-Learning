@@ -62,7 +62,7 @@ def softmax_act(Qvalues):
 
     #map to exponential
     for i in range(num_actions):
-        weights[i] = math.exp(weights[i])
+        weights[i] = math.exp(ETA * weights[i]) #note that this is softmax with temperature parameter eta
 
     #normalize, get probability for each action
     total_weight = 0
