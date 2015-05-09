@@ -25,26 +25,26 @@ SELECT = False
 
 '''Test world'''
 #Test Maze size
-MAZE_ROW = 100
-MAZE_COL = 100
+MAZE_ROW = 10
+MAZE_COL = 10
 
 #test trial numbers
 MAX_STEP = 10000
-MAX_TRIAL = 200
-DRAW = False
+MAX_TRIAL = 1
+DRAW = True
 MOUSE = False
 
 '''Module Classes and Instances'''
-NUM_MODULE_CLASS = 5
+NUM_MODULE_CLASS = 3
 RAND_MODULE = True
-
+MAX_INST = 10
 
 '''Graphic visualization'''
 #Maze cell size in pixel, everything else depends on this
-CELL_SIZE = 30
+CELL_SIZE = 20
 
 '''IRL stuff'''
-RECORDING = True
+RECORDING = False
 RECORD_FILENAME = "sparseTest3"
 
 

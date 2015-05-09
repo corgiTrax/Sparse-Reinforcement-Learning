@@ -17,29 +17,25 @@ def calc_dists(agentPos, objPos, maze):
 
     return dists
 
-def calc_Qvalues(moduleClass, agentPos, objList, maze):
+def calc_Qvalues(moduleClass, agentPos, maze):
     '''given module class, agent position and instances' positions, calculate Q values'''
+    ''' return dimension is #instnces * #actions'''
     Qvalues = []
 
-    for objPos in objList:
-        obj_Qvalue = []
+    for inst in moduleClass.insts:
+        inst_Qvalue = []
         for act in ACTIONS:
             #suppose the agent really takes the current action act
             testAgent = agent.Agent(agentPos, maze)
             testAgent.move(act)
-
-            #calc number of steps away from the object
-            dist = abs(testAgent.pos[ROW] - objPos[ROW]) + abs(testAgent.pos[COL] - objPos[COL])
-
-            if moduleClass == 'prize': Q = R_PRIZE * (GAMMA_PRIZE**dist)
-            elif moduleClass == 'obstacle': Q = R_OBS * (GAMMA_OBS**dist)
-            elif moduleClass == 'predator': Q = R_PRED * (GAMMA_PRED**dist)
-            
-            obj_Qvalue.append(Q)
+            #calc number of steps away from the inst
+            dist = abs(testAgent.pos[ROW] - inst[ROW]) + abs(testAgent.pos[COL] - inst[COL])
+            Q = moduleClass.weight * moduleClass.unit_reward * (moduleClass.gamma ** dist)
+            inst_Qvalue.append(Q)
 
             del testAgent
 
-        Qvalues.append(obj_Qvalue)
+        Qvalues.append(inst_Qvalue)
 
     return Qvalues
 
@@ -84,4 +80,8 @@ def softmax_act(Qvalues):
             action = i
 
     return action
+
+
+if __name__ == '__main__':
+    main()
 
