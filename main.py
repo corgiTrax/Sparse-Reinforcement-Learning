@@ -23,7 +23,10 @@ class Experiment():
         # init module classes and instances
         self.moduleClass = []
         for i in range(NUM_MODULE_CLASS):
-            new_module = module.moduleClass(classID = i, world = self.testMaze,  random_gen = RAND_MODULE, max_inst = MAX_INST)
+#            new_module = module.moduleClass(classID = i, world = self.testMaze,  random_gen = RAND_GENS[i],\
+#            collectable = COLLECTABLES[i], unit_reward = UNIT_REWARDS[i], weight = WEIGHTS[i],\
+#            gamma = GAMMAS[i], num_inst = NUM_INSTS[i])
+            new_module = module.moduleClass(classID = i , world = self.testMaze, random_gen = True)
             self.moduleClass.append(new_module)            
 
     def run(self):                
