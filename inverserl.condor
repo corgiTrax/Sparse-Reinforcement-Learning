@@ -1,0 +1,8 @@
+Universe = vanilla
+Executable = /usr/local/bin/python
++Group = "grad"
+Output     = out.$(Process)
+Error      = err.$(Process)
+
+Arguments = inverseRL.py data/exp1
+Queue
