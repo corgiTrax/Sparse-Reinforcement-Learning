@@ -1,11 +1,11 @@
 '''inverse reinforcement learning algorithm'''
-from scipy.optimize import differential_evolution, minimize
+from scipy.optimize import differential_evolution, fmin_tnc, fmin_l_bfgs_b, minimize
 import random
 import numpy
 import copy as py_copy
-import graphics as cg
 import math
 import sys
+import time
 
 NUM_ACT = 4
 
@@ -75,24 +75,29 @@ class inverse_rl:
                 temp = 1
                 for inst in insts:
                     temp = temp * math.exp(inst[a]) 
-                second_term += temp
+                second_term += py_copy.deepcopy(temp)
             second_term = math.log(second_term) 
             
-            logl = logl + first_term - second_term
+            logl = logl + py_copy.deepcopy(first_term) - py_copy.deepcopy(second_term)
 
         data_file.close()
         obj = -logl
-        print("objective function constructed >>>")
+        #print("objective function constructed, one iter completed >>>")
         return obj
 
-    def diff_ev(self):
+#    def callbackF(self,Xi):
+#        print '{0:4d}   {1: 3.2f}   {2: 3.2f}   {3: 3.2f}   {4: 3.2f}   {5: 3.2f}'.format(Xi[0], Xi[1], Xi[2], Xi[3], Xi[4], Xi[5])
+
+    def optimize(self):
         # differential evolution
         # two modules the variables are x[0] = w0, x[1] = gamma0, x[2] = w1, x[3] = gamma1...
-        bounds = [(0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99)]
-        print("begin differential evolution algorithmi >>>")
-        return differential_evolution(self.construct_obj, bounds, tol = 0.05)
+        x0 = [10, 0.5, 10, 0.5, 10, 0.5, 10, 0.5, 10, 0.5, 10, 0.5]
+        bound = [(0,20), (0.0, 0.9), (0, 20), (0.0, 0.9), (0,20), (0.0, 0.9), (0, 20), (0.0, 0.9), (0,20), (0.0, 0.9), (0, 20), (0.0, 0.9)]
+        #print("begin minimization algorithm >>>")
+        #return differential_evolution(self.construct_obj, bounds)
+        return minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound)
 
 if __name__ == '__main__':
     test = inverse_rl(sys.argv[1])
-    print(test.diff_ev())
+    print(test.optimize())
  
