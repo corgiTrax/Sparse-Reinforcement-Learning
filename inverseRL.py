@@ -1,6 +1,13 @@
 '''inverse reinforcement learning algorithm'''
-from config import *
 from scipy.optimize import differential_evolution, minimize
+import random
+import numpy
+import copy as py_copy
+import graphics as cg
+import math
+import sys
+
+NUM_ACT = 4
 
 class observed_inst():
     '''observed data from agent
@@ -81,9 +88,9 @@ class inverse_rl:
     def diff_ev(self):
         # differential evolution
         # two modules the variables are x[0] = w0, x[1] = gamma0, x[2] = w1, x[3] = gamma1...
-        bounds = [(0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99)]
+        bounds = [(0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99), (0,20),(0.0, 0.99)]
         print("begin differential evolution algorithmi >>>")
-        return differential_evolution(self.construct_obj, bounds)
+        return differential_evolution(self.construct_obj, bounds, tol = 0.05)
 
 if __name__ == '__main__':
     test = inverse_rl(sys.argv[1])

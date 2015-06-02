@@ -26,17 +26,17 @@ SELECT = False
 
 '''Test world'''
 #Test Maze size
-MAZE_ROW = 20
+MAZE_ROW = 12
 MAZE_COL = MAZE_ROW
 
 #test trial numbers
-MAX_STEP = 500
+MAX_STEP = 200
 MAX_TRIAL = 10
 DRAW = False
 MOUSE = False
 
 '''Module Classes and Instances'''
-NUM_MODULE_CLASS = 10
+NUM_MODULE_CLASS = 6
 RAND_MODULE = True
 MAX_INST = 10
 
@@ -56,10 +56,18 @@ RECORDING = True
 #NUM_INSTS = [10,10]
 #RAND_GENS = [False,False]
 
-COLLECTABLES= [True,True,True,True,True,False,False,False,False,False]
-UNIT_REWARDS = [1,1,1,1,1,-1,-1,-1,-1,-1]
-WEIGHTS = [3,6,9,12,15,3,6,9,12,15]
-GAMMAS = [0.9, 0.6, 0.8, 0.7, 0.5, 0.4, 0.2, 0.1, 0.3, 0.05]
-NUM_INSTS = [10,10,10,10,10,10,10,10,10,10]
-RAND_GENS = [False,False,False,False,False,False,False,False,False,False]
+COLLECTABLES= [True,True,True,False,False,False]
+UNIT_REWARDS = [1,1,1,-1,-1,-1]
+WEIGHTS = [5,10,15,5,10,15]
+GAMMAS = [0.8, 0.6, 0.4, 0.2, 0.1, 0.05]
+NUM_INSTS = [10,10,10,10,10,10]
+RAND_GENS = [False,False,False,False,False,False]
+
+
+#COLLECTABLES= [True,True,True,True,True,False,False,False,False,False]
+#UNIT_REWARDS = [1,1,1,1,1,-1,-1,-1,-1,-1]
+#WEIGHTS = [3,6,9,12,15,3,6,9,12,15]
+#GAMMAS = [0.9, 0.6, 0.8, 0.7, 0.5, 0.4, 0.2, 0.1, 0.3, 0.05]
+#NUM_INSTS = [10,10,10,10,10,10,10,10,10,10]
+#RAND_GENS = [False,False,False,False,False,False,False,False,False,False]
 
