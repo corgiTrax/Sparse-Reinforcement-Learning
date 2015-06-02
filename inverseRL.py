@@ -3,7 +3,6 @@ from scipy.optimize import differential_evolution, minimize
 import random
 import numpy
 import copy as py_copy
-import graphics as cg
 import math
 import sys
 
