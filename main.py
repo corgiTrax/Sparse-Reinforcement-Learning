@@ -6,6 +6,7 @@ import world
 import agent
 import module
 import reinforcement 
+import inverseRL
 
 class Experiment():
     def __init__(self, data_file):
@@ -23,10 +24,10 @@ class Experiment():
         # init module classes and instances
         self.moduleClass = []
         for i in range(NUM_MODULE_CLASS):
-#            new_module = module.moduleClass(classID = i, world = self.testMaze,  random_gen = RAND_GENS[i],\
-#            collectable = COLLECTABLES[i], unit_reward = UNIT_REWARDS[i], weight = WEIGHTS[i],\
-#            gamma = GAMMAS[i], num_inst = NUM_INSTS[i])
-            new_module = module.moduleClass(classID = i , world = self.testMaze, random_gen = True)
+            new_module = module.moduleClass(classID = i, world = self.testMaze,  random_gen = RAND_GENS[i],\
+            collectable = COLLECTABLES[i], unit_reward = UNIT_REWARDS[i], weight = WEIGHTS[i],\
+            gamma = GAMMAS[i], num_inst = NUM_INSTS[i])
+#            new_module = module.moduleClass(classID = i , world = self.testMaze, random_gen = True)
             self.moduleClass.append(new_module)            
 
     def run(self):                
@@ -53,26 +54,20 @@ class Experiment():
 
             '''IRL data recording''' #TODO: write this as a single line function
             if RECORDING:
-                new_instances = []
-                #prize instances
-                for prizePos in self.testMaze.prizes:
-                    xs = reinforcement.calc_dists(self.myAgent.pos, prizePos, self.testMaze)
-                    new_instance = modularIRL.observed_instance(self.trial, self.stepCount, PRIZE, action, xs)
-                    new_instances.append(new_instance)
-            
-                #obstacle instances
-                for obsPos in self.testMaze.obstacles:
-                    xs = reinforcement.calc_dists(self.myAgent.pos, obsPos, self.testMaze)
-                    new_instance = modularIRL.observed_instance(self.trial, self.stepCount, OBS, action, xs)
-                    new_instances.append(new_instance)
+                new_insts = []
+                for module in self.moduleClass:
+                    for inst in module.insts:
+                        ds = reinforcement.calc_dists(self.myAgent.pos, inst, self.testMaze) 
+                        new_inst = inverseRL.observed_inst(self.stepCount, module.classID, module.unit_reward, action, ds)
+                        new_insts.append(new_inst)
 
-                self.data_file.write(str(self.trial) + ',' + str(self.stepCount))
-                for instance in new_instances:
-                    self.data_file.write(',')
-                    instance.record(self.data_file)
-                    #print(instance)
+#                self.data_file.write(str(self.trial) + ',' + str(self.stepCount))
+                for inst in new_insts:
+                    inst.record(self.data_file)
+                    self.data_file.write(' ')
+#                    print(inst)
                 self.data_file.write('\n')
-                del new_instances
+                del new_insts
             '''end IRL part'''
 
             # move one step only when mouse clicks
@@ -102,7 +97,7 @@ class Experiment():
 
 
 #Experiment
-data_file = open(RECORD_FILENAME,'w')
+data_file = open(sys.argv[1],'w')
 #data_file.write(str(R_PRIZE) + ',' + str(R_OBS) + ',' + str(GAMMA_PRIZE) + ',' + str(GAMMA_OBS) + ',' + str(ETA) + '\n')
 
 for trial in range(MAX_TRIAL):

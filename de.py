@@ -1,11 +1,24 @@
 from scipy.optimize import differential_evolution, minimize
 import numpy as np
+import math
 
-def funx(x):
-    return x**2 + 1
+class de:
+    def __init__(self):
+        pass
+    
+    def funx(self, x):
+        print("constrcuted")
+        return x**3
 
-bounds = [(-5,5)]
+    def solve(self):
+        bounds = [(-5,5)]
+        result = differential_evolution(self.funx, bounds)
+        print(result)
+        print(result.x)
 
-result = differential_evolution(funx, bounds)
-print(result)
-print(result.x)
+new_de = de()
+new_de.solve()
+
+print(math.exp(3))
+
+

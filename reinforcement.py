@@ -4,7 +4,7 @@ from config import *
 import agent
 
 def calc_dists(agentPos, objPos, maze):
-    '''for a module instance, for each action, calculate the 'x' variable in log likelihood function'''
+    '''for a module instance, for each action, calculate the 'd' variable in log likelihood function'''
     dists = [] 
     for act in ACTIONS:
         #suppose the agent really takes the current action act
