@@ -4,5 +4,7 @@ Executable = /usr/local/bin/python
 Output     = out.$(Process)
 Error      = err.$(Process)
 
-Arguments = inverseRL.py data/exp1
-Queue
+num_of_processes=11
+
+Arguments = inverseRL.py data/exp$(Process)
+Queue $(num_of_processes)
