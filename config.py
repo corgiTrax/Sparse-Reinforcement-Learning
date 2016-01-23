@@ -26,23 +26,23 @@ SELECT = False
 
 '''Test world'''
 #Test Maze size
-MAZE_ROW = 10
-MAZE_COL = MAZE_ROW
+MAZE_ROW = 4
+MAZE_COL = 25
 
 #test trial numbers
 MAX_STEP = 100
 MAX_TRIAL = 50
-DRAW = False
-MOUSE = False
+DRAW = True
+MOUSE = True
 
 '''Module Classes and Instances'''
-NUM_MODULE_CLASS = 10
+NUM_MODULE_CLASS = 6
 RAND_MODULE = False
 MAX_INST = 10
 
 '''Graphic visualization'''
 #Maze cell size in pixel, everything else depends on this
-CELL_SIZE = 20
+CELL_SIZE = 40
 
 '''IRL stuff'''
 RECORDING = True
@@ -63,12 +63,12 @@ RECORDING = True
 #NUM_INSTS = [8,8,8,8]
 #RAND_GENS = [False,False,False,False]
 
-#COLLECTABLES= [True,True,True,False,False,False]
-#UNIT_REWARDS = [1,1,1,-1,-1,-1]
-#WEIGHTS = [5,10,15,5,10,15]
-#GAMMAS = [0.7, 0.6, 0.5, 0.3, 0.2, 0.1]
-#NUM_INSTS = [8,8,8,8,8,8]
-#RAND_GENS = [False,False,False,False,False,False]
+COLLECTABLES= [True,True,True,False,False,False]
+UNIT_REWARDS = [1,1,1,-1,-1,-1]
+WEIGHTS = [5,10,15,5,10,15]
+GAMMAS = [0.7, 0.6, 0.5, 0.3, 0.2, 0.1]
+NUM_INSTS = [10,10,10,10,10,10]
+RAND_GENS = [False,False,False,False,False,False]
 
 
 #COLLECTABLES= [True,True,True,True,True,False,False,False,False,False]
@@ -78,10 +78,10 @@ RECORDING = True
 #NUM_INSTS = [10,10,10,10,10,10,10,10,10,10]
 #RAND_GENS = [False,False,False,False,False,False,False,False,False,False]
 
-COLLECTABLES= [True,True,True,True,True,False,False,False,False,False]
-UNIT_REWARDS = [1,1,1,1,1,-1,-1,-1,-1,-1]
-WEIGHTS = [5,0,0,0,0,15,0,0,0,0]
-GAMMAS = [0.7, 0, 0, 0, 0, 0.2, 0, 0, 0, 0]
-NUM_INSTS = [5,5,5,5,5,5,5,5,5,5]
-RAND_GENS = [False,False,False,False,False,False,False,False,False,False]
+#COLLECTABLES= [True,True,True,True,True,False,False,False,False,False]
+#UNIT_REWARDS = [1,1,1,1,1,-1,-1,-1,-1,-1]
+#WEIGHTS = [5,0,0,0,0,15,0,0,0,0]
+#GAMMAS = [0.7, 0, 0, 0, 0, 0.2, 0, 0, 0, 0]
+#NUM_INSTS = [5,5,5,5,5,5,5,5,5,5]
+#RAND_GENS = [False,False,False,False,False,False,False,False,False,False]
 
