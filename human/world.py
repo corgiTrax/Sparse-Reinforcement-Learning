@@ -2,10 +2,8 @@
 import re
 import copy as cp
 import graphics as cg
-
-ROOM_X = 8.534
-ROOM_Z = 7.315
-SIZE = 100
+import math
+from config import *
 
 class Trial:
     def __init__(self, filename):
@@ -23,7 +21,7 @@ class Trial:
             curAgent = [] 
             agentField = fields[1]
             agentX, agentZ = agentField.split(',')
-            agentX = float(agentX); agentZ = float(agentZ)
+            agentX = float(agentX) + OFF_X; agentZ = float(agentZ) + OFF_Z
             curAgent.append([agentX, agentZ])
             self.agents.append(cp.deepcopy(curAgent))
 
@@ -33,7 +31,7 @@ class Trial:
             targets = targetField.split(';')
             for i in range(len(targets) - 1): # last one is empty
                 targetX, targetZ = targets[i].split(',')
-                targetX = float(targetX); targetZ = float(targetZ)
+                targetX = float(targetX) + OFF_X; targetZ = float(targetZ) + OFF_Z
                 curTargets.append([targetX, targetZ])
             self.targets.append(cp.deepcopy(curTargets))
             # obstacles
@@ -42,7 +40,7 @@ class Trial:
             obsts = obstField.split(';')
             for i in range(len(obsts) - 1): # last one is empty
                 obstX, obstZ = obsts[i].split(',')
-                obstX = float(obstX); obstZ = float(obstZ)
+                obstX = float(obstX) + OFF_X; obstZ = float(obstZ) + OFF_Z
                 curObsts.append([obstX, obstZ])
             self.obsts.append(cp.deepcopy(curObsts))
             # paths
@@ -51,74 +49,100 @@ class Trial:
             paths = pathField.split(';')
             for i in range(len(paths) - 1): # last one is empty
                 pathX, pathZ = paths[i].split(',')
-                pathX = float(pathX); pathZ = float(pathZ)
+                pathX = float(pathX) + OFF_X; pathZ = float(pathZ) + OFF_Z
                 curPaths.append([pathX, pathZ])
             self.paths.append(cp.deepcopy(curPaths))
             # elevator
             curElev = [] 
             elevField = fields[5]
             elevX, elevZ = elevField.split(',')
-            elevX = float(elevX); elevZ = float(elevZ)
+            elevX = float(elevX) + OFF_X; elevZ = float(elevZ) + OFF_Z
             curElev.append([elevX, elevZ])
             self.elevs.append(cp.deepcopy(curElev))
         
+        self.timeSteps = len(self.targets)
         print("Read in obejcts done")
         data_file.close()
 
     def draw(self):
-        # draw the world and agent path
-        self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X * SIZE, height = ROOM_Z * SIZE)
-        time = 0
-        # draw all targets
-        for targetPos in self.targets[time]:
-            targetPos[0], targetPos[1]
-        # draw all obsts
+        '''draw the world and agent path from data'''
+        self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X * SIZE + 50, height = ROOM_Z * SIZE + 200)
+        self.window.setBackground("gray")
 
-        # draw all paths
+        # discretization
+        self.rows = int(math.ceil(ROOM_X * SIZE / CELL))
+        self.cols = int(math.ceil(ROOM_Z * SIZE / CELL))
 
-        # draw the elevator
+        if SHOW_GRID:
+            #Draw maze grid:
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    cell = cg.Rectangle(cg.Point(j * CELL, i * CELL), cg.Point((j + 1) * CELL, (i + 1) * CELL))
+                    cell.draw(self.window)
+                    cell.setOutline("black")
+            #Draw position labels
+            #Row labels
+            for i in range(self.rows):
+                label = cg.Text(cg.Point((self.cols + 1) * CELL, (i + 0.5) * CELL),str(i))
+                label.setSize(FONT_SIZE)
+                label.draw(self.window)
+            #Column labels
+            for i in range(self.cols):
+                label = cg.Text(cg.Point((i + 0.5) * CELL, (self.rows + 1) * CELL),str(i))
+                label.setSize(FONT_SIZE)
+                label.draw(self.window)
 
-        # draw agent path over time
+        for time in range(self.timeSteps):
+            # draw all targets
+            targetPics = []
+            for targetPos in self.targets[time]:
+                targetPic = cg.Circle(cg.Point(targetPos[0] * SIZE, targetPos[1] * SIZE ), OBJ_SIZE)
+                targetPic.setFill("darkblue"); targetPic.setOutline("darkblue")
+                targetPic.draw(self.window)
+                targetPics.append(targetPic)
+            # draw all obsts
+            obstPics = []
+            for obstPos in self.obsts[time]:
+                topLeftPt = cg.Point(obstPos[0] * SIZE - OBJ_SIZE, obstPos[1] * SIZE - OBJ_SIZE)
+                bottomRightPt = cg.Point(obstPos[0] * SIZE + OBJ_SIZE, obstPos[1] * SIZE + OBJ_SIZE)
+                obstPic = cg.Rectangle(topLeftPt,bottomRightPt)
+                obstPic.setFill("darkred"); obstPic.setOutline("darkred")
+                obstPic.draw(self.window)
+                obstPics.append(obstPic)
+            # draw all paths
+            for pathPos in self.paths[time]:
+                pathPic = cg.Circle(cg.Point(pathPos[0] * SIZE, pathPos[1] * SIZE), OBJ_SIZE/2)
+                pathPic.setFill("white"); pathPic.setOutline("white")
+                pathPic.draw(self.window)
+            # draw the elevator
+            for elevPos in self.elevs[time]:
+                elevPic = cg.Circle(cg.Point(elevPos[0] * SIZE, elevPos[1] * SIZE), OBJ_SIZE * 2)
+                elevPic.setFill("yellow"); elevPic.setOutline("yellow")
+                elevPic.draw(self.window)
+            # draw agent path over time
+            for agentPos in self.agents[time]:
+                agentPic = cg.Circle(cg.Point(agentPos[0] * SIZE, agentPos[1] * SIZE ), OBJ_SIZE/2)
+                agentPic.setFill("green"); agentPic.setOutline("green")
+                agentPic.draw(self.window)
+            # click to go to next step
+            self.window.getMouse()
+            for targetPic in targetPics: targetPic.undraw()
+            for obstPic in obstPics: obstPic.undraw()
+           
+    def discretize(self):
+        '''using CELL(SIZE) to discretize the data and build a new data file to be used for IRL
+        i.e., translate object continuous coordinates into cell coordinates; determine actions for the agent'''
+        self.timeSteps; 
 
 
 if __name__ == '__main__':
-    trial0 = Trial("data/subj26/26_5_1.data")
+    trial0 = Trial("data/subj26/26_40_4.data")
     trial0.draw()
 
 
 raw_input("Please press enter to exit")
 
 
-CELL_SIZE = 10
-
-class Environment:
-    def __init__(self,rows,columns):
-        self.rows = rows
-        self.columns = columns
-
-        #represent maze map as a 2D array
-        self.mazeMap = [[0 for x in range(columns)] for x in range(rows)]
-    
-    def draw(self, objInst):
-        width_ = (self.columns + 2) * CELL_SIZE
-        height_ = (self.rows + 2) * CELL_SIZE
-        #Draw maze grid:
-        self.window = cg.GraphWin(title = "Maze", width = width_, height = height_)
-        cells = []
-        for i in range(self.rows):
-            for j in range(self.columns):
-                cell = cg.Rectangle(cg.Point(j * CELL_SIZE, i * CELL_SIZE), cg.Point((j + 1) * CELL_SIZE, (i + 1) * CELL_SIZE))
-                cell.draw(self.window)
-
-        #Draw position labels
-        #Row labels
-        for i in range(self.rows):
-            label = cg.Text(cg.Point((self.columns + 0.5) * CELL_SIZE, (i + 0.5) * CELL_SIZE),str(i))
-            label.draw(self.window)
-        #Column labels
-        for i in range(self.columns):
-            label = cg.Text(cg.Point((i + 0.5) * CELL_SIZE, (self.rows + 0.5) * CELL_SIZE),str(i))
-            label.draw(self.window)
 
     
 
