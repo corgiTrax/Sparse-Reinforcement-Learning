@@ -70,8 +70,8 @@ class Trial:
         self.window.setBackground("gray")
 
         # discretization
-        self.rows = int(math.ceil(ROOM_X * SIZE / CELL))
-        self.cols = int(math.ceil(ROOM_Z * SIZE / CELL))
+        self.rows = int(math.ceil(ROOM_X / CELL))
+        self.cols = int(math.ceil(ROOM_Z / CELL))
 
         if SHOW_GRID:
             #Draw maze grid:
@@ -92,36 +92,36 @@ class Trial:
                 label.setSize(FONT_SIZE)
                 label.draw(self.window)
 
-        for time in range(self.timeSteps):
+        for time in range(1): #(self.timeSteps):
             # draw all targets
             targetPics = []
             for targetPos in self.targets[time]:
-                targetPic = cg.Circle(cg.Point(targetPos[0] * SIZE, targetPos[1] * SIZE ), OBJ_SIZE)
+                targetPic = cg.Circle(cg.Point(targetPos[0] * SIZE, targetPos[1] * SIZE ), TAR_SIZE)
                 targetPic.setFill("darkblue"); targetPic.setOutline("darkblue")
                 targetPic.draw(self.window)
                 targetPics.append(targetPic)
             # draw all obsts
             obstPics = []
             for obstPos in self.obsts[time]:
-                topLeftPt = cg.Point(obstPos[0] * SIZE - OBJ_SIZE, obstPos[1] * SIZE - OBJ_SIZE)
-                bottomRightPt = cg.Point(obstPos[0] * SIZE + OBJ_SIZE, obstPos[1] * SIZE + OBJ_SIZE)
+                topLeftPt = cg.Point(obstPos[0] * SIZE - OBS_SIZE, obstPos[1] * SIZE - OBS_SIZE)
+                bottomRightPt = cg.Point(obstPos[0] * SIZE + OBS_SIZE, obstPos[1] * SIZE + OBS_SIZE)
                 obstPic = cg.Rectangle(topLeftPt,bottomRightPt)
                 obstPic.setFill("darkred"); obstPic.setOutline("darkred")
                 obstPic.draw(self.window)
                 obstPics.append(obstPic)
             # draw all paths
             for pathPos in self.paths[time]:
-                pathPic = cg.Circle(cg.Point(pathPos[0] * SIZE, pathPos[1] * SIZE), OBJ_SIZE/2)
+                pathPic = cg.Circle(cg.Point(pathPos[0] * SIZE, pathPos[1] * SIZE), TAR_SIZE/2)
                 pathPic.setFill("white"); pathPic.setOutline("white")
                 pathPic.draw(self.window)
             # draw the elevator
             for elevPos in self.elevs[time]:
-                elevPic = cg.Circle(cg.Point(elevPos[0] * SIZE, elevPos[1] * SIZE), OBJ_SIZE * 2)
+                elevPic = cg.Circle(cg.Point(elevPos[0] * SIZE, elevPos[1] * SIZE), TAR_SIZE * 2)
                 elevPic.setFill("yellow"); elevPic.setOutline("yellow")
                 elevPic.draw(self.window)
             # draw agent path over time
             for agentPos in self.agents[time]:
-                agentPic = cg.Circle(cg.Point(agentPos[0] * SIZE, agentPos[1] * SIZE ), OBJ_SIZE/2)
+                agentPic = cg.Circle(cg.Point(agentPos[0] * SIZE, agentPos[1] * SIZE ), TAR_SIZE/2)
                 agentPic.setFill("green"); agentPic.setOutline("green")
                 agentPic.draw(self.window)
             # click to go to next step
