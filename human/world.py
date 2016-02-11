@@ -5,6 +5,7 @@ import graphics as cg
 import math
 from config import *
 import utils
+import sys
 
 class Trial:
     def __init__(self, filename):
@@ -192,11 +193,11 @@ class Trial:
         print("discretize data and write to file done")
 
 if __name__ == '__main__':
-    trial0 = Trial("data/subj26/26_32_3.data")
-    trial0.build_irl_data()
-#    trial0.draw()
+    trial0 = Trial(sys.argv[1])
+#    trial0.build_irl_data()
+    trial0.draw()
 
-raw_input("Please press enter to exit")
+# raw_input("Please press enter to exit")
 
 
            

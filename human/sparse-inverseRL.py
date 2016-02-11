@@ -6,6 +6,9 @@ import copy as cp
 import math
 import sys
 import time
+import numpy as np
+
+np.set_printoptions(precision = 3, suppress = True, linewidth = 1000, threshold = 'nan')
 
 NUM_ACT = 9
 NUM_MODULE = 4
@@ -84,8 +87,8 @@ class inverse_rl:
         # initialization
         for i in range(NUM_MODULE):
             x0.append(0)
-            x0.append(0)
-            bound.append((0, 100))
+            x0.append(0.5)
+            bound.append((0, None))
             bound.append((0.0,0.99))
         #print(x0)
         #print(bound)

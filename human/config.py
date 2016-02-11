@@ -7,9 +7,9 @@ OFF_Z = ROOM_Z/2
 TAR_SIZE = 0.1829 * SIZE
 OBS_SIZE = 0.2896 / 2 * SIZE
 AGENT_SIZE = 0.03 * SIZE
-CELL = 8 # discretize step size/state granularity
+CELL = 6 # state granularity
 FONT_SIZE = SIZE / 10 
-SHOW_GRID = True
+SHOW_GRID = False
 
 # actions
 STAY = 0; 

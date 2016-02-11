@@ -46,7 +46,7 @@ def move(agentPos, action):
 
 def conseq(agentPos, objPos, action):
     '''given action, calculate the distance to the object after taken the action'''
-    return int(round(calc_dist(move(agentPos, action), objPos)))
+    return int(round(calc_dist(move(agentPos, action), objPos) / CELL))
 
 if __name__ == '__main__':
     print(calc_bin(calc_angle([0,0], [1,1])))
