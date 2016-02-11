@@ -1,11 +1,20 @@
 # environment parameters
-SIZE = 50
+SIZE = 100 # convert meters to cm
 ROOM_X = 8.534 * SIZE
 ROOM_Z = 7.315 * SIZE
 OFF_X = ROOM_X/2
 OFF_Z = ROOM_Z/2
-TAR_SIZE = 0.2134 * SIZE
-OBS_SIZE = 0.2896 * SIZE
-CELL = 20 # discretize step size
-FONT_SIZE = 10 
-SHOW_GRID = False
+TAR_SIZE = 0.1829 * SIZE
+OBS_SIZE = 0.2896 / 2 * SIZE
+AGENT_SIZE = 0.03 * SIZE
+CELL = 8 # discretize step size/state granularity
+FONT_SIZE = SIZE / 10 
+SHOW_GRID = True
+
+# actions
+STAY = 0; 
+LEFT = 1; UPLEFT = 2; UP = 3; UPRIGHT = 4
+RIGHT = 5; DOWNRIGHT = 6; DOWN = 7; DOWNLEFT = 8
+ACTIONS = [STAY, LEFT, UPLEFT, UP, UPRIGHT, RIGHT, DOWNRIGHT, DOWN, DOWNLEFT]
+ACT_NAMES = ["STAY", "LEFT", "UPLEFT", "UP", "UPRIGHT", "RIGHT", "DOWNRIGHT", "DOWN", "DOWNLEFT"]
+
