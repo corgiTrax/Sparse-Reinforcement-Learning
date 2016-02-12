@@ -1,5 +1,5 @@
 '''sparse inverse reinforcement learning algorithm for human data fitting'''
-from scipy.optimize import fmin_tnc, fmin_l_bfgs_b, minimize
+from scipy.optimize import minimize,fmin,brute
 import random
 import numpy
 import copy as cp
@@ -85,17 +85,19 @@ class inverse_rl:
         x0 = []
         bound = []
         # initialization
-        for i in range(NUM_MODULE):
-            x0.append(0)
-            x0.append(0.5)
-            bound.append((0, None))
-            bound.append((0.0,0.99))
+        #for i in range(NUM_MODULE):
+        #    x0.append(0.5)
+        #    x0.append(0.5)
+        #    bound.append((0, 1))
+        #    bound.append((0.0,0.99))
         #print(x0)
         #print(bound)
         #print("begin minimization algorithm >>>")
         #return differential_evolution(self.construct_obj, bounds)
-        return minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound)
-
+        #return minimize(self.consturct_obj, x0, method = 'SLSQP', bounds = bound)
+        rranges = (slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1))
+        resbrute =  brute(self.construct_obj, rranges, full_output = True, finish = fmin)
+        return resbrute
 if __name__ == '__main__':
     test = inverse_rl(sys.argv[1])
     print(test.optimize())
