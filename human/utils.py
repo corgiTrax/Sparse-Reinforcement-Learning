@@ -26,27 +26,38 @@ def calc_bin(angle):
 
 def tile(pos):
     '''given the float coordinates, calculate the discrete coordinate'''
-    xd = int(pos[0] / CELL)
-    zd = int(pos[1] / CELL)
-    return xd, zd
+    if DISCRETE: return [int(pos[0] / CELL), int(pos[1] / CELL)]
+    else: return pos
 
 def move(agentPos, action):
     '''given action, calculate where agent lands'''
-    CELL2 = CELL / math.sqrt(2)
-    if action == STAY: newPos = cp.deepcopy(agentPos)
-    elif action == RIGHT: newPos = [agentPos[0] + CELL , agentPos[1]]
-    elif action == UPRIGHT: newPos = [agentPos[0] + CELL2 , agentPos[1] - CELL2]
-    elif action == UP: newPos = [agentPos[0], agentPos[1] - CELL]
-    elif action == UPLEFT: newPos = [agentPos[0] - CELL2 , agentPos[1] - CELL2]
-    elif action == LEFT: newPos = [agentPos[0] - CELL , agentPos[1]]
-    elif action == DOWNLEFT: newPos = [agentPos[0] - CELL2, agentPos[1] + CELL2]
-    elif action == DOWN: newPos = [agentPos[0], agentPos[1] + CELL]
-    elif action == DOWNRIGHT: newPos = [agentPos[0] + CELL2 , agentPos[1] + CELL2]
+    if DISCRETE:
+        CELL2 = float(CELL) / math.sqrt(2)
+        if action == STAY: newPos = cp.deepcopy(agentPos)
+        elif action == RIGHT: newPos = [agentPos[0] + CELL , agentPos[1]]
+        elif action == UPRIGHT: newPos = [agentPos[0] + CELL2 , agentPos[1] - CELL2]
+        elif action == UP: newPos = [agentPos[0], agentPos[1] - CELL]
+        elif action == UPLEFT: newPos = [agentPos[0] - CELL2 , agentPos[1] - CELL2]
+        elif action == LEFT: newPos = [agentPos[0] - CELL , agentPos[1]]
+        elif action == DOWNLEFT: newPos = [agentPos[0] - CELL2, agentPos[1] + CELL2]
+        elif action == DOWN: newPos = [agentPos[0], agentPos[1] + CELL]
+        elif action == DOWNRIGHT: newPos = [agentPos[0] + CELL2, agentPos[1] + CELL2]
+    else:
+        UNIT = 1
+        if action == STAY: newPos = cp.deepcopy(agentPos)
+        elif action == RIGHT: newPos = [agentPos[0] + UNIT , agentPos[1]]
+        elif action == UPRIGHT: newPos = [agentPos[0] + UNIT , agentPos[1] - UNIT]
+        elif action == UP: newPos = [agentPos[0], agentPos[1] - UNIT]
+        elif action == UPLEFT: newPos = [agentPos[0] - UNIT , agentPos[1] - UNIT]
+        elif action == LEFT: newPos = [agentPos[0] - UNIT , agentPos[1]]
+        elif action == DOWNLEFT: newPos = [agentPos[0] - UNIT, agentPos[1] + UNIT]
+        elif action == DOWN: newPos = [agentPos[0], agentPos[1] + UNIT]
+        elif action == DOWNRIGHT: newPos = [agentPos[0] + UNIT, agentPos[1] + UNIT]
     return newPos
 
 def conseq(agentPos, objPos, action):
     '''given action, calculate the distance to the object after taken the action'''
-    return int(round(calc_dist(move(agentPos, action), objPos) / CELL))
+    return int(round(calc_dist(move(agentPos, action), objPos)))
 
 if __name__ == '__main__':
     print(calc_bin(calc_angle([0,0], [1,1])))

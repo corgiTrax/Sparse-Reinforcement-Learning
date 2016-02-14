@@ -18,7 +18,7 @@ class inverse_rl:
         '''data format per time step, per module instance, separated by space
         module class number, unit reward(-1 or 1), action chosen, distance to this instance after taken an action'''
         self.data_file = data_file
-        self.sparse = False
+        self.sparse = True
         if self.sparse == True:
             print("sparse version")
         else:
@@ -70,13 +70,13 @@ class inverse_rl:
         
         # l1 norm on w
         if self.sparse:
-            delta = 1
+            delta = 0.01
             for i in range(NUM_MODULE): 
                 logl = logl - delta * x[i * 2]
 
         data_file.close()
         obj = -logl
-        print("objective function constructed, one optimization iter completed >>>")
+        # print("objective function constructed, one optimization iter completed >>>")
         return obj
 
     def optimize(self):
@@ -85,19 +85,25 @@ class inverse_rl:
         x0 = []
         bound = []
         # initialization
-        #for i in range(NUM_MODULE):
-        #    x0.append(0.5)
-        #    x0.append(0.5)
-        #    bound.append((0, 1))
-        #    bound.append((0.0,0.99))
+        for i in range(NUM_MODULE):
+            x0.append(0)
+            x0.append(0.5)
+            bound.append((0, None))
+            bound.append((0.0,0.99))
         #print(x0)
         #print(bound)
         #print("begin minimization algorithm >>>")
         #return differential_evolution(self.construct_obj, bounds)
-        #return minimize(self.consturct_obj, x0, method = 'SLSQP', bounds = bound)
-        rranges = (slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1))
-        resbrute =  brute(self.construct_obj, rranges, full_output = True, finish = fmin)
-        return resbrute
+        cons = [{'type':'ineq', 'fun': lambda x: x[4] - x[0]}, 
+        {'type':'ineq', 'fun': lambda x: x[4] - x[2]}, 
+        {'type':'ineq', 'fun': lambda x: x[6] - x[0]},          
+        {'type':'ineq', 'fun': lambda x: x[6] - x[2]}]
+        #{'type':'eq', 'fun': lambda x: x[0] + x[2] + x[4] + x[6] - 1}]
+        #return minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound, constraints = cons)
+        return minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound)['x']
+#        rranges = (slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1))
+#        resbrute =  brute(self.construct_obj, rranges, full_output = True, finish = fmin)
+#        return resbrute
 if __name__ == '__main__':
     test = inverse_rl(sys.argv[1])
     print(test.optimize())

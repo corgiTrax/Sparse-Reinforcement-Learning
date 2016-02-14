@@ -1,5 +1,5 @@
 # environment parameters
-SIZE = 100 # convert meters to cm
+SIZE = 100 # 10 
 ROOM_X = 8.534 * SIZE
 ROOM_Z = 7.315 * SIZE
 OFF_X = ROOM_X/2
@@ -7,9 +7,10 @@ OFF_Z = ROOM_Z/2
 TAR_SIZE = 0.1829 * SIZE
 OBS_SIZE = 0.2896 / 2 * SIZE
 AGENT_SIZE = 0.03 * SIZE
-CELL = 6 # state granularity
+CELL = 5 # state granularity
 FONT_SIZE = SIZE / 10 
 SHOW_GRID = False
+DISCRETE = False
 
 # actions
 STAY = 0; 

@@ -6,7 +6,7 @@ import math
 from config import *
 import utils
 import sys
-
+import numpy as np
 class Trial:
     def __init__(self, filename):
         '''read in all objects from data_file and their positions'''
@@ -49,6 +49,7 @@ class Trial:
                 curObsts.append([obstX, obstZ])
             self.obsts.append(cp.deepcopy(curObsts))
             # paths
+            # TBD: may need to augment more way points
             curPaths = [] # stores all target at this time step
             pathField = fields[4]
             paths = pathField.split(';')
@@ -150,17 +151,19 @@ class Trial:
         data_file = open(self.file_discrete, 'w')
         for time in range(self.timeSteps - 1): # exclude the last one which we can't compute action
             # agent
-            agentPos = self.agents[time][0]
+            agentPos = utils.tile(self.agents[time][0])
+            # discard the data where agent is too close to elevators
+            #if utils.calc_dist(agentPos, self.elevs[time][0]) < 2 * CELL \
+            #or utils.calc_dist(agentPos, self.paths[time][0]) < 2 * CELL: continue 
             # action
-            agentPosNext = self.agents[time + 1][0]
-            if abs(utils.calc_dist(agentPos, agentPosNext)) < CELL: action = STAY
-            else: action = utils.calc_bin(utils.calc_angle(agentPos, agentPosNext))
+            agentPosNext = utils.tile(self.agents[time + 1][0])
+            action = utils.calc_bin(utils.calc_angle(agentPos, agentPosNext))
             # targets
             unit_r = 1; module = 0
             for targetPos in self.targets[time]:
                 data_file.write(str(module) + ',' + str(unit_r) + ',' + str(action) + ',')
                 for count, act in enumerate(ACTIONS):
-                    data_file.write(str(utils.conseq(agentPos, targetPos, act)))
+                    data_file.write(str(utils.conseq(agentPos, utils.tile(targetPos), act)))
                     if count != len(ACTIONS) - 1: data_file.write(',')
                 data_file.write(' ')
             # obstacles
@@ -168,7 +171,7 @@ class Trial:
             for obstPos in self.obsts[time]:
                 data_file.write(str(module) + ',' + str(unit_r) + ',' + str(action) + ',')
                 for count, act in enumerate(ACTIONS):
-                    data_file.write(str(utils.conseq(agentPos, obstPos, act)))
+                    data_file.write(str(utils.conseq(agentPos, utils.tile(obstPos), act)))
                     if count != len(ACTIONS) - 1: data_file.write(',')
                 data_file.write(' ')
             # paths
@@ -176,7 +179,7 @@ class Trial:
             for pathPos in self.paths[time]:
                 data_file.write(str(module) + ',' + str(unit_r) + ',' + str(action) + ',')
                 for count, act in enumerate(ACTIONS):
-                    data_file.write(str(utils.conseq(agentPos, pathPos, act)))
+                    data_file.write(str(utils.conseq(agentPos, utils.tile(pathPos), act)))
                     if count != len(ACTIONS) - 1: data_file.write(',')
                 data_file.write(' ')
             # elevator
@@ -184,19 +187,137 @@ class Trial:
             for elevPos in self.elevs[time]:
                 data_file.write(str(module) + ',' + str(unit_r) + ',' + str(action) + ',')
                 for count, act in enumerate(ACTIONS):
-                    data_file.write(str(utils.conseq(agentPos, elevPos, act)))
+                    data_file.write(str(utils.conseq(agentPos, utils.tile(elevPos), act)))
                     if count != len(ACTIONS) - 1: data_file.write(',')
                 data_file.write(' ')
             data_file.write('\n')
         data_file.close()
         
         print("discretize data and write to file done")
+    
+    def visualize_result(self):#, sol_file_name):
+        '''given rewards and gammas estimated from sol_file, visualize the chosen action'''
+        # for each step, calculate the reward function and prediced action
+        #sol_file = open(sol_file_name, 'r')
+        
+        pred_actions = []
+        for time in range(self.timeSteps - 1): # exclude the last one which we can't compute action
+            # agent
+            agentPos = utils.tile(self.agents[time][0])
+            # discard the data where agent is too close to elevators
+            #if utils.calc_dist(agentPos, self.elevs[time][0]) < 2 * CELL \
+            #or utils.calc_dist(agentPos, self.paths[time][0]) < 2 * CELL: continue 
+            # true action
+            global_Q = np.zeros(len(ACTIONS))
+            # targets
+            unit_r = 1; module = 0
+            r = 16.635; gamma = 0.826
+            for targetPos in self.targets[time]:
+                for act in ACTIONS:
+                    global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(targetPos), act))
+            # obstacles
+            unit_r = -1; module = 1
+            r = 0; gamma = 0.5
+            for obstPos in self.obsts[time]:
+                for act in ACTIONS:
+                    global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(obstPos), act))
+            # paths
+            unit_r = 1; module = 2
+            r = 1.593; gamma = 0.887
+            for targetPos in self.targets[time]:
+                for act in ACTIONS:
+                    global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(targetPos), act))
+            # elevators
+            unit_r = 1; module = 3
+            r = 0.002; gamma = 0.5
+            for targetPos in self.targets[time]:
+                for act in ACTIONS:
+                    global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(targetPos), act))
+            pred_action = np.argmax(global_Q)
+            pred_actions.append(pred_action)
+            # print("predicted action is: "),; print(ACT_NAMES[pred_action])
+        
+        self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X + 50, height = ROOM_Z + 200)
+        self.window.setBackground("gray")
+
+        # discretization
+        self.rows = int(math.ceil(ROOM_X / CELL))
+        self.cols = int(math.ceil(ROOM_Z / CELL))
+
+        if SHOW_GRID:
+            #Draw maze grid:
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    cell = cg.Rectangle(cg.Point(j * CELL, i * CELL), cg.Point((j + 1) * CELL, (i + 1) * CELL))
+                    cell.draw(self.window)
+                    cell.setOutline("black")
+            #Draw position labels
+            #Row labels
+            for i in range(self.rows):
+                label = cg.Text(cg.Point((self.cols + 1) * CELL, (i + 0.5) * CELL),str(i))
+                label.setSize(FONT_SIZE)
+                label.draw(self.window)
+            #Column labels
+            for i in range(self.cols):
+                label = cg.Text(cg.Point((i + 0.5) * CELL, (self.rows + 1) * CELL),str(i))
+                label.setSize(FONT_SIZE)
+                label.draw(self.window)
+
+        for time in range(self.timeSteps - 1): # exclude the last one which we can't compute action
+            # draw all targets
+            targetPics = []
+            for targetPos in self.targets[time]:
+                targetPic = cg.Circle(cg.Point(targetPos[0], targetPos[1]), TAR_SIZE)
+                targetPic.setFill("darkblue"); targetPic.setOutline("darkblue")
+                targetPic.draw(self.window)
+                targetPics.append(targetPic)
+            # draw all obsts
+            obstPics = []
+            for obstPos in self.obsts[time]:
+                topLeftPt = cg.Point(obstPos[0] - OBS_SIZE, obstPos[1] - OBS_SIZE)
+                bottomRightPt = cg.Point(obstPos[0] + OBS_SIZE, obstPos[1] + OBS_SIZE)
+                obstPic = cg.Rectangle(topLeftPt,bottomRightPt)
+                obstPic.setFill("darkred"); obstPic.setOutline("darkred")
+                obstPic.draw(self.window)
+                obstPics.append(obstPic)
+            # draw all paths
+            for pathPos in self.paths[time]:
+                pathPic = cg.Circle(cg.Point(pathPos[0], pathPos[1]), TAR_SIZE/4)
+                pathPic.setFill("white"); pathPic.setOutline("white")
+                pathPic.draw(self.window)
+            # draw the elevator
+            for elevPos in self.elevs[time]:
+                elevPic = cg.Circle(cg.Point(elevPos[0], elevPos[1]), TAR_SIZE)
+                elevPic.setFill("yellow"); elevPic.setOutline("yellow")
+                elevPic.draw(self.window)
+            # draw agent path over time
+            agentPos = self.agents[time][0]
+            agentPic = cg.Circle(cg.Point(agentPos[0], agentPos[1]), AGENT_SIZE)
+            agentPic.setFill("green"); agentPic.setOutline("green")
+            agentPic.draw(self.window)
+#            agentX, agentZ = utils.tile(agentPos)
+#            print("discretized position: "),; print(agentX, agentZ)
+
+            print("predicted action is: "),; print(ACT_NAMES[pred_actions[time]])
+            # calculate agent action:
+            agentPosNext = self.agents[time + 1][0]
+            if abs(utils.calc_dist(agentPos, agentPosNext)) < CELL: action = STAY
+            else: action = utils.calc_bin(utils.calc_angle(agentPos, agentPosNext))
+            print("discreteized actual action: "),; print(ACT_NAMES[action])
+            # click to go to next step
+            self.window.getMouse()
+            for targetPic in targetPics: targetPic.undraw()
+            for obstPic in obstPics: obstPic.undraw()
+
 
 if __name__ == '__main__':
     trial0 = Trial(sys.argv[1])
-#    trial0.build_irl_data()
-    trial0.draw()
-
+    if sys.argv[2] == 'b':
+        trial0.build_irl_data()
+    elif sys.argv[2] == 'd':
+        trial0.draw()
+    elif sys.argv[2] == 'v':
+        trial0.visualize_result()
 # raw_input("Please press enter to exit")
 
 

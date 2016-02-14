@@ -1,9 +1,10 @@
 #!/bin/bash
 rm data/subj26/*.dis
-for f in data/subj26/*;
+rm data/subj26/task*
+for f in data/subj26/*.data;
 do
   echo "Processing $f file..."
-  python world.py $f 
+  python world.py $f b
 done
 for f in data/subj26/*_1.data.dis;
 do
