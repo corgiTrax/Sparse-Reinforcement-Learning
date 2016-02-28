@@ -7,22 +7,21 @@ import math
 import sys
 import time
 import numpy as np
-
+from config import *
 np.set_printoptions(precision = 3, suppress = True, linewidth = 1000, threshold = 'nan')
 
-NUM_ACT = 9
-NUM_MODULE = 4
-
 class inverse_rl:
-    def __init__(self, data_file):
+    def __init__(self, data_file, sparse):
         '''data format per time step, per module instance, separated by space
         module class number, unit reward(-1 or 1), action chosen, distance to this instance after taken an action'''
         self.data_file = data_file
-        self.sparse = True
+        if int(sparse) == 0: self.sparse = False
+        else: self.sparse = True
         if self.sparse == True:
             print("sparse version")
         else:
             print("non sparse version")
+        self.out_filename = "result/" + data_file.split('/')[-2] + '/' + ((data_file.split('/')[-1]).split('.')[0])
 
     def construct_obj(self, x):
         # construct objective function
@@ -48,7 +47,7 @@ class inverse_rl:
                 terms = []
                 # for each action:
                 for d in ds:
-                    term = x[mc_id * 2] * unit_r * (x[mc_id * 2 + 1]**d)
+                    term = x[mc_id * 2] * unit_r * ((x[mc_id * 2 + 1])**d)
                     terms.append(cp.deepcopy(term))
                 insts.append(cp.deepcopy(terms))
             
@@ -62,15 +61,17 @@ class inverse_rl:
             for a in range(NUM_ACT):
                 temp = 1
                 for inst in insts:
+                    # inst[a] = round(inst[a],4) # round this to avoid math overflow
                     temp = temp * math.exp(inst[a]) 
                 second_term += cp.deepcopy(temp)
-            second_term = math.log(second_term) 
+            if second_term != 0:
+                second_term = math.log(second_term) 
             
             logl = logl + cp.deepcopy(first_term) - cp.deepcopy(second_term)
         
         # l1 norm on w
         if self.sparse:
-            delta = 0.01
+            delta = 0.2 # sparsity bias, requires tuning
             for i in range(NUM_MODULE): 
                 logl = logl - delta * x[i * 2]
 
@@ -94,17 +95,30 @@ class inverse_rl:
         #print(bound)
         #print("begin minimization algorithm >>>")
         #return differential_evolution(self.construct_obj, bounds)
-        cons = [{'type':'ineq', 'fun': lambda x: x[4] - x[0]}, 
-        {'type':'ineq', 'fun': lambda x: x[4] - x[2]}, 
-        {'type':'ineq', 'fun': lambda x: x[6] - x[0]},          
-        {'type':'ineq', 'fun': lambda x: x[6] - x[2]}]
-        #{'type':'eq', 'fun': lambda x: x[0] + x[2] + x[4] + x[6] - 1}]
-        #return minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound, constraints = cons)
-        return minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound)['x']
+        #cons = [{'type':'ineq', 'fun': lambda x: x[4] - x[0]}, 
+        #{'type':'ineq', 'fun': lambda x: x[4] - x[2]}, 
+        #{'type':'ineq', 'fun': lambda x: x[6] - x[0]},          
+        #{'type':'ineq', 'fun': lambda x: x[6] - x[2]}]
+        #cons = [{'type':'eq', 'fun': lambda x: x[0] + x[2] + x[4] - 1}]
+        #self.result = minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound, constraints = cons)['x']
+        self.result = minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound).x # note: in python2, this should be ['x'] since it was dictionary, now it's a class
+        self.result = self.result.tolist()
+        print(self.result) 
+        #print(self.result)
 #        rranges = (slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1))
 #        resbrute =  brute(self.construct_obj, rranges, full_output = True, finish = fmin)
 #        return resbrute
+    
+    def write_result(self):
+        out_file = open(self.out_filename, 'w')
+        for result in self.result:
+            out_file.write(str(result))
+            out_file.write('\n')
+        out_file.close()
+        print("Results write to " + self.out_filename)
+
 if __name__ == '__main__':
-    test = inverse_rl(sys.argv[1])
-    print(test.optimize())
+    test = inverse_rl(sys.argv[1], sys.argv[2]) # filename; sparse or not
+    test.optimize()
+    test.write_result()
  

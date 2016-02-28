@@ -24,7 +24,8 @@ def parse(data_file):
         # get agent positions XZs
         agentX = trialData["agentX"][0][0][0] # array
         agentZ = trialData["agentZ"][0][0][0] # array
-    
+        agentAngle = trialData["agentAngle"][0][0][0]
+
         # get object positions
         targetX = trialData["targ"][0][0]["posX"][0][0][0:-1, :] # 2D array, |time step| x |target number|
         targetZ = trialData["targ"][0][0]["posZ"][0][0][0:-1, :]# 2D array
@@ -56,17 +57,23 @@ def parse(data_file):
         assert(numPath == numPath2),"path number not agreed after truncation!"
     
         # get elevator position too
-        elevX = cp.deepcopy(pathX[:, -1])
-        elevZ = cp.deepcopy(pathZ[:, -1])
+        # note that elevator positions are reversed each time
+        # for subj#26, the first elevator is at the beginning of the path
+        if trial % 2 == 1:
+            elevX = cp.deepcopy(pathX[:, -1])
+            elevZ = cp.deepcopy(pathZ[:, -1])
+        else:
+            elevX = cp.deepcopy(pathX[:, 0])
+            elevZ = cp.deepcopy(pathZ[:, 0])
 
         # write data to a text file
-        filename = str(subjNum) + "_" + str(trialNum) + "_" + str(taskNum) + ".data"
+        filename = "subj" + str(subjNum) + '/' + str(subjNum) + "_" + str(trialNum) + "_" + str(taskNum) + ".data"
         output_file = open(filename, 'w')
         # build time series data
         for t in range(numStep):
             output_file.write(str(t) + '#')
             # agent
-            output_file.write(str(round(agentX[t],ACC)) + ',' + str(round(agentZ[t],ACC)) + '#')
+            output_file.write(str(round(agentX[t],ACC)) + ',' + str(round(agentZ[t],ACC)) + ',' + str(round(agentAngle[t],ACC)) + '#')
             # targets
             for i in range(numTar):
                 if not(targetX[t][i] == -100):
