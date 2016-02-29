@@ -6,21 +6,28 @@ from os.path import isfile,join
 
 # get all .data files from subject data
 direct = sys.argv[1]
+EVAL = sys.argv[2]
 files = [f for f in listdir(direct)]
 dataFiles = []
 for f in files:
-    if f.find(".data") != -1 and f.find(".dis") == -1 and f.find(".fit") == -1:
+    if f.find(".data") != -1 and f.find(".dis") == -1:
         dataFiles.append(direct + f)
+#print(dataFiles)
 
 errs = [[],[],[],[]]
 for dataf in dataFiles:
     newTrial = world.Trial(dataf)
-    print("Current data file: " + dataf)
+    print("Current file: " + dataf)
     task = int(dataf[-6]) # 1,2,3,4
-    irlFile = (dataf.replace("data", "result", 1)).split('.')[0]
-    print("Using irl result file: " + irlFile)
-    err = newTrial.visualize_result(irlFile)
-    errs[task-1].append(err)
+    if task != 5: #True:
+        if EVAL == "o": # use own irl file
+            irlFile = (dataf.replace("data", "result", 1)).split('.')[0]
+            print(irlFile,dataf)
+            err = newTrial.visualize_result(irlFile)
+        elif EVAL == "a": # use aggregated irl file
+            irlFile = direct.replace("data", "result", 1) + "task" + str(task)
+            err = newTrial.visualize_result(irlFile)
+        errs[task-1].append(err)
 
 mean_errs = []
 for task, taskErr in enumerate(errs):

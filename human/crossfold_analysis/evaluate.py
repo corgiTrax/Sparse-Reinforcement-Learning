@@ -9,7 +9,7 @@ direct = sys.argv[1]
 files = [f for f in listdir(direct)]
 dataFiles = []
 for f in files:
-    if f.find(".data") != -1 and f.find(".dis") == -1 and f.find(".fit") == -1:
+    if f.find(".data") != -1 and f.find(".dis") == -1:
         dataFiles.append(direct + f)
 
 errs = [[],[],[],[]]

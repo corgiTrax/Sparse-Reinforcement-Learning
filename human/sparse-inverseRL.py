@@ -21,8 +21,9 @@ class inverse_rl:
             print("sparse version")
         else:
             print("non sparse version")
-        self.out_filename = "result/" + data_file.split('/')[-2] + '/' + ((data_file.split('/')[-1]).split('.')[0])
-
+        # output file is in result/subj#/, the file name without ".fit"
+        self.out_filename = "../result/" + data_file.split('/')[-2] + '/' + ((data_file.split('/')[-1]).split('.')[0])
+    
     def construct_obj(self, x):
         # construct objective function
         data_file = open(self.data_file,'r')

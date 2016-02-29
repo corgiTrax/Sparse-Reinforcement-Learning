@@ -18,7 +18,7 @@ CELL = int(SIZE * 0.6) # state granularity
 PATH_SIZE = 0 * SIZE # for IRL landing distance, if gets into this range, the distance is 0.
 VIS_CONE = 58 # degrees; visual cone range on one side
 VIS_DIST = 10 * SIZE # visual cone radius
-#0.5, 0.1, 55, 4
+#0.6, 0, 58, 10
 
 VIS = False; MOUSE = VIS # visualize or not
 # actions

@@ -182,7 +182,7 @@ class Trial:
             data_file.write('\n')
         data_file.close()
         
-        print("process data and write to file done")
+        print("process data and write to file done: " + self.file_continuous)
     
     def visualize_result(self, sol_file_name):
         '''given rewards and gammas estimated from sol_file, visualize the chosen action'''
@@ -282,7 +282,7 @@ class Trial:
                 agentPic.draw(self.window)
 
                 # visualize agent angle
-                land = utils.facing(agentPos, agentAngle, 0.12 * SIZE)
+                land = utils.facing(agentPos, agentAngle, 0.15 * SIZE)
                 # print(land[0] - agentPos[0], land[1] - agentPos[1])
                 anglePic = cg.Line(cg.Point(agentPos[0] * FACTOR, agentPos[1] * FACTOR), cg.Point(land[0] * FACTOR, land[1] * FACTOR))
                 anglePic.setFill("black"); anglePic.setArrow("last"); anglePic.setWidth(5)
@@ -291,6 +291,8 @@ class Trial:
                 # visualize predicted action
                 print("predicted action is: "),; print(ACT_NAMES[pred_action])
                 land = utils.move(agentPos, pred_action)
+                # dont draw the acutal landing position, since CELL is large
+                land = [(land[0] + agentPos[0]) / 2, (land[1] + agentPos[1]) / 2]
                 predActPic = cg.Line(cg.Point(agentPos[0] * FACTOR, agentPos[1] * FACTOR), cg.Point(land[0] * FACTOR, land[1] * FACTOR))
                 predActPic.setFill("red"); predActPic.setArrow("last"); predActPic.setWidth(2)
                 predActPic.draw(self.window)
@@ -298,6 +300,7 @@ class Trial:
                 # visualize agent action:
                 print("discreteized actual action: "),; print(ACT_NAMES[action])
                 land = utils.move(agentPos, action)
+                land = [(land[0] + agentPos[0]) / 2, (land[1] + agentPos[1]) / 2]
                 actualActPic = cg.Line(cg.Point(agentPos[0] * FACTOR, agentPos[1] * FACTOR), cg.Point(land[0] * FACTOR, land[1] * FACTOR)) # could also use actual next position
                 actualActPic.setFill("green"); actualActPic.setArrow("last"); actualActPic.setWidth(2)
                 actualActPic.draw(self.window)
