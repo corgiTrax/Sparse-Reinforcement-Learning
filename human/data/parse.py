@@ -2,6 +2,7 @@ import scipy.io as sio
 import matplotlib.pyplot as plt  
 import numpy as np 
 import copy as cp
+import sys
 np.set_printoptions(precision = 3, suppress = True, linewidth = 1000, threshold = 'nan')
 ACC = 3 # rounding accuracy, 1mm
 
@@ -17,8 +18,9 @@ def parse(data_file):
     maxTrial = 32 # 32 trials
     for trial in range(0, maxTrial):
         trialData = pRes[0][trial]
-        
+     
         trialNum = trialData["trialNum"][0,0][0,0] # trial #
+        print("parsing trial: " + str(trialNum))
         taskNum = trialData["taskNum"][0,0][0,0] # task #, indicating which modules are running
     
         # get agent positions XZs
@@ -93,4 +95,4 @@ def parse(data_file):
             output_file.write('\n') 
         output_file.close()
 
-parse("subj26parsed.mat")
+parse(sys.argv[1])

@@ -16,7 +16,8 @@ class Trial:
         ''' positions are translated to the new coordinate system by adding OFF_X and OFF_Z, 
         where (0,0) is at upperleft corner instead of at the center; coordinates are translated by * SIZE as well'''
         self.agents = []; self.agentAngles = []; self.targets = []; self.obsts = []; self.paths = []; self.elevs = []
-     
+        self.allTargets = []; self.allObsts = []; self.allElevs = []
+
         data_file = open(filename,'r')
         self.file_continuous = filename
         for lineNum, line in enumerate(data_file): # each line is a time step
@@ -33,38 +34,46 @@ class Trial:
             self.agentAngles.append(agentAngle)
 
             # targets
-            curTargets = [] # stores all target at this time step
+            curAllTargets = []
+            curTargets = [] # stores all target visible at this time step
             targetField = fields[2]
             targets = targetField.split(';')
             for i in range(len(targets) - 1): # last one is empty
                 targetX, targetZ = targets[i].split(',')
                 targetX = float(targetX) * SIZE + OFF_X; targetZ = float(targetZ) * SIZE + OFF_Z
+                curAllTargets.append([targetX, targetZ])
                 if utils.in_vcone(agentPos, agentAngle, [targetX, targetZ]):
                     curTargets.append([targetX, targetZ])
+            self.allTargets.append(cp.deepcopy(curAllTargets))    
             self.targets.append(cp.deepcopy(curTargets))
             # obstacles
-            curObsts = [] # stores all obst at this time step
+            curAllObsts = []
+            curObsts = [] # stores all obst visible at this time step
             obstField = fields[3]
             obsts = obstField.split(';')
             for i in range(len(obsts) - 1): # last one is empty
                 obstX, obstZ = obsts[i].split(',')
                 obstX = float(obstX) * SIZE + OFF_X; obstZ = float(obstZ) * SIZE + OFF_Z
+                curAllObsts.append([obstX, obstZ])
                 if utils.in_vcone(agentPos, agentAngle, [obstX, obstZ]):
                     curObsts.append([obstX, obstZ])
+            self.allObsts.append(cp.deepcopy(curAllObsts))
             self.obsts.append(cp.deepcopy(curObsts))
             # elevator
-            curElev = [] 
+            curAllElevs = []
+            curElevs = [] 
             elevField = fields[5]
             elevX, elevZ = elevField.split(',')
             elevX = float(elevX) * SIZE + OFF_X; elevZ = float(elevZ) * SIZE + OFF_Z
+            curAllElevs.append([elevX, elevZ])
             if utils.in_vcone(agentPos, agentAngle, [elevX, elevZ]):
-                curElev.append([elevX, elevZ])
-            self.elevs.append(cp.deepcopy(curElev))
+                curElevs.append([elevX, elevZ])
+            self.elevs.append(cp.deepcopy(curElevs))
+            self.allElevs.append(cp.deepcopy(curAllElevs))
 
             # paths
-            # TODO: may need to augment more way points
             if lineNum == 0:
-                self.allPaths = [] # stores all paths at the beginning
+                self.allPaths = [] # stores all paths at the beginning since they can't be removed
                 pathField = fields[4]
                 paths = pathField.split(';')
                 for i in range(len(paths) - 1): # last one is empty
@@ -78,7 +87,6 @@ class Trial:
             self.paths.append(cp.deepcopy(curPaths)) 
         
         self.timeSteps = len(self.targets)
-#        print("Read in obejcts done")
         data_file.close()
 
     def draw(self):
@@ -246,34 +254,43 @@ class Trial:
             if VIS:
                 # draw all targets
                 targetPics = []
-                for targetPos in self.targets[time]:
+                for targetPos in self.allTargets[time]:
                     targetPic = cg.Circle(cg.Point(targetPos[0] * FACTOR, targetPos[1] * FACTOR), TAR_SIZE * FACTOR)
-                    targetPic.setFill("darkblue"); targetPic.setOutline("darkblue")
+                    if targetPos in self.targets[time]:
+                        targetPic.setFill("darkblue"); targetPic.setOutline("darkblue")
+                    else:
+                        targetPic.setFill("darkgray"); targetPic.setOutline("black")
                     targetPic.draw(self.window)
                     targetPics.append(targetPic)
                 # draw all obsts
                 obstPics = []
-                for obstPos in self.obsts[time]:
+                for obstPos in self.allObsts[time]:
                     topLeftPt = cg.Point(obstPos[0] * FACTOR - OBS_SIZE * FACTOR, obstPos[1] * FACTOR - OBS_SIZE * FACTOR)
                     bottomRightPt = cg.Point(obstPos[0] * FACTOR + OBS_SIZE * FACTOR, obstPos[1] * FACTOR + OBS_SIZE * FACTOR)
                     obstPic = cg.Rectangle(topLeftPt,bottomRightPt)
-                    obstPic.setFill("darkred"); obstPic.setOutline("darkred")
+                    if obstPos in self.obsts[time]:
+                        obstPic.setFill("darkred"); obstPic.setOutline("darkred")
+                    else:
+                        obstPic.setFill("darkgray"); obstPic.setOutline("black")
                     obstPic.draw(self.window)
                     obstPics.append(obstPic)
                 # draw all paths
                 pathPics = []
-                for pathPos in self.paths[time]:
+                for pathPos in self.allPaths:
                     pathPic = cg.Circle(cg.Point(pathPos[0] * FACTOR, pathPos[1] * FACTOR), TAR_SIZE/4 * FACTOR)
-                    #if utils.in_vcone(agentPos, agentAngle, pathPos):
-                    pathPic.setFill("white"); pathPic.setOutline("white")
-                    #else:
-                    #    pathPic.setFill("black"); pathPic.setOutline("black")
+                    if pathPos in self.paths[time]:
+                        pathPic.setFill("white"); pathPic.setOutline("white")
+                    else:
+                        pathPic.setFill("darkgray"); pathPic.setOutline("black")
                     pathPic.draw(self.window)
                     pathPics.append(pathPic)
                 # draw the elevator
-                for elevPos in self.elevs[time]:
+                for elevPos in self.allElevs[time]:
                     elevPic = cg.Circle(cg.Point(elevPos[0] * FACTOR, elevPos[1] * FACTOR), TAR_SIZE * FACTOR)
-                    elevPic.setFill("yellow"); elevPic.setOutline("yellow")
+                    if elevPos in self.elevs[time]:
+                        elevPic.setFill("yellow"); elevPic.setOutline("yellow")
+                    else:
+                        elevPic.setFill("darkgray"); elevPic.setOutline("black")
                     elevPic.draw(self.window)
                 # draw agent path over time
                 agentPos = self.agents[time][0]

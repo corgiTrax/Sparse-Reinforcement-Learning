@@ -62,8 +62,8 @@ class inverse_rl:
             for a in range(NUM_ACT):
                 temp = 1
                 for inst in insts:
-                    # inst[a] = round(inst[a],4) # round this to avoid math overflow
-                    temp = temp * math.exp(inst[a]) 
+                    #inst[a] = int(round(inst[a])) # round this to avoid math overflow
+                    temp = temp * math.exp(inst[a])
                 second_term += cp.deepcopy(temp)
             if second_term != 0:
                 second_term = math.log(second_term) 
