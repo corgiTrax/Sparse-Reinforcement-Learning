@@ -214,8 +214,8 @@ class Trial:
             # discard the data where agent is too close to elevators
             if utils.calc_dist(agentPos, self.allPaths[0]) < EXCLUDE \
             or utils.calc_dist(agentPos, self.allPaths[-1]) < EXCLUDE: continue 
-            # get actual agent action
             agentPosNext = self.agents[time + 1][0]
+            # get actual agent action
             action = utils.calc_bin(utils.calc_angle(agentPos, agentPosNext))
 
             # 1.0 calculate predicted action
@@ -248,7 +248,8 @@ class Trial:
                         global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(elevPos), act, PATH_SIZE))
             pred_action = np.argmax(global_Q)
             # record prediction error 
-            angularErrs.append(utils.calc_err(action, pred_action))
+            # angularErrs.append(utils.calc_err_actual(utils.move(agentPos, action), agentPos, pred_action)) # this compares with discretized actual action
+            angularErrs.append(utils.calc_err_actual(agentPosNext, agentPos, pred_action)) # this compares with actual agentNextPos
 
             # 2.0 visualize results
             if VIS:
@@ -333,7 +334,6 @@ class Trial:
         err = (sum(angularErrs)/float(len(angularErrs)))
         print("Average absolute prediction error is, in degrees: {}".format(err))
         return err         
-        # raw_input("Please press enter to exit")
 
 if __name__ == '__main__':
     trial0 = Trial(sys.argv[1]) # the first argument being the data filename
@@ -342,6 +342,7 @@ if __name__ == '__main__':
     elif sys.argv[2] == 'v': # visualize fitted action
         VIS = True; MOUSE = True
         trial0.visualize_result(sys.argv[3]) # solution filename
+        raw_input("Please press enter to exit")
     elif sys.argv[2] == 'a': # just run trial and get angular error
         VIS = False; MOUSE = False
         trial0.visualize_result(sys.argv[3]) # solution filename
