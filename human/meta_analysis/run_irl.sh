@@ -5,7 +5,9 @@
 #  echo "running sparse irl on $f file..."
 #  python sparse-inverseRL.py $f 0
 #done  
-for f in ../data/subj26/task*;
+rm -rf ../result/subj$1
+mkdir ../result/subj$1
+for f in ../data/subj$1/task*;
 do
   echo "running sparse irl on $f file..."
   python3 ../sparse-inverseRL.py $f 0

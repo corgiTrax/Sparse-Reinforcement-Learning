@@ -31,6 +31,7 @@ class Trial:
             agentPos = [agentX, agentZ]
             self.agents.append(cp.deepcopy(curAgent))
             agentAngle = float(agentAngle)
+            # agentAngle = utils.to360(utils.calc_angle(agentPos, agentPosNext))
             self.agentAngles.append(agentAngle)
 
             # targets
@@ -80,62 +81,43 @@ class Trial:
                     pathX, pathZ = paths[i].split(',')
                     pathX = float(pathX) * SIZE + OFF_X; pathZ = float(pathZ) * SIZE + OFF_Z
                     self.allPaths.append([pathX, pathZ])
+                if self.allPaths.index([elevX, elevZ]) == 0: 
+                    self.startSide = 1 # which side the agent starts, alternate by trials
+                    pass_index = len(self.allPaths) - 1
+                else: 
+                    self.startSide = 0
+                    pass_index = 0
             curPaths = []
-            for path in self.allPaths:
-                if utils.in_vcone(agentPos, agentAngle, path):
-                    curPaths.append(cp.deepcopy(path))
+            if PATH_LOOKAHEAD:
+            # determine which paths are for current time step
+            # identify which paths are still ahead and store them
+                nearest = utils.nearest_obj([agentX, agentZ], self.allPaths) 
+                if self.startSide == 0: # start from the last path, 21, 20, ...,
+                    # update passed_index
+                    if pass_index - nearest > NUM_PATH_LOOKAHEAD + 2: # do nothing, probably at another seg of path
+                        pass
+                    else: pass_index = nearest
+                    for ct,path in enumerate(self.allPaths):
+                        if pass_index - NUM_PATH_LOOKAHEAD < ct <= pass_index:
+                            curPaths.append(cp.deepcopy(path))
+            
+                elif self.startSide == 1: # start from the first path, 0, 1, ..., 
+                    # update passed_index
+                    if nearest - pass_index > NUM_PATH_LOOKAHEAD + 2: # do nothing, probably at another seg of path
+                        pass
+                    else: pass_index = nearest
+                    for ct,path in enumerate(self.allPaths):
+                        if pass_index <= ct < pass_index + NUM_PATH_LOOKAHEAD:
+                            curPaths.append(cp.deepcopy(path))
+            else: # use visual cone
+                for path in self.allPaths:
+                    if utils.in_vcone(agentPos, agentAngle, path):
+                        curPaths.append(cp.deepcopy(path))
             self.paths.append(cp.deepcopy(curPaths)) 
         
         self.timeSteps = len(self.targets)
         data_file.close()
 
-    def draw(self):
-        ''' visualize data'''
-        self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X * FACTOR + 50, height = ROOM_Z * FACTOR + 200)
-        self.window.setBackground("gray")
-
-        for time in range(self.timeSteps - 1): # exclude the last one which we can't compute action
-            agentPos = utils.tile(self.agents[time][0])
-
-            # draw all targets
-            targetPics = []
-            for targetPos in self.targets[time]:
-                targetPic = cg.Circle(cg.Point(targetPos[0] * FACTOR, targetPos[1] * FACTOR), TAR_SIZE * FACTOR)
-                targetPic.setFill("darkblue"); targetPic.setOutline("darkblue")
-                targetPic.draw(self.window)
-                targetPics.append(targetPic)
-            # draw all obsts
-            obstPics = []
-            for obstPos in self.obsts[time]:
-                topLeftPt = cg.Point(obstPos[0] * FACTOR - OBS_SIZE * FACTOR, obstPos[1] * FACTOR - OBS_SIZE * FACTOR)
-                bottomRightPt = cg.Point(obstPos[0] * FACTOR + OBS_SIZE * FACTOR, obstPos[1] * FACTOR + OBS_SIZE * FACTOR)
-                obstPic = cg.Rectangle(topLeftPt,bottomRightPt)
-                obstPic.setFill("darkred"); obstPic.setOutline("darkred")
-                obstPic.draw(self.window)
-                obstPics.append(obstPic)
-            # draw all paths
-            pathPics = []
-            for pathPos in self.paths[time]:
-                pathPic = cg.Circle(cg.Point(pathPos[0] * FACTOR, pathPos[1] * FACTOR), TAR_SIZE/4 * FACTOR)
-                pathPic.setFill("white"); pathPic.setOutline("white")
-                pathPic.draw(self.window)
-                pathPics.append(pathPic)
-            # draw the elevator
-            for elevPos in self.elevs[time]:
-                elevPic = cg.Circle(cg.Point(elevPos[0] * FACTOR, elevPos[1] * FACTOR), TAR_SIZE * FACTOR)
-                elevPic.setFill("yellow"); elevPic.setOutline("yellow")
-                elevPic.draw(self.window)
-            # draw agent path over time
-            agentPos = self.agents[time][0]
-            agentPic = cg.Circle(cg.Point(agentPos[0] * FACTOR, agentPos[1] * FACTOR), AGENT_SIZE * FACTOR)
-            agentPic.setFill("green"); agentPic.setOutline("green")
-            agentPic.draw(self.window)
-
-            # click to go to next step
-            if MOUSE: self.window.getMouse()
-            for targetPic in targetPics: targetPic.undraw()
-            for obstPic in obstPics: obstPic.undraw()
-            for pathPic in pathPics: pathPic.undraw()
 
     def build_irl_data(self):
         '''build a new data file to be used for IRL
@@ -144,6 +126,7 @@ class Trial:
         module class number, unit reward(-1 or 1), action chosen, distance to this instance after taken an action'''
         self.file_discrete = self.file_continuous + ".dis"
         data_file = open(self.file_discrete, 'w')
+        curPath = 0
         for time in range(self.timeSteps - 1): # exclude the last one which we can't compute action
             # agent
             agentPos = utils.tile(self.agents[time][0]) # note that when DISCRETE is set to False in config, utils.tile does not do anything
@@ -183,7 +166,9 @@ class Trial:
                 for elevPos in self.elevs[time]:
                     data_file.write(str(module) + ',' + str(unit_r) + ',' + str(action) + ',')
                     for count, act in enumerate(ACTIONS):
-                        data_file.write(str(utils.conseq(agentPos, utils.tile(elevPos), act, PATH_SIZE)))
+                        dist, curPath = utils.dist_elev(utils.move(agentPos,act), self.paths[time], elevPos, curPath)
+                        data_file.write(str(dist))
+                        # data_file.write(str(utils.conseq(agentPos, utils.tile(elevPos), act, PATH_SIZE)))
                         if count != len(ACTIONS) - 1: data_file.write(',')
                     data_file.write(' ')
             
@@ -201,20 +186,23 @@ class Trial:
             params[ct] = float(line)
         # print("The parameters we use are: "),; print(params)
         angularErrs = []
+        angularErrsFw = [] # if the agent just walk forward
 
         # visualization
         if VIS:
             self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X * FACTOR + 50, height = ROOM_Z * FACTOR + 200)
             self.window.setBackground("gray")
 
+        curPath = 0 # current path segment
         for time in range(self.timeSteps - 1): # exclude the last one which we can't compute action
             agentPos = utils.tile(self.agents[time][0])
-            agentAngle = self.agentAngles[time]
-
+            # print(agentAngle)
             # discard the data where agent is too close to elevators
             if utils.calc_dist(agentPos, self.allPaths[0]) < EXCLUDE \
             or utils.calc_dist(agentPos, self.allPaths[-1]) < EXCLUDE: continue 
             agentPosNext = self.agents[time + 1][0]
+            agentAngle = self.agentAngles[time]
+            # agentAngle = utils.to360(utils.calc_angle(agentPos, agentPosNext))
             # get actual agent action
             action = utils.calc_bin(utils.calc_angle(agentPos, agentPosNext))
 
@@ -245,11 +233,14 @@ class Trial:
                 r = params[6]; gamma = params[7]
                 for elevPos in self.elevs[time]:
                     for act in ACTIONS:
-                        global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(elevPos), act, PATH_SIZE))
+                        dist, curPath = utils.dist_elev(utils.move(agentPos, act), self.paths[time], elevPos, curPath)
+                        global_Q[act] += r * unit_r * (gamma ** dist)
             pred_action = np.argmax(global_Q)
             # record prediction error 
             # angularErrs.append(utils.calc_err_actual(utils.move(agentPos, action), agentPos, pred_action)) # this compares with discretized actual action
             angularErrs.append(utils.calc_err_actual(agentPosNext, agentPos, pred_action)) # this compares with actual agentNextPos
+            land = utils.facing(agentPos, agentAngle, 0.15 * SIZE)
+            angularErrsFw.append(utils.calc_err_actual2(agentPosNext, agentPos, land)) # this compares with actual agentNextPos
 
             # 2.0 visualize results
             if VIS:
@@ -333,73 +324,205 @@ class Trial:
         
         err = (sum(angularErrs)/float(len(angularErrs)))
         print("Average absolute prediction error is, in degrees: {}".format(err))
+        errFw = (sum(angularErrsFw)/float(len(angularErrsFw)))
+        print("Walking forward average absolute prediction error is, in degrees: {}".format(errFw))
         return err         
+
+    def free_run(self, sol_file_name):
+        '''given rewards and gammas estimated from sol_file, visualize the free trajectory path'''
+        # get estimated reward and gamma from a file
+        sol_file = open(sol_file_name, 'r')
+        params = np.zeros(NUM_MODULE * 2)
+        for ct, line in enumerate(sol_file):
+            params[ct] = float(line)
+        # print("The parameters we use are: "),; print(params)
+
+        # visualization
+        if VIS:
+            self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X * FACTOR + 50, height = ROOM_Z * FACTOR + 200)
+            self.window.setBackground("gray")
+        
+        for time in range(self.timeSteps - 1):
+            agentAngle = self.agentAngles[time]
+            agentPos = utils.tile(self.agents[time][0]) 
+
+            # discard the data where agent is too close to elevators
+            if utils.calc_dist(agentPos, self.allPaths[0]) < EXCLUDE \
+            or utils.calc_dist(agentPos, self.allPaths[-1]) < EXCLUDE: continue 
+            else: break # the stored agentPos and agent angle is the start
+        
+        targets = cp.deepcopy(self.allTargets[time])
+        obsts = cp.deepcopy(self.allObsts[time])
+        paths = cp.deepcopy(self.allPaths)
+        elevs = cp.deepcopy(self.allElevs[time])
+        if self.startSide == 0: # which side the agent starts, alternate by trials
+            pass_index = 0
+        else: 
+            pass_index = len(self.allPaths) - 1
+
+        arrived = False
+        # begin iterations
+        while not(arrived): 
+            # print(agentAngle)
+            # 1.0 calculate predicted action
+            # true action
+            global_Q = np.zeros(len(ACTIONS))
+            # targets
+            unit_r = 1; module = 0
+            r = params[0]; gamma = params[1]
+            if targets != []:
+                targetPos  = targets[utils.nearest_obj(agentPos,targets)]
+                for act in ACTIONS:
+                    global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(targetPos), act, TAR_SIZE))
+            # obstacles
+            unit_r = -1; module = 1
+            r = params[2]; gamma = params[3]
+            obstPos = obsts[utils.nearest_obj(agentPos,obsts)]
+            for act in ACTIONS:
+                global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(obstPos), act, OBS_SIZE))
+            # paths
+            unit_r = 1; module = 2
+            r = params[4]; gamma = params[5]
+            # paths
+            curPaths = []
+            if PATH_LOOKAHEAD:
+            # determine which paths are for current time step
+            # identify which paths are still ahead and store them
+                nearest = utils.nearest_obj(agentPos, paths) 
+                if self.startSide == 0: # start from the last path, 21, 20, ...,
+                    # update passed_index
+                    if pass_index - nearest > NUM_PATH_LOOKAHEAD + THROW_OUT: # do nothing, probably at another seg of path
+                        pass
+                    else: pass_index = nearest
+                    for ct,path in enumerate(self.allPaths):
+                        if pass_index - NUM_PATH_LOOKAHEAD < ct <= pass_index:
+                            curPaths.append(cp.deepcopy(path))
+                elif self.startSide == 1: # start from the first path, 0, 1, ..., 
+                    # update passed_index
+                    if nearest - pass_index > NUM_PATH_LOOKAHEAD + THROW_OUT: # do nothing, probably at another seg of path
+                        pass
+                    else: pass_index = nearest
+                    for ct,path in enumerate(self.allPaths):
+                        if pass_index <= ct < pass_index + NUM_PATH_LOOKAHEAD:
+                            curPaths.append(cp.deepcopy(path))
+                for pathPos in curPaths:
+                    if utils.in_vcone(agentPos, agentAngle, pathPos):
+                        for act in ACTIONS:
+                            global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(pathPos), act, PATH_SIZE))
+            else:
+                cur_path = utils.nearest_obj(agentPos,paths)
+                print(pass_index, cur_path)
+                if abs(cur_path - pass_index) > 2:
+                    cur_path = pass_index
+                else:
+                    if self.startSide == 0: # which side the agent starts, alternate by trials
+                        if pass_index >= cur_path: # move to next waypoint
+                            cur_path += 1
+                    if self.startSide == 1: # which side the agent starts, alternate by trials
+                        if pass_index <= cur_path: # move to next waypoint
+                            cur_path -= 1
+
+                pathPos = paths[cur_path]
+                pass_index = cur_path
+                for act in ACTIONS:
+                    global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(pathPos), act, PATH_SIZE))
+
+            # elevators
+            if ELEVATOR:
+                unit_r = 1; module = 3
+                r = params[6]; gamma = params[7]
+                for elevPos in elevs:
+                    if utils.in_vcone(agentPos, agentAngle, elevPos):
+                        for act in ACTIONS:
+                            global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(elevPos), act, PATH_SIZE))
+            pred_action = np.argmax(global_Q)
+            
+            # touched obstacles and targets removed
+            # 2.0 visualize results
+            if VIS:
+                # draw all targets
+                targetPics = []
+                for targetPos in targets:
+                    targetPic = cg.Circle(cg.Point(targetPos[0] * FACTOR, targetPos[1] * FACTOR), TAR_SIZE * FACTOR)
+                    targetPic.setFill("darkblue"); targetPic.setOutline("darkblue")
+                    targetPic.draw(self.window)
+                    targetPics.append(targetPic)
+                # draw all obsts
+                obstPics = []
+                for obstPos in obsts:
+                    topLeftPt = cg.Point(obstPos[0] * FACTOR - OBS_SIZE * FACTOR, obstPos[1] * FACTOR - OBS_SIZE * FACTOR)
+                    bottomRightPt = cg.Point(obstPos[0] * FACTOR + OBS_SIZE * FACTOR, obstPos[1] * FACTOR + OBS_SIZE * FACTOR)
+                    obstPic = cg.Rectangle(topLeftPt,bottomRightPt)
+                    obstPic.setFill("darkred"); obstPic.setOutline("darkred")
+                    obstPic.draw(self.window)
+                    obstPics.append(obstPic)
+                # draw all paths
+                pathPics = []
+                for pathPos in paths:
+                    pathPic = cg.Circle(cg.Point(pathPos[0] * FACTOR, pathPos[1] * FACTOR), TAR_SIZE/4 * FACTOR)
+                    pathPic.setFill("white"); pathPic.setOutline("white")
+                    pathPic.draw(self.window)
+                    pathPics.append(pathPic)
+                # draw the elevator
+                for elevPos in elevs:
+                    elevPic = cg.Circle(cg.Point(elevPos[0] * FACTOR, elevPos[1] * FACTOR), TAR_SIZE * FACTOR)
+                    elevPic.setFill("yellow"); elevPic.setOutline("yellow")
+                    elevPic.draw(self.window)
+                # draw agent path over time
+                agentPic = cg.Circle(cg.Point(agentPos[0] * FACTOR, agentPos[1] * FACTOR), AGENT_SIZE * FACTOR)
+                agentPic.setFill("green"); agentPic.setOutline("green")
+                agentPic.draw(self.window)
+
+                # visualize agent angle
+                land = utils.facing(agentPos, agentAngle, 0.15 * SIZE)
+                anglePic = cg.Line(cg.Point(agentPos[0] * FACTOR, agentPos[1] * FACTOR), cg.Point(land[0] * FACTOR, land[1] * FACTOR))
+                anglePic.setFill("black"); anglePic.setArrow("last"); anglePic.setWidth(5)
+                anglePic.draw(self.window)
+
+                # click to go to next step
+                if MOUSE: self.window.getMouse()
+                if not(arrived):
+                    for targetPic in targetPics: targetPic.undraw()
+                    for obstPic in obstPics: obstPic.undraw()
+                    for pathPic in pathPics: pathPic.undraw()
+                #predActPic.undraw()
+                #actualActPic.undraw()
+
+            # action consequences
+            agentAngle = utils.calc_angle(agentPos, utils.move(agentPos, pred_action))
+            # to 360 degree range and different coordinate frame (agreed with the ones from .mat files)
+            agentAngle = utils.to360(agentAngle)
+            agentPos = utils.move(agentPos, pred_action) # agent moves
+            # remove touched stuff
+            for targetPos in targets[:]:
+                if utils.calc_dist(agentPos, targetPos) < TAR_SIZE: targets.remove(targetPos)  
+            # obstacles
+            for obstPos in obsts[:]:
+                if utils.calc_dist(agentPos, obstPos) < OBS_SIZE: obsts.remove(obstPos)  
+            if self.startSide == 0: # which side the agent starts, alternate by trials
+                if pass_index == len(self.allPaths) - 1: arrived = True
+            else: 
+                if pass_index == 0: arrived = True
+
+
 
 if __name__ == '__main__':
     trial0 = Trial(sys.argv[1]) # the first argument being the data filename
     if sys.argv[2] == 'b': # build irl data, called by the .sh script 
         trial0.build_irl_data()
     elif sys.argv[2] == 'v': # visualize fitted action
-        VIS = True; MOUSE = True
+        VIS = True; MOUSE = False
         trial0.visualize_result(sys.argv[3]) # solution filename
         raw_input("Please press enter to exit")
     elif sys.argv[2] == 'a': # just run trial and get angular error
-        VIS = False; MOUSE = False
+        VIS = True; MOUSE = False
         trial0.visualize_result(sys.argv[3]) # solution filename
     elif sys.argv[2] == 'd': # draw data
         VIS = True; MOUSE = True
         trial0.draw()
+    elif sys.argv[2] == 'f': # 
+        VIS = True; MOUSE = False
+        trial0.free_run(sys.argv[3]) # solution filename
+        raw_input("Please press enter to exit")
 
 
-#       # discretization
-#       self.rows = int(math.ceil(ROOM_X / CELL))
-#       self.cols = int(math.ceil(ROOM_Z / CELL))
-
-#       if SHOW_GRID:
-#           #Draw maze grid:
-#           for i in range(self.rows):
-#               for j in range(self.cols):
-#                   cell = cg.Rectangle(cg.Point(j * CELL, i * CELL), cg.Point((j + 1) * CELL, (i + 1) * CELL))
-#                   cell.draw(self.window)
-#                   cell.setOutline("black")
-#           #Draw position labels
-#           #Row labels
-#           for i in range(self.rows):
-#               label = cg.Text(cg.Point((self.cols + 1) * CELL, (i + 0.5) * CELL),str(i))
-#               label.setSize(FONT_SIZE)
-#               label.draw(self.window)
-#           #Column labels
-#           for i in range(self.cols):
-#               label = cg.Text(cg.Point((i + 0.5) * CELL, (self.rows + 1) * CELL),str(i))
-#               label.setSize(FONT_SIZE)
-#               label.draw(self.window)
-
-# Remove path segments that are passed
-#                removedPaths = [] # store index of way points that are passed
-#                if self.allPaths.index([elevX, elevZ]) == 0: self.startSide = 0 # which side the agent starts, alternate by trials
-#                else: self.startSide = 1
-#            
-#            # determine which paths are for current time step
-#            # identify which paths are still ahead and store them
-#            if self.startSide == 0: # start from the last path, 21, 20, ..., 
-#                for i in range(len(self.allPaths) - 1, -1, -1):
-#                    if (not (i in removedPaths)) and  utils.calc_dist(self.allPaths[i], [agentX, agentZ]) <= WAY_POINT_PASS_THRESHOLD:
-#                        removedPaths.append(i)
-#                        #for j in range(len(allPaths) -1, i, -1): # previous way points should be removed too
-#                        #    if not (j in removedPaths): removedPaths.append(j)
-#                        break # remove one way point at a time
-#
-#            elif self.startSide == 1: # start from the first path, 0, 1, ..., 
-#                 for i in range(len(self.allPaths)):
-#                    if (not (i in removedPaths)) and  utils.calc_dist(self.allPaths[i], [agentX, agentZ]) <= WAY_POINT_PASS_THRESHOLD:
-#                        removedPaths.append(i)
-#                        #for j in range(i): # previous way points should be removed too
-#                        #    if not (j in removedPaths): removedPaths.append(j)
-#                        break # remove one way point at a time
-#            
-#            curPaths = []          
-#            for i, path in enumerate(self.allPaths):
-#                if not(i in removedPaths):
-#                    curPaths.append(cp.deepcopy(path))
-# 
-        

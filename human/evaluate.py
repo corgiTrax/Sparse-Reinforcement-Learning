@@ -17,12 +17,12 @@ for f in files:
 errs = [[],[],[],[]]
 for dataf in dataFiles:
     newTrial = world.Trial(dataf)
-    print("Current file: " + dataf)
+#    print("Current file: " + dataf)
     task = int(dataf[-6]) # 1,2,3,4
     if task != 5: #True:
         if EVAL == "o": # use own irl file
             irlFile = (dataf.replace("data", "result", 1)).split('.')[0]
-            print(irlFile,dataf)
+#            print(irlFile,dataf)
             err = newTrial.visualize_result(irlFile)
         elif EVAL == "a": # use aggregated irl file
             irlFile = direct.replace("data", "result", 1) + "task" + str(task)
@@ -32,7 +32,8 @@ for dataf in dataFiles:
 mean_errs = []
 for task, taskErr in enumerate(errs):
     mean_err = sum(taskErr)/float(len(taskErr))
-    print("Angular difference of task {} is: {}".format(task + 1, mean_err))
+#    print("Angular difference of task {} is: {}".format(task + 1, mean_err))
+    print(mean_err)
     mean_errs.append(mean_err)
 
-print("Average error of all trials is: {}".format(sum(mean_errs)/float(len(mean_errs))))
+#print("Average error of all trials is: {}".format(sum(mean_errs)/float(len(mean_errs))))

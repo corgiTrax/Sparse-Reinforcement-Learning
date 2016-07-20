@@ -12,13 +12,13 @@ AGENT_SIZE = 0.05 * SIZE
 FONT_SIZE = SIZE / 10 
 SHOW_GRID = False
 DISCRETE = False
-EXCLUDE = SIZE * 1 # exclude data that are too close to start/elevator 
+EXCLUDE = 0#SIZE * 1 # exclude data that are too close to start/elevator 
 #WAY_POINT_PASS_THRESHOLD = 0.3 * SIZE
-CELL = int(SIZE * 0.7) # state granularity
+CELL = int(SIZE * 0.2) # state granularity
 PATH_SIZE = 0 * SIZE # for IRL landing distance, if gets into this range, the distance is 0.
 VIS_CONE = 58 # degrees; visual cone range on one side
 VIS_DIST = 10 * SIZE # visual cone radius
-#0.6, 0, 58, 10
+#0.7, 0, 58, 10
 
 VIS = False; MOUSE = VIS # visualize or not
 # actions
@@ -38,3 +38,7 @@ else:
 NUM_ACT = len(ACTIONS)
 NUM_MODULE = 3
 ELEVATOR = False
+VISCONE = True
+PATH_LOOKAHEAD = False
+NUM_PATH_LOOKAHEAD = 3
+THROW_OUT = 2 # throw out bad ones

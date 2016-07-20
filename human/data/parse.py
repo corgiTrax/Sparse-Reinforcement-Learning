@@ -5,24 +5,42 @@ import copy as cp
 import sys
 np.set_printoptions(precision = 3, suppress = True, linewidth = 1000, threshold = 'nan')
 ACC = 3 # rounding accuracy, 1mm
+# for these subjects all trials are static
+ALL = [25,26,27,28]
+# for these subjects first 16 are static
+FIRSTHALF = [31,32,33,34,35,36,37,38,39,60,61,62,63,64,65]
+SECONDHALF = range(40,60)
 
 def parse(data_file):
     # read and parse mat file
     data = sio.loadmat(data_file)
     
     subjNum = data["subjNum"][0,0] #subject's ID
-    
+    print("Parsing subject: " + str(subjNum))
     # data for all 32 trials
     pRes = data["pRes"]
     
     maxTrial = 32 # 32 trials
     for trial in range(0, maxTrial):
+        print(trial)
+        if subjNum in ALL: pass
+        elif (subjNum in FIRSTHALF and trial > 15): break
+        elif (subjNum in SECONDHALF and trial <= 15): continue
         trialData = pRes[0][trial]
      
         trialNum = trialData["trialNum"][0,0][0,0] # trial #
         print("parsing trial: " + str(trialNum))
         taskNum = trialData["taskNum"][0,0][0,0] # task #, indicating which modules are running
-    
+        taskName = trialData["taskName"][0,0][0] # task Name, indicating which modules are running
+        print(taskName)
+        if taskName == "none": taskNum = 1
+        elif taskName == "obst": taskNum = 2
+        elif taskName == "targ": taskNum = 3
+        elif taskName == "both": taskNum = 4
+        else: 
+            print("Invalid task, trial number: " + str(trialNum))
+            continue
+
         # get agent positions XZs
         agentX = trialData["agentX"][0][0][0] # array
         agentZ = trialData["agentZ"][0][0][0] # array

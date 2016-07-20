@@ -1,13 +1,14 @@
 import math
 import copy as cp
 from config import *
+import numpy as np
 
 def calc_dist(posA, posB):
     '''euclidean distance'''
     return math.sqrt((posA[0] - posB[0]) ** 2 + (posA[1] - posB[1]) ** 2)
 
 def calc_angle(posA, posB):
-    '''find angle of an action'''
+    '''find angle of an action: -180 ~ 180'''
     x_diff = posB[0] - posA[0]; z_diff = posB[1] - posA[1]
     return math.degrees(math.atan2(z_diff, x_diff))
 
@@ -111,6 +112,23 @@ def calc_err_actual(agentPosNext, agentPos, action):
     prod = BA[0] * BC[0] + BA[1] * BC[1]
     BA_norm = math.hypot(BA[0], BA[1])
     BC_norm = math.hypot(BC[0], BC[1])
+    if BA_norm * BC_norm == 0: return 0 # ??
+    temp = min(1, prod / float(BA_norm * BC_norm))
+    theta = math.copysign(1, BA[0]) * math.acos(temp) # in radians
+    theta = math.degrees(theta) # -180 ~ 180
+    return abs(theta) 
+
+def calc_err_actual2(agentPosNext, agentPos, predPos):
+    '''calculate the absolute angular difference between predicted position and next position'''
+    B = agentPos
+    C = predPos
+    A = agentPosNext
+    BA = [A[0] - B[0], A[1] - B[1]]
+    BC = [C[0] - B[0], C[1] - B[1]]
+    prod = BA[0] * BC[0] + BA[1] * BC[1]
+    BA_norm = math.hypot(BA[0], BA[1])
+    BC_norm = math.hypot(BC[0], BC[1])
+    if BA_norm * BC_norm == 0: return 0 # ??
     temp = min(1, prod / float(BA_norm * BC_norm))
     theta = math.copysign(1, BA[0]) * math.acos(temp) # in radians
     theta = math.degrees(theta) # -180 ~ 180
@@ -123,22 +141,57 @@ def facing(agentPos, angle, dist):
 
 def in_vcone(B, angle, A):
     '''give a obj's position (A) and agent's angle and pos (B), tell if obj is in visual cone or not'''
-    if calc_dist(B,A) > VIS_DIST: return False
-    C = facing(B, angle, 1)
-    BA = [A[0] - B[0], A[1] - B[1]]
-    BC = [C[0] - B[0], C[1] - B[1]]
-    prod = BA[0] * BC[0] + BA[1] * BC[1]
-    BA_norm = math.hypot(BA[0], BA[1])
-    BC_norm = math.hypot(BC[0], BC[1])
-    if BA_norm == 0: # object is really close to agent's position
-        return True
-    theta = math.copysign(1, BA[0]) * math.acos(prod / float(BA_norm * BC_norm)) # in radians
-    theta = math.degrees(theta) # -180 ~ 180
-    if -VIS_CONE <= theta <= VIS_CONE: return True
-    else: return False
+    '''this angle is in 360 degrees range?'''
+    if VISCONE:
+        if calc_dist(B,A) > VIS_DIST: return False
+        C = facing(B, angle, 1)
+        BA = [A[0] - B[0], A[1] - B[1]]
+        BC = [C[0] - B[0], C[1] - B[1]]
+        prod = BA[0] * BC[0] + BA[1] * BC[1]
+        BA_norm = math.hypot(BA[0], BA[1])
+        BC_norm = math.hypot(BC[0], BC[1])
+        if BA_norm == 0: # object is really close to agent's position
+            return True
+        theta = math.copysign(1, BA[0]) * math.acos(prod / float(BA_norm * BC_norm)) # in radians
+        theta = math.degrees(theta) # -180 ~ 180
+        if -VIS_CONE <= theta <= VIS_CONE: return True
+        else: return False
+    else: return True
+
+def to360(angle):
+    '''calc_angle result is in current world frame, but angentAngle from .mat file is using a different coordinate frame'''
+    if angle < 0: angle = angle + 360
+    angle = 360 - angle 
+    return (angle + 90) % 360
+
+def nearest_obj(agentPos, objs):
+    '''return the index of nearest object'''
+    dists = np.zeros(len(objs))
+    for i, obj in enumerate(objs):
+        dists[i] = calc_dist(agentPos, obj)
+    return np.argmin(dists)
+
+# if using elevator, save for future
+#def acc_dists(objs, index, order):
+#    '''return accumulated distance of a list of objects, starting at an index'''
+#
+#
+#def dist_elev(agentPos, paths, elevPos, lastPath):
+#    '''calculate the distance (along path only) to elevator, and the current way point'''
+#    if paths.index(elevPos) == 0: 
+#        curPath = len(paths) - 1
+#
+#    else:
+#        nearest_path = nearest_obj(agentPos, paths)
+#        if nearest_path >= lastPath + 2: # cannot skip more than 2 paths
+#            curPath = lastPath
+#        else: pass
+#    return dist,curPath
+
 
 if __name__ == '__main__':
     #print(calc_bin(calc_angle([0,0], [1,1])))
     #print(in_vcone([0,0], 182, [1,-1]))
-    print(get_angle([0,1], [1,0]))
+    #print(get_angle([0,1], [1,0]))
     #print(calc_err_actual([1,1], [0,0], L))
+    print(nearest_obj([0,0],[[0,1],[2,0],[3,3],[0,0.5]]))
