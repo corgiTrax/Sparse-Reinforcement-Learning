@@ -89,26 +89,27 @@ class Trial:
                     pass_index = 0
             curPaths = []
             if PATH_LOOKAHEAD:
-            # determine which paths are for current time step
-            # identify which paths are still ahead and store them
-                nearest = utils.nearest_obj([agentX, agentZ], self.allPaths) 
-                if self.startSide == 0: # start from the last path, 21, 20, ...,
-                    # update passed_index
-                    if pass_index - nearest > NUM_PATH_LOOKAHEAD + 2: # do nothing, probably at another seg of path
-                        pass
-                    else: pass_index = nearest
-                    for ct,path in enumerate(self.allPaths):
-                        if pass_index - NUM_PATH_LOOKAHEAD < ct <= pass_index:
-                            curPaths.append(cp.deepcopy(path))
-            
-                elif self.startSide == 1: # start from the first path, 0, 1, ..., 
-                    # update passed_index
-                    if nearest - pass_index > NUM_PATH_LOOKAHEAD + 2: # do nothing, probably at another seg of path
-                        pass
-                    else: pass_index = nearest
-                    for ct,path in enumerate(self.allPaths):
-                        if pass_index <= ct < pass_index + NUM_PATH_LOOKAHEAD:
-                            curPaths.append(cp.deepcopy(path))
+#            # determine which paths are for current time step
+#            # identify which paths are still ahead and store them
+#                nearest = utils.nearest_obj([agentX, agentZ], self.allPaths) 
+#                if self.startSide == 0: # start from the last path, 21, 20, ...,
+#                    # update passed_index
+#                    if pass_index - nearest > NUM_PATH_LOOKAHEAD + 2: # do nothing, probably at another seg of path
+#                        pass
+#                    else: pass_index = nearest
+#                    for ct,path in enumerate(self.allPaths):
+#                        if pass_index - NUM_PATH_LOOKAHEAD < ct <= pass_index:
+#                            curPaths.append(cp.deepcopy(path))
+#            
+#                elif self.startSide == 1: # start from the first path, 0, 1, ..., 
+#                    # update passed_index
+#                    if nearest - pass_index > NUM_PATH_LOOKAHEAD + 2: # do nothing, probably at another seg of path
+#                        pass
+#                    else: pass_index = nearest
+#                    for ct,path in enumerate(self.allPaths):
+#                        if pass_index <= ct < pass_index + NUM_PATH_LOOKAHEAD:
+#                            curPaths.append(cp.deepcopy(path))
+                pass
             else: # use visual cone
                 for path in self.allPaths:
                     if utils.in_vcone(agentPos, agentAngle, path):
@@ -335,13 +336,14 @@ class Trial:
         params = np.zeros(NUM_MODULE * 2)
         for ct, line in enumerate(sol_file):
             params[ct] = float(line)
-        # print("The parameters we use are: "),; print(params)
+        print("The weight and discount factors we use are: "),; print(params)
 
         # visualization
         if VIS:
             self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X * FACTOR + 50, height = ROOM_Z * FACTOR + 200)
             self.window.setBackground("gray")
         
+        # exclude stuff that are too close to start/elevator due to noise
         for time in range(self.timeSteps - 1):
             agentAngle = self.agentAngles[time]
             agentPos = utils.tile(self.agents[time][0]) 
@@ -351,12 +353,13 @@ class Trial:
             or utils.calc_dist(agentPos, self.allPaths[-1]) < EXCLUDE: continue 
             else: break # the stored agentPos and agent angle is the start
         
+        # these arrays store removable items for current free run
         targets = cp.deepcopy(self.allTargets[time])
         obsts = cp.deepcopy(self.allObsts[time])
         paths = cp.deepcopy(self.allPaths)
         elevs = cp.deepcopy(self.allElevs[time])
         if self.startSide == 0: # which side the agent starts, alternate by trials
-            pass_index = 0
+            pass_index = 0 # this parameter indicates which path point has been passed
         else: 
             pass_index = len(self.allPaths) - 1
 
@@ -370,62 +373,51 @@ class Trial:
             # targets
             unit_r = 1; module = 0
             r = params[0]; gamma = params[1]
-            if targets != []:
-                targetPos  = targets[utils.nearest_obj(agentPos,targets)]
+#            if targets != []:
+#                targetPos  = targets[utils.nearest_obj(agentPos,targets)]
+            for targetPos in targets:
                 for act in ACTIONS:
                     global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(targetPos), act, TAR_SIZE))
             # obstacles
             unit_r = -1; module = 1
             r = params[2]; gamma = params[3]
-            obstPos = obsts[utils.nearest_obj(agentPos,obsts)]
-            for act in ACTIONS:
-                global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(obstPos), act, OBS_SIZE))
+#            obstPos = obsts[utils.nearest_obj(agentPos,obsts)]
+            for obstPos in obsts:
+                for act in ACTIONS:
+                    global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(obstPos), act, OBS_SIZE))
             # paths
             unit_r = 1; module = 2
             r = params[4]; gamma = params[5]
             # paths
             curPaths = []
-            if PATH_LOOKAHEAD:
-            # determine which paths are for current time step
-            # identify which paths are still ahead and store them
-                nearest = utils.nearest_obj(agentPos, paths) 
-                if self.startSide == 0: # start from the last path, 21, 20, ...,
-                    # update passed_index
-                    if pass_index - nearest > NUM_PATH_LOOKAHEAD + THROW_OUT: # do nothing, probably at another seg of path
-                        pass
-                    else: pass_index = nearest
-                    for ct,path in enumerate(self.allPaths):
-                        if pass_index - NUM_PATH_LOOKAHEAD < ct <= pass_index:
-                            curPaths.append(cp.deepcopy(path))
-                elif self.startSide == 1: # start from the first path, 0, 1, ..., 
-                    # update passed_index
-                    if nearest - pass_index > NUM_PATH_LOOKAHEAD + THROW_OUT: # do nothing, probably at another seg of path
-                        pass
-                    else: pass_index = nearest
-                    for ct,path in enumerate(self.allPaths):
-                        if pass_index <= ct < pass_index + NUM_PATH_LOOKAHEAD:
-                            curPaths.append(cp.deepcopy(path))
-                for pathPos in curPaths:
-                    if utils.in_vcone(agentPos, agentAngle, pathPos):
-                        for act in ACTIONS:
-                            global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(pathPos), act, PATH_SIZE))
+            cur_path = utils.nearest_obj(agentPos,paths)
+            if abs(cur_path - pass_index) > 2: # key check: do not skip lots of path points
+                cur_path = pass_index
             else:
-                cur_path = utils.nearest_obj(agentPos,paths)
-                print(pass_index, cur_path)
-                if abs(cur_path - pass_index) > 2:
-                    cur_path = pass_index
-                else:
-                    if self.startSide == 0: # which side the agent starts, alternate by trials
-                        if pass_index >= cur_path: # move to next waypoint
-                            cur_path += 1
-                    if self.startSide == 1: # which side the agent starts, alternate by trials
-                        if pass_index <= cur_path: # move to next waypoint
-                            cur_path -= 1
+                if self.startSide == 0: # which side the agent starts, alternate by trials
+                    if pass_index >= cur_path: # move to next waypoint
+                        cur_path += 1
+                if self.startSide == 1: # which side the agent starts, alternate by trials
+                    if pass_index <= cur_path: # move to next waypoint
+                        cur_path -= 1
 
-                pathPos = paths[cur_path]
-                pass_index = cur_path
-                for act in ACTIONS:
-                    global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(pathPos), act, PATH_SIZE))
+            print(pass_index, cur_path)
+            if self.startSide == 0: # start from the first path point 0, 1, ...,
+                for ct,path in enumerate(self.allPaths):
+                    if pass_index <= ct < pass_index + NUM_PATH_LOOKAHEAD:
+                        print(ct)
+                        curPaths.append(cp.deepcopy(path))
+            elif self.startSide == 1: # start from the last path point, 25, 24, ..., 
+                for ct,path in enumerate(self.allPaths):
+                    if pass_index - NUM_PATH_LOOKAHEAD < ct <= pass_index:
+                        print(ct)
+                        curPaths.append(cp.deepcopy(path))
+
+            pass_index = cur_path
+            for pathPos in curPaths:
+                if utils.in_vcone(agentPos, agentAngle, pathPos):
+                    for act in ACTIONS:
+                        global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(pathPos), act, PATH_SIZE))
 
             # elevators
             if ELEVATOR:
@@ -435,6 +427,7 @@ class Trial:
                     if utils.in_vcone(agentPos, agentAngle, elevPos):
                         for act in ACTIONS:
                             global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(elevPos), act, PATH_SIZE))
+            # Take an action
             pred_action = np.argmax(global_Q)
             
             # touched obstacles and targets removed
@@ -520,8 +513,8 @@ if __name__ == '__main__':
     elif sys.argv[2] == 'd': # draw data
         VIS = True; MOUSE = True
         trial0.draw()
-    elif sys.argv[2] == 'f': # 
-        VIS = True; MOUSE = False
+    elif sys.argv[2] == 'f': #free run 
+        VIS = True; MOUSE = True
         trial0.free_run(sys.argv[3]) # solution filename
         raw_input("Please press enter to exit")
 

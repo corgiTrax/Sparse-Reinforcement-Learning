@@ -46,3 +46,29 @@
             for obstPic in obstPics: obstPic.undraw()
             for pathPic in pathPics: pathPic.undraw()
 
+
+            if PATH_LOOKAHEAD:
+            # determine which paths are for current time step
+            # identify which paths are still ahead and store them
+                nearest = utils.nearest_obj(agentPos, paths) 
+                if self.startSide == 0: # start from the last path, 21, 20, ...,
+                    # update passed_index
+                    if pass_index - nearest > NUM_PATH_LOOKAHEAD + THROW_OUT: # do nothing, probably at another seg of path
+                        pass
+                    else: pass_index = nearest
+                    for ct,path in enumerate(self.allPaths):
+                        if pass_index - NUM_PATH_LOOKAHEAD < ct <= pass_index:
+                            curPaths.append(cp.deepcopy(path))
+                elif self.startSide == 1: # start from the first path, 0, 1, ..., 
+                    # update passed_index
+                    if nearest - pass_index > NUM_PATH_LOOKAHEAD + THROW_OUT: # do nothing, probably at another seg of path
+                        pass
+                    else: pass_index = nearest
+                    for ct,path in enumerate(self.allPaths):
+                        if pass_index <= ct < pass_index + NUM_PATH_LOOKAHEAD:
+                            curPaths.append(cp.deepcopy(path))
+                for pathPos in curPaths:
+                    if utils.in_vcone(agentPos, agentAngle, pathPos):
+                        for act in ACTIONS:
+                            global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(pathPos), act, PATH_SIZE))
+

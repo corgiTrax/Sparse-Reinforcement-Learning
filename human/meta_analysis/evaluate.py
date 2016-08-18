@@ -5,6 +5,7 @@ from os import listdir
 from os.path import isfile,join
 
 # get all .data files from subject data
+print("USAGE: python evaluate.py [directory to the human data file] [evaluation method: a(aggregated)|o(own)]")
 direct = sys.argv[1]
 EVAL = sys.argv[2]
 files = [f for f in listdir(direct)]
