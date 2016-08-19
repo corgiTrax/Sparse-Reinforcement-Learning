@@ -113,18 +113,18 @@ def in_vcone(B, angle, A):
     '''this angle is in 360 degrees range?'''
     if VISCONE:
         if calc_dist(B,A) > VIS_DIST: return False
-        C = facing(B, angle, 1)
-        BA = [A[0] - B[0], A[1] - B[1]]
-        BC = [C[0] - B[0], C[1] - B[1]]
-        prod = BA[0] * BC[0] + BA[1] * BC[1]
-        BA_norm = math.hypot(BA[0], BA[1])
-        BC_norm = math.hypot(BC[0], BC[1])
-        if BA_norm == 0: # object is really close to agent's position
-            return True
-        theta = math.copysign(1, BA[0]) * math.acos(prod / float(BA_norm * BC_norm)) # in radians
-        theta = math.degrees(theta) # -180 ~ 180
-        if -VIS_CONE <= theta <= VIS_CONE: return True
-        else: return False
+  #      C = facing(B, angle, 1)
+  #      BA = [A[0] - B[0], A[1] - B[1]]
+  #      BC = [C[0] - B[0], C[1] - B[1]]
+  #      prod = BA[0] * BC[0] + BA[1] * BC[1]
+  #      BA_norm = math.hypot(BA[0], BA[1])
+  #      BC_norm = math.hypot(BC[0], BC[1])
+  #      if BA_norm == 0: # object is really close to agent's position
+  #          return True
+  #      theta = math.copysign(1, BA[0]) * math.acos(prod / float(BA_norm * BC_norm)) # in radians
+  #      theta = math.degrees(theta) # -180 ~ 180
+  #      if -VIS_CONE <= theta <= VIS_CONE: return True
+  #      else: return False
     else: return True
 
 def to360(angle):
