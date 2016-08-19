@@ -7,6 +7,7 @@ from config import *
 import utils
 import sys
 import numpy as np
+from PIL import Image as NewImage
 
 np.set_printoptions(precision = 3, suppress = True, linewidth = 1000, threshold = 'nan')
 
@@ -362,7 +363,7 @@ class Trial:
         
         # visualization
         self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X * FACTOR + 50, height = ROOM_Z * FACTOR + 200)
-        self.window.setBackground("gray")
+        self.window.setBackground("white")
         # draw all targets
         targetPics = []
         for targetPos in targets:
@@ -383,7 +384,7 @@ class Trial:
         pathPics = []
         for pathPos in paths:
             pathPic = cg.Circle(cg.Point(pathPos[0] * FACTOR, pathPos[1] * FACTOR), TAR_SIZE/4 * FACTOR)
-            pathPic.setFill("white"); pathPic.setOutline("white")
+            pathPic.setFill("gray"); pathPic.setOutline("gray")
             pathPic.draw(self.window)
             pathPics.append(pathPic)
         # draw the elevator
@@ -501,7 +502,15 @@ class Trial:
 
             # click to go to next step
             if MOUSE: self.window.getMouse()
+        
+        # saves the current TKinter object in postscript format
+        self.window.postscript(file="image.eps")
 
+        # Convert from eps format to gif format using PIL
+        img = NewImage.open("image.eps")
+        fname = self.file_continuous + ".png"
+        img.save(fname, "png")   
+    
     def drawToWin(self, window):
         '''draw to a given window, for visualize data from human subjects from different trials'''
         # Now draw actual human trajectory
@@ -544,6 +553,6 @@ if __name__ == '__main__':
         trial0.free_run(sys.argv[3]) # solution filename
 #        trial1 = Trial(sys.argv[4])
 #        trial1.drawToWin(trial0.window)
-        raw_input("Please press enter to exit")
+#        raw_input("Please press enter to exit")
 
 

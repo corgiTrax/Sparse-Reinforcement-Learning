@@ -23,7 +23,7 @@ EXCLUDE = SIZE * 0 # exclude data that are too close to start/elevator
 CELL = int(SIZE * 0.3) # state granularity
 PATH_SIZE = 0 * SIZE # for IRL landing distance, if gets into this range, the distance is 0.
 VIS_CONE = 58 # 58 degrees; visual cone range on one side
-VIS_DIST = 2 * SIZE # visual cone radius
+VIS_DIST = 10 * SIZE # visual cone radius
 # best parameters for ang.diff: 0.7, 0, 58, 10
 # best parameters for free run: 0.2
 
