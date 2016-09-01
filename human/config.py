@@ -39,5 +39,5 @@ PATH_LOOKAHEAD = False
 NEAREST = False # only look at nearest object of each module
 
 DISCRETE = False
-NUM_PATH_LOOKAHEAD = 3
+NUM_PATH_LOOKAHEAD = 5
 SKIP_THRESH = 2
