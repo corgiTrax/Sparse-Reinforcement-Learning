@@ -617,7 +617,7 @@ class Line(_BBox):
         _BBox.__init__(self, p1, p2, ["arrow","fill","width"])
         self.setFill(DEFAULT_CONFIG['outline'])
         self.setOutline = self.setFill
-   
+
     def clone(self):
         other = Line(self.p1, self.p2)
         other.config = self.config.copy()

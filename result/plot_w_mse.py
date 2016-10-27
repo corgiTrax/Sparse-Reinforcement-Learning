@@ -5,6 +5,8 @@ import copy
 files = []
 files.append("MSE_nonsparse")
 files.append("MSE_01")
+#files.append("MSE_015")
+#files.append("MSE_02")
 files.append("MSE_025")
 files.append("MSE_1")
 
@@ -23,15 +25,15 @@ for i in range(20):
     sample.append(20 * (i+1))
 
 plt.gcf().set_size_inches(5,4)
-plt.plot(sample,datas[0],'b--o',label = '$\delta^2 = 0$')
-plt.plot(sample,datas[1],'y--v',label = '$\delta^2 = 0.1$')
-plt.plot(sample,datas[2],'r--p',label = '$\delta^2 = 0.25$')
-plt.plot(sample,datas[3],'g--D',label = '$\delta^2 = 1$')
+plt.plot(sample,datas[0],'b',label = 'non-sparse')
+plt.plot(sample,datas[1],'g',label = '$\lambda = 0.1$')
+plt.plot(sample,datas[2],'r',label = '$\lambda = 0.25$')
+plt.plot(sample,datas[3],'y',label = '$\lambda = 1$')
 
-legend = plt.legend(loc = 'upper right', fontsize='xx-large')
-plt.ylabel('Weight MSE', fontsize = 'x-large')
-plt.xlabel('Number of Samples', fontsize = 'x-large')
-plt.yticks(fontsize = 'x-large')
-plt.xticks(fontsize = 'x-large')
-
+legend = plt.legend(loc = 'upper right')
+plt.ylabel('Reward MSE')
+plt.xlabel('Number of Samples')
+#plt.yticks(fontsize = 'x-large')
+#plt.xticks(fontsize = 'x-large')
+plt.savefig("sparse.png")
 plt.show()

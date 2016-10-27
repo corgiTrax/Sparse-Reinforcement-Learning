@@ -113,6 +113,7 @@ def in_vcone(B, angle, A):
     '''this angle is in 360 degrees range?'''
     if VISCONE:
         if calc_dist(B,A) > VIS_DIST: return False
+        else: return True
   #      C = facing(B, angle, 1)
   #      BA = [A[0] - B[0], A[1] - B[1]]
   #      BC = [C[0] - B[0], C[1] - B[1]]

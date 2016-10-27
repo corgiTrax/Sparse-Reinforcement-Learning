@@ -26,8 +26,8 @@ SELECT = False
 
 '''Test world'''
 #Test Maze size
-MAZE_ROW = 4
-MAZE_COL = 25
+MAZE_ROW = 8
+MAZE_COL = 16
 
 #test trial numbers
 MAX_STEP = 100
@@ -67,7 +67,7 @@ COLLECTABLES= [True,True,True,False,False,False]
 UNIT_REWARDS = [1,1,1,-1,-1,-1]
 WEIGHTS = [5,10,15,5,10,15]
 GAMMAS = [0.7, 0.6, 0.5, 0.3, 0.2, 0.1]
-NUM_INSTS = [10,10,10,10,10,10]
+NUM_INSTS = [12,12,12,10,10,10]
 RAND_GENS = [False,False,False,False,False,False]
 
 

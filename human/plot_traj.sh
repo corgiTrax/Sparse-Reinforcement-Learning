@@ -1,6 +1,6 @@
 #!/bin/bash
-rm -rf data/subj$1/plots
-mkdir data/subj$1/plots
+#rm -rf data/subj$1/plots
+#mkdir data/subj$1/plots
 for f in data/subj$1/*_$2.data;
 do
   echo "Plotting $f file..."

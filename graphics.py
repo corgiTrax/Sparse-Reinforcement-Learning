@@ -161,9 +161,6 @@ except:
    import Tkinter as tk
 
 
-COLORLIST = ["orange", "yellow", "purple", "cyan", "lightgreen", "gray"]
-#COLORLIST = ["black", "blue", "brown", "cyan", "gray", "green", "orange", "purple", "red", "white", "yellow"]
-##########################################################################
 # Module Exceptions
 
 class GraphicsError(Exception):
@@ -939,6 +936,8 @@ def test():
     t.setSize(20)
     win.getMouse()
     win.close()
+
+COLORLIST = [color_rgb(65,105,225), color_rgb(100,149,237), color_rgb(135,206,250), color_rgb(255,69,0), color_rgb(240,127,80), color_rgb(255,99,71)]
 
 if __name__ == "__main__":
     test()

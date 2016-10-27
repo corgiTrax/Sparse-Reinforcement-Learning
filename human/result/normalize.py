@@ -22,11 +22,11 @@ for fn in fns:
     for i in range(len(weights)):
         weights[i] /= sumW
     
-#    print("Results for file: " + fn)
-    #print("Normalized weights are: ")
+    print("Results for file: " + fn)
+    print("Normalized weights are: ")
     for w in weights:
         print("{0:0.2f}".format(w))
-    #print("\nDiscount factors are: ")
+    print("\nDiscount factors are: ")
     for g in gammas:
         print("{0:0.2f}".format(g))
     

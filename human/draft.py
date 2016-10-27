@@ -72,3 +72,57 @@
                         for act in ACTIONS:
                             global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(pathPos), act, PATH_SIZE))
 
+
+
+
+
+# in free_run visualization
+        if not PILG:
+            # 1.0 visualization of the environment
+            self.window = cg.GraphWin(title = "A Single Trial", width = ROOM_X * FACTOR + 50, height = ROOM_Z * FACTOR + 200)
+            self.window.setBackground("white")
+            # draw all targets
+            targetPics = []
+            for targetPos in targets_init:
+                targetPic = cg.Circle(cg.Point(targetPos[0] * FACTOR, targetPos[1] * FACTOR), TAR_SIZE * FACTOR)
+                targetPic.setFill("darkblue"); targetPic.setOutline("darkblue")
+                targetPic.draw(self.window)
+                targetPics.append(targetPic)
+            # draw all obsts
+            obstPics = []
+            for obstPos in obsts_init:
+                topLeftPt = cg.Point(obstPos[0] * FACTOR - OBS_SIZE * FACTOR, obstPos[1] * FACTOR - OBS_SIZE * FACTOR)
+                bottomRightPt = cg.Point(obstPos[0] * FACTOR + OBS_SIZE * FACTOR, obstPos[1] * FACTOR + OBS_SIZE * FACTOR)
+                obstPic = cg.Rectangle(topLeftPt,bottomRightPt)
+                obstPic.setFill("darkred"); obstPic.setOutline("darkred")
+                obstPic.draw(self.window)
+                obstPics.append(obstPic)
+            # draw all paths
+            pathPics = []
+            for pathPos in paths_init:
+                pathPic = cg.Circle(cg.Point(pathPos[0] * FACTOR, pathPos[1] * FACTOR), TAR_SIZE/4 * FACTOR)
+                pathPic.setFill("gray"); pathPic.setOutline("gray")
+                pathPic.draw(self.window)
+                pathPics.append(pathPic)
+            # draw the elevator
+            for elevPos in elevs_init:
+                elevPic = cg.Circle(cg.Point(elevPos[0] * FACTOR, elevPos[1] * FACTOR), TAR_SIZE * FACTOR)
+                elevPic.setFill("yellow"); elevPic.setOutline("yellow")
+                elevPic.draw(self.window)
+
+            # 2.0
+                agentLine = cg.Line(cg.Point(agentPos[0] * FACTOR, agentPos[1] * FACTOR), cg.Point(lastAgentPos[0] * FACTOR, lastAgentPos[1] * FACTOR))
+                agentLine.setFill("green"); agentLine.setOutline("green"); agentLine.setWidth(0.3 * SIZE);
+                agentLine.draw(self.window)
+            
+            # 3.0
+            agentLine = cg.Line(cg.Point(agentPos[0] * FACTOR, agentPos[1] * FACTOR), cg.Point(lastAgentPos[0] * FACTOR, lastAgentPos[1] * FACTOR))
+            agentLine.setFill("black"); agentLine.setOutline("black"); agentLine.setWidth(0.2 * SIZE);
+            agentLine.draw(self.window)
+        
+        #saving
+        self.window.postscript(file="image.eps")
+        # Convert from eps format to gif format using PIL
+        img = Image.open("image.eps")
+        img.save(fname, "png")   
+

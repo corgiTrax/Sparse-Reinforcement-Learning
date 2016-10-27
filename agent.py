@@ -25,8 +25,9 @@ class Agent:
         '''if object is new draw a new object'''
         if (isnew == True):
             self.picCenter = cg.Point((self.pos[COL] + 0.5) * CELL_SIZE, (self.pos[ROW] + 0.5) * CELL_SIZE)
-            self.agentPic = cg.Circle(self.picCenter, CELL_SIZE/4)
+            self.agentPic = cg.Circle(self.picCenter, CELL_SIZE/6)
             self.agentPic.setFill(color)
+            self.agentPic.setOutline(color)
             self.agentPic.draw(self.world.window)
         else:
             dx = -self.agentPic.getCenter().getX() + (self.pos[COL] + 0.5) * CELL_SIZE

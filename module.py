@@ -48,7 +48,8 @@ class moduleClass:
             self.inst_pics = []
             for inst in self.insts:
                 if self.unit_reward == 1: # this is some good stuff
-                    pic = cg.Circle(cg.Point((inst[COL] + 0.5) * CELL_SIZE, (inst[ROW] + 0.5) * CELL_SIZE), CELL_SIZE/6)
+                    pic = cg.Circle(cg.Point((inst[COL] + 0.5) * CELL_SIZE, (inst[ROW] + 0.5) * CELL_SIZE), CELL_SIZE/3)
+                    pic.setOutline(self.color)
                 else: # this is something agent want to avoid
                     topLeftPt = cg.Point(inst[COL] * CELL_SIZE, inst[ROW] * CELL_SIZE)
                     bottomRightPt = cg.Point((inst[COL] + 1) * CELL_SIZE, (inst[ROW] + 1) * CELL_SIZE)

@@ -16,6 +16,7 @@ for f in files:
 #print(dataFiles)
 
 errs = [[],[],[],[]]
+errsFw = [[],[],[],[]]
 for dataf in dataFiles:
     newTrial = world.Trial(dataf)
 #    print("Current file: " + dataf)
@@ -24,11 +25,12 @@ for dataf in dataFiles:
         if EVAL == "o": # use own irl file
             irlFile = (dataf.replace("data", "result", 1)).split('.')[0]
 #            print(irlFile,dataf)
-            err = newTrial.visualize_result(irlFile)
+            err, errFw = newTrial.visualize_result(irlFile)
         elif EVAL == "a": # use aggregated irl file
             irlFile = direct.replace("data", "result", 1) + "task" + str(task)
-            err = newTrial.visualize_result(irlFile)
+            err, errFw = newTrial.visualize_result(irlFile)
         errs[task-1].append(err)
+        errsFw[task-1].append(errFw)
 
 mean_errs = []
 for task, taskErr in enumerate(errs):
@@ -37,4 +39,13 @@ for task, taskErr in enumerate(errs):
     print(mean_err)
     mean_errs.append(mean_err)
 
-#print("Average error of all trials is: {}".format(sum(mean_errs)/float(len(mean_errs))))
+print("Average error of all trials is: {}".format(sum(mean_errs)/float(len(mean_errs))))
+
+mean_errsFw = []
+for task, taskErr in enumerate(errsFw):
+    mean_errFw = sum(taskErr)/float(len(taskErr))
+#    print("Angular difference of task {} is: {}".format(task + 1, mean_err))
+    print(mean_errFw)
+    mean_errsFw.append(mean_errFw)
+
+print("Baseline Average error of all trials is: {}".format(sum(mean_errsFw)/float(len(mean_errsFw))))
