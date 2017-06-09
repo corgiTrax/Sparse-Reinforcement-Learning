@@ -1,0 +1,26 @@
+#!/bin/bash
+python evaluate.py data/subj26/ a >> angular_diff/subj26_.txt
+python evaluate.py data/subj27/ a >> angular_diff/subj27_.txt
+python evaluate.py data/subj28/ a >> angular_diff/subj28_.txt
+python evaluate.py data/subj31/ a >> angular_diff/subj31_.txt
+python evaluate.py data/subj32/ a >> angular_diff/subj32_.txt
+python evaluate.py data/subj33/ a >> angular_diff/subj33_.txt
+python evaluate.py data/subj34/ a >> angular_diff/subj34_.txt
+python evaluate.py data/subj35/ a >> angular_diff/subj35_.txt
+python evaluate.py data/subj36/ a >> angular_diff/subj36_.txt
+python evaluate.py data/subj37/ a >> angular_diff/subj37_.txt
+python evaluate.py data/subj38/ a >> angular_diff/subj38_.txt
+python evaluate.py data/subj39/ a >> angular_diff/subj39_.txt
+python evaluate.py data/subj42/ a >> angular_diff/subj42_.txt
+python evaluate.py data/subj43/ a >> angular_diff/subj43_.txt
+python evaluate.py data/subj44/ a >> angular_diff/subj44_.txt
+python evaluate.py data/subj45/ a >> angular_diff/subj45_.txt
+python evaluate.py data/subj46/ a >> angular_diff/subj46_.txt
+python evaluate.py data/subj47/ a >> angular_diff/subj47_.txt
+python evaluate.py data/subj48/ a >> angular_diff/subj48_.txt
+python evaluate.py data/subj54/ a >> angular_diff/subj54_.txt
+python evaluate.py data/subj56/ a >> angular_diff/subj56_.txt
+python evaluate.py data/subj59/ a >> angular_diff/subj59_.txt
+python evaluate.py data/subj61/ a >> angular_diff/subj61_.txt
+python evaluate.py data/subj63/ a >> angular_diff/subj63_.txt
+python evaluate.py data/subj64/ a >> angular_diff/subj64_.txt

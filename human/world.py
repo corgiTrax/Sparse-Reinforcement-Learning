@@ -1,4 +1,5 @@
 '''Environment'''
+import random
 import re
 import copy as cp
 import graphics as cg
@@ -183,10 +184,20 @@ class Trial:
         '''given rewards and gammas estimated from sol_file, visualize the chosen action'''
         # get estimated reward and gamma from a file
         sol_file = open(sol_file_name, 'r')
+        task = int(sol_file_name[-1]) # task1 task2 task3 task4...
         params = np.zeros(NUM_MODULE * 2)
         for ct, line in enumerate(sol_file):
             params[ct] = float(line)
-        # print("The parameters we use are: "),; print(params)
+        if AGENT == BINARY_R:
+            if task == 1: params[0], params[2], params[4] = 0, 0, 1
+            elif task == 2: params[0], params[2], params[4] = 0, 1, 1
+            elif task == 3: params[0], params[2], params[4] = 1, 0, 1
+            elif task == 4: params[0], params[2], params[4] = 1, 1, 1
+        elif AGENT == GAMMA05:
+            params[1], params[3], params[5] = 0.5, 0.5, 0.5
+        elif AGENT == GAMMA099:
+            params[1], params[3], params[5] = 0.99, 0.99, 0.99
+#        print("The parameters we use are: "),; print(params)
         angularErrs = []
         angularErrsFw = [] # if the agent just walk forward
 
@@ -239,14 +250,11 @@ class Trial:
                         global_Q[act] += r * unit_r * (gamma ** dist)
             
             # do not use softmax action for evaluating angular difference, always pick the best one
-            if AGENT == MIRL:
+            if AGENT != RANDOM:
                 pred_action = np.argmax(global_Q)
             # random action
             if AGENT == RANDOM:
                 pred_action = random.randint(0, NUM_ACT - 1)
-            # reflex agent implementation here
-            if AGENT == REFLEX:
-                pass
 
             # record prediction error 
             # angularErrs.append(utils.calc_err_actual(utils.move(agentPos, action), agentPos, pred_action)) # this compares with discretized actual action
@@ -335,9 +343,9 @@ class Trial:
                 #actualActPic.undraw()
         
         err = (sum(angularErrs)/float(len(angularErrs)))
-        print("Average absolute prediction error is, in degrees: {}".format(err))
+#        print("Average absolute prediction error is, in degrees: {}".format(err))
         errFw = (sum(angularErrsFw)/float(len(angularErrsFw)))
-        print("Walking forward average absolute prediction error is, in degrees: {}".format(errFw))
+#        print("Walking forward average absolute prediction error is, in degrees: {}".format(errFw))
         return err, errFw         
 
     def free_run(self, sol_file_name):
@@ -385,8 +393,8 @@ class Trial:
                 backDraw.ellipse([topLeft,bottomRight], fill=(100,100,100,255)) # dark grey
             # draw the elevator
             for elevPos in elevs_init:
-                topLeft = (elevPos[0] * FACTOR - TAR_SIZE * FACTOR, elevPos[1] * FACTOR - TAR_SIZE * FACTOR)
-                bottomRight = (elevPos[0] * FACTOR + TAR_SIZE * FACTOR, elevPos[1] * FACTOR + TAR_SIZE * FACTOR)
+                topLeft = (elevPos[0] * FACTOR -  2 * TAR_SIZE * FACTOR, elevPos[1] * FACTOR - 2 * TAR_SIZE * FACTOR)
+                bottomRight = (elevPos[0] * FACTOR + 2 * TAR_SIZE * FACTOR, elevPos[1] * FACTOR + 2* TAR_SIZE * FACTOR)
                 backDraw.ellipse([topLeft,bottomRight], fill=(255,255,0,255)) # yellow
 
         for trial in range(NUM_TRAJ):
@@ -408,7 +416,7 @@ class Trial:
             stepCount = 0
     
             # begin iterations
-            while not(arrived) and stepCount < MAX_STEP: 
+            while not arrived and stepCount < MAX_STEP: 
                 global_Q = np.zeros(len(ACTIONS))
                 # targets
                 unit_r = 1; module = 0
@@ -487,11 +495,11 @@ class Trial:
                 # obstacles
                 for obstPos in obsts[:]:
                     if utils.calc_dist(agentPos, obstPos) < OBS_SIZE: obsts.remove(obstPos)  
-                # TODO use distance
+                #if utils.calc_dist(agentPos, elevs[0]) < ARR_DIST: arrived = True
                 if self.startSide == 0: # which side the agent starts, alternate by trials
-                    if pass_index == len(self.allPaths) - 1: arrived = True
+                    if pass_index == len(self.allPaths): arrived = True
                 else: 
-                    if pass_index == 0: arrived = True
+                    if pass_index == -1: arrived = True
                 stepCount += 1 
 
         # Now get actual human trajectory

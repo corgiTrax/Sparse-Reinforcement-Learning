@@ -24,16 +24,16 @@ sample = []
 for i in range(20):
     sample.append(20 * (i+1))
 
-plt.gcf().set_size_inches(5,4)
+plt.gcf().set_size_inches(5,5)
 plt.plot(sample,datas[0],'b',label = 'non-sparse')
 plt.plot(sample,datas[1],'g',label = '$\lambda = 0.1$')
 plt.plot(sample,datas[2],'r',label = '$\lambda = 0.25$')
 plt.plot(sample,datas[3],'y',label = '$\lambda = 1$')
 
 legend = plt.legend(loc = 'upper right')
-plt.ylabel('Reward MSE')
+plt.ylabel('Mean Squared Error of Rewards')
 plt.xlabel('Number of Samples')
 #plt.yticks(fontsize = 'x-large')
 #plt.xticks(fontsize = 'x-large')
-plt.savefig("sparse.png")
-plt.show()
+plt.savefig("sparse.png", dpi = 300)
+#plt.show()

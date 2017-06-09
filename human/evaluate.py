@@ -5,7 +5,9 @@ from os import listdir
 from os.path import isfile,join
 
 # get all .data files from subject data
-print("USAGE: python evaluate.py [directory to the human data file] [evaluation method: a(aggregated)|o(own)]")
+if len(sys.argv) != 3:
+    print("USAGE: python evaluate.py [directory to the human data file] [evaluation method: a(aggregated)|o(own)]")
+
 direct = sys.argv[1]
 EVAL = sys.argv[2]
 files = [f for f in listdir(direct)]
@@ -32,20 +34,26 @@ for dataf in dataFiles:
         errs[task-1].append(err)
         errsFw[task-1].append(errFw)
 
-mean_errs = []
+print(len(errs[0]))
+for taskErr in errs:
+    for err in taskErr:
+        print(err)
+
+mean_errs = [] # across 4 tasks
 for task, taskErr in enumerate(errs):
     mean_err = sum(taskErr)/float(len(taskErr))
-#    print("Angular difference of task {} is: {}".format(task + 1, mean_err))
+    print("Angular difference of task {} is: {}".format(task + 1, mean_err))
     print(mean_err)
     mean_errs.append(mean_err)
 
-print("Average error of all trials is: {}".format(sum(mean_errs)/float(len(mean_errs))))
+# print("Average error of all trials is: {}".format(sum(mean_errs)/float(len(mean_errs))))
 
-mean_errsFw = []
-for task, taskErr in enumerate(errsFw):
-    mean_errFw = sum(taskErr)/float(len(taskErr))
+# get walking forward baseline
+#mean_errsFw = []
+#for task, taskErr in enumerate(errsFw):
+#    mean_errFw = sum(taskErr)/float(len(taskErr))
 #    print("Angular difference of task {} is: {}".format(task + 1, mean_err))
-    print(mean_errFw)
-    mean_errsFw.append(mean_errFw)
+#    print(mean_errFw)
+#    mean_errsFw.append(mean_errFw)
 
-print("Baseline Average error of all trials is: {}".format(sum(mean_errsFw)/float(len(mean_errsFw))))
+#print("Baseline Average error of all trials is: {}".format(sum(mean_errsFw)/float(len(mean_errsFw))))

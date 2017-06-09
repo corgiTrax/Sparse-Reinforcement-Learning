@@ -1,0 +1,26 @@
+#!/bin/bash
+./plot_traj.sh 26
+./plot_traj.sh 27
+./plot_traj.sh 28
+./plot_traj.sh 31
+./plot_traj.sh 32
+./plot_traj.sh 33
+./plot_traj.sh 34
+./plot_traj.sh 35
+./plot_traj.sh 36
+./plot_traj.sh 37
+./plot_traj.sh 38
+./plot_traj.sh 39
+./plot_traj.sh 42
+./plot_traj.sh 43
+./plot_traj.sh 44
+./plot_traj.sh 45
+./plot_traj.sh 46
+./plot_traj.sh 47
+./plot_traj.sh 48
+./plot_traj.sh 54
+./plot_traj.sh 56
+./plot_traj.sh 59
+./plot_traj.sh 61
+./plot_traj.sh 63
+./plot_traj.sh 64

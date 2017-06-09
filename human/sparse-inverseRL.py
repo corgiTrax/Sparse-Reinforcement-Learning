@@ -23,7 +23,9 @@ class inverse_rl:
             print("non sparse version")
         # output file is in result/subj#/, the file name without ".fit"
         self.out_filename = "../result/" + data_file.split('/')[-2] + '/' + ((data_file.split('/')[-1]).split('.')[0])
-    
+        self.task = int(((data_file.split('/')[-1]).split('.')[0])[-1])
+        print("Current Task: ",self.task)
+
     def construct_obj(self, x):
         # construct objective function
         data_file = open(self.data_file,'r')
@@ -62,7 +64,7 @@ class inverse_rl:
             for a in range(NUM_ACT):
                 temp = 1
                 for inst in insts:
-                    #inst[a] = int(round(inst[a])) # round this to avoid math overflow
+                    if inst[a] > 709: inst[a] = 709 # prevent overflow
                     temp = temp * math.exp(inst[a])
                 second_term += cp.deepcopy(temp)
             if second_term != 0:
@@ -72,7 +74,7 @@ class inverse_rl:
         
         # l1 norm on w
         if self.sparse:
-            delta = 0.2 # sparsity bias, requires tuning
+            delta = 0.25 # sparsity bias, requires tuning
             for i in range(NUM_MODULE): 
                 logl = logl - delta * x[i * 2]
 
@@ -87,11 +89,49 @@ class inverse_rl:
         x0 = []
         bound = []
         # initialization
-        for i in range(NUM_MODULE):
-            x0.append(0)
-            x0.append(0.5)
-            bound.append((0, None))
-            bound.append((0.0,0.99))
+        EST_REWARD = True
+        if EST_REWARD:
+            for i in range(NUM_MODULE):
+                x0.append(0)
+                x0.append(0.99)
+                bound.append((0, None))
+                bound.append((0.99,0.99)) #TODO can fix discount factor here, ow be (0.0, 0.99)
+        else: # fix reward weights to be binary and estimate discount factors
+            for i in range(NUM_MODULE):
+                if self.task == 1:
+                    if i == 0: x0.append(0)
+                    elif i == 1: x0.append(0)
+                    elif i == 2: x0.append(1)
+                elif self.task == 2:
+                    if i == 0: x0.append(0)
+                    elif i == 1: x0.append(1)
+                    elif i == 2: x0.append(1)
+                elif self.task == 3:
+                    if i == 0: x0.append(1)
+                    elif i == 1: x0.append(0)
+                    elif i == 2: x0.append(1)
+                elif self.task == 4:
+                    if i == 0: x0.append(1)
+                    elif i == 1: x0.append(1)
+                    elif i == 2: x0.append(1)
+                x0.append(0.5)
+                if self.task == 1:
+                    if i == 0: bound.append((0, 0))
+                    elif i == 1: bound.append((0, 0))
+                    elif i == 2: bound.append((1, 1))
+                elif self.task == 2:
+                    if i == 0: bound.append((0, 0))
+                    elif i == 1: bound.append((1, 1))
+                    elif i == 2: bound.append((1, 1))
+                elif self.task == 3:
+                    if i == 0: bound.append((1, 1))
+                    elif i == 1: bound.append((0, 0))
+                    elif i == 2: bound.append((1, 1))
+                elif self.task == 4:
+                    if i == 0: bound.append((1, 1))
+                    elif i == 1: bound.append((1, 1))
+                    elif i == 2: bound.append((1, 1))
+                bound.append((0.0,0.99))
         #print(x0)
         #print(bound)
         #print("begin minimization algorithm >>>")

@@ -2,6 +2,7 @@
 import sys
 from os import listdir
 from os.path import isfile,join
+print("This program normalize the reward for each task, and also show the discount factors")
 
 # get file
 direct = sys.argv[1]
@@ -22,13 +23,13 @@ for fn in fns:
     for i in range(len(weights)):
         weights[i] /= sumW
     
-    print("Results for file: " + fn)
+    print("Results for task: " + fn)
     print("Normalized weights are: ")
     for w in weights:
-        print("{0:0.2f}".format(w))
-    print("\nDiscount factors are: ")
+        print("{0:0.3f}".format(w))
+    print("Discount factors are: ")
     for g in gammas:
-        print("{0:0.2f}".format(g))
-    
+        print("{0:0.3f}".format(g))
+    print
     f.close()
 
