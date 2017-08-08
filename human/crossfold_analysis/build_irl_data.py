@@ -1,6 +1,7 @@
+import sys
+sys.path.append('/home/zharuvrl/Projects/Sparse-Reinforcement-Learning/human')
 from config import *
 import world
-import sys
 from os import listdir
 from os.path import isfile,join
 
@@ -9,7 +10,7 @@ files = [f for f in listdir(direct)]
 # get all data files and build .dis files
 dataFiles = []
 for f in files:
-    if f.find(".data") != -1 and f.find(".dis") == -1 and f.find(".fit") == -1:
+    if f.find(".png") == -1 and f.find(".data") != -1 and f.find(".dis") == -1 and f.find(".fit") == -1:
         dataFiles.append(direct + f)
 for f in dataFiles:
     print("Building .dis file for: " + f)

@@ -184,7 +184,7 @@ class Trial:
         '''given rewards and gammas estimated from sol_file, visualize the chosen action'''
         # get estimated reward and gamma from a file
         sol_file = open(sol_file_name, 'r')
-        task = int(sol_file_name[-1]) # task1 task2 task3 task4...
+        task = int(sol_file_name[-1]) # task1/2/3/4, or subj_trial_task1/2/3/4
         params = np.zeros(NUM_MODULE * 2)
         for ct, line in enumerate(sol_file):
             params[ct] = float(line)
@@ -197,6 +197,8 @@ class Trial:
             params[1], params[3], params[5] = 0.5, 0.5, 0.5
         elif AGENT == GAMMA099:
             params[1], params[3], params[5] = 0.99, 0.99, 0.99
+        elif AGENT == GAMMA01:
+            params[1], params[3], params[5] = 0.1, 0.1, 0.1
 #        print("The parameters we use are: "),; print(params)
         angularErrs = []
         angularErrsFw = [] # if the agent just walk forward

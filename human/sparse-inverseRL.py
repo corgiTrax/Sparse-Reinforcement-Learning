@@ -89,13 +89,13 @@ class inverse_rl:
         x0 = []
         bound = []
         # initialization
-        EST_REWARD = True
+        EST_REWARD = True #TODO
         if EST_REWARD:
             for i in range(NUM_MODULE):
                 x0.append(0)
-                x0.append(0.99)
+                x0.append(0.5) #TODO
                 bound.append((0, None))
-                bound.append((0.99,0.99)) #TODO can fix discount factor here, ow be (0.0, 0.99)
+                bound.append((0.0,0.99)) #TODO can fix discount factor here, ow be (0.0, 0.99)
         else: # fix reward weights to be binary and estimate discount factors
             for i in range(NUM_MODULE):
                 if self.task == 1:

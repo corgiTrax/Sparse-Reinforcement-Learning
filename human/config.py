@@ -5,8 +5,8 @@ ACTIONS = [L, LLU, LU, LUU, U, UUR, UR, URR, R, RRD, RD, RDD, D, DDL, DL, DLL]
 ACT_NAMES = ["LEFT", "LEFT LEFT UP", "LEFT UP", "LEFT UP UP", "UP", "UP UP RIGHT", "UP RIGHT", "UP RIGHT RIGHT", "RIGHT",\
 "RIGHT RIGHT DOWN", "RIGHT DOWN", "RIGHT DOWN DOWN", "DOWN", "DONW DOWN LEFT", "DONW LEFT", "DOWN LEFT LEFT"]
 NUM_ACT = len(ACTIONS)
-MIRL, RANDOM, BINARY_R, GAMMA05, GAMMA099 = 0,1,2,3,4
-AGENT = 0
+MIRL, RANDOM, BINARY_R, GAMMA05, GAMMA099, GAMMA01 = 0,1,2,3,4,5
+AGENT = GAMMA01 #TODO
 
 # environment parameters
 SIZE = 10
@@ -75,7 +75,7 @@ VECS = [
 [0.7,	4,	4,	5,	0.6]]
 #VEC = VECS[SUBJ_DIC.index(SUBJ)]
 # 0.572, 50, 5, 5, 0.6, 0
-VEC = [0.572, 50, 5, 5, 0.0, 0.0] # 3.32 for the second one, on average, put 50 for infinite distance
+VEC = [0.572, 50, 5, 5, 0.6, 0.0] # 3.32 for the second one, on average, put 50 for infinite distance
 CELL = int(SIZE * VEC[0]) # state granularity
 VIS_DIST = VEC[1] * SIZE # visual cone radius
 NUM_PATH_LOOKAHEAD = VEC[2]
