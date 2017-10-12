@@ -1,0 +1,39 @@
+1. Subjects: only consider these subjects:
+26,27,28, 31,32,33,34,35,36,37,38,39,60,61,62,63,64,65
+
+2. Filename: the data files are named subjectID_trialNumber_TaskNumber.data under each subject's folder, e.g., subj26/26_5_1.data
+- For subject 26,27,28, they each have 8 trials per task
+For the rest of subjects, they each have 4 trials per task
+- Tasks are:
+Task 1: Follow the path only
+Task 2: Follow the path and avoid the obstacles
+Task 3: Follow the path and collect the targets
+Task 4: Follow, avoid, and collect together
+So your estimated reward should show correspondence with task priority.
+- The way to perform experiment is to use leave-1-out cross-fold analysis, i.e. estimate reward on 7 or 3 trials and test on the left-out one.
+
+3.  How to read data file:
+A typical line in data file looks like this:
+63#-2.341,-1.555,270.338#-1.0,-1.785;-1.492,-0.929;1.39,1.011;-1.95,0.495;1.422,1.603;-0.016,1.498;-2.18,0.777;0.727,0.118;#-1.943,0.634;1.08,1.099;1.078,-0.49;-2.167,1.352;0.89,-0.001;0.56,1.149;0.85,1.194;0.072,-0.795;#-2.438,-1.829;-2.286,-1.219;-1.829,-0.762;-1.676,-0.152;-1.372,0.305;-1.219,0.914;-0.914,1.372;-0.305,1.372;-0.152,0.762;0.152,0.305;0.457,-0.152;0.61,-0.762;0.61,-1.372;0.762,-1.981;1.067,-2.134;1.524,-1.981;1.829,-1.524;1.981,-0.914;2.134,-0.305;2.286,0.305;2.438,0.914;2.438,1.524;#-2.438,-1.829
+- The fields are separate by #
+- A single line (one time step) is organized as follows:
+time_step # agentX, agentY, agentOrientation # Target1X, Target1Y; Target2X, Target2Y.......;
+Obstacle1X, Obstacle1Y; .......; PathPoint1X, PathPoint1Y, ...... # destination pathpointX, Y
+- The positions are in **Meters**
+- Note that once agent encounter a target or an obstacle, the target or obstacle will disappear; once the agent has bypassed a path point, it will disappeared too. So the line will have fewer and fewer objects. Path is tricky two handle, we'll get back to this.
+- The last field is the position of the final pathpoint, so from this we know where end of the path agent starts with
+
+4. Parameters:
+- We assume that the agent makes decision at 0.1m precision 
+- Action space: 16 discrete orientations span 360 degrees
+- The agent step length is 0.572m
+- Room is 8.534m (X) by 7.315m (Y)
+- Target has radius 0.2134m, obstacle has radius 0.1753m. These are useful for determining whether the agent has encounter the object successfully (then that object will disappear)
+- Path is really tricky. The pathpoints are discrete landmarks on a continuous path. These serve as positive reward (a target) to draw agent to move forward.  Ideally, an agent should be looking at all pathpoint ahead of it. And when an agent move beyond a pathpoint, it should be deleted. The first tricky thing is that our path is "S" shaped (see paper figures), we assume that the agent looks at most 5 pathpoints  ahead of it. 
+The second tricky thing is that, how do we decide when a pathpoint is bypassed. Since the agent leaves path a lot and returns (sometimes it doesn't return)., it is hard to decide which pathpoints are being considered for now. 
+How we handle the path is here: https://github.com/corgiTrax/Sparse-Reinforcement-Learning/blob/master/human/world.py#L79
+It's a little complicated, I can explain to you when we meet next time. 
+
+5. Others
+- The data within 0.6 meters range of the starting point should be excluded. They are doing something else and the data shouldn't be used. 
+- I have some helper functions at https://github.com/corgiTrax/Sparse-Reinforcement-Learning/blob/master/human/utils.py
