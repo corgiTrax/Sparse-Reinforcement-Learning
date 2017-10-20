@@ -1,0 +1,9 @@
++Group = "Grad"
++Project = "AI_ROBOTICS"
++ProjectDescription = "simulation of reward learning using bayesian inverse reinforcement learning algorithm"
+Executable = feature_birl_test 
+arguments = 28 38 4 
+Output = ./output/28_38_4.out 
+
+Queue 1 
+ 
