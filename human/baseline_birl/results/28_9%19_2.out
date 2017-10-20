@@ -1,4 +1,4 @@
-arguments: 28 19 2 0.00980392 0.00980392 4.28579e-15 -0.980392
+arguments: 28 19 2 0.00980392 0.00980392 -6.4627e-15 -0.980392
 loading features...
 
 Initializing gridworld of size 28 by 22..
@@ -28,27 +28,27 @@ recovered reward
 -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, 
 -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, -0.98, 
 -- optimal policy --
-r  r  v  >  r  r  r  r  v  r  r  r  >  r  >  ^  <  <  <  <  r  v  r  v  l  v  r  v  
-r  r  r  v  >  r  v  r  v  v  r  >  r  >  R  ^  L  <  <  <  r  r  v  l  v  r  v  l  
-r  v  r  r  v  >  v  >  r  v  l  r  >  R  ^  ^  ^  L  <  <  r  >  r  <  r  v  r  v  
->  r  v  r  v  v  v  l  >  >  r  v  R  ^  ^  ^  ^  ^  L  <  >  R  ^  r  v  r  v  l  
-r  >  v  >  r  v  l  l  R  ^  >  R  <  ^  ^  ^  ^  ^  ^  L  R  ^  r  r  r  v  l  <  
-r  r  v  r  >  r  <  v  v  v  R  ^  L  v  l  v  l  ^  ^  R  ^  r  >  r  >  R  <  L  
-r  r  r  r  r  r  r  v  v  r  v  r  v  l  v  l  l  l  R  ^  r  >  r  >  R  ^  L  L  
-v  r  r  r  r  r  r  v  r  v  r  v  r  v  l  l  l  v  l  r  >  r  >  R  ^  ^  L  L  
-r  v  r  r  r  r  r  r  v  r  v  v  v  l  l  l  l  l  l  >  r  >  R  ^  R  ^  L  L  
->  r  v  r  r  r  v  r  r  v  r  v  l  l  l  r  v  l  l  r  >  R  ^  R  R  ^  L  L  
-r  >  r  r  r  r  r  v  l  r  v  l  l  l  l  l  l  <  <  >  R  R  ^  R  ^  R  ^  L  
->  R  ^  r  >  >  >  <  <  >  >  <  <  v  l  l  ^  L  l  R  ^  ^  R  R  ^  ^  R  ^  
-R  ^  r  >  R  R  R  ^  L  R  ^  L  v  l  l  l  v  l  l  l  ^  <  ^  R  ^  L  R  ^  
-^  r  >  R  R  R  ^  ^  R  ^  ^  >  L  <  <  l  l  <  <  v  l  L  <  ^  ^  ^  L  ^  
-r  >  R  R  R  R  >  r  v  l  v  l  ^  L  <  <  ^  L  <  <  <  l  L  <  ^  L  ^  L  
->  R  R  R  R  >  r  >  r  v  l  <  l  ^  L  L  <  ^  L  ^  L  <  <  L  <  ^  L  ^  
-R  R  R  R  >  r  >  R  >  L  <  L  <  <  ^  L  L  <  ^  L  ^  L  <  <  L  <  ^  ^  
-R  R  R  >  r  >  R  >  R  ^  L  l  L  L  <  L  L  L  <  ^  L  ^  L  L  <  L  <  ^  
-R  ^  >  r  >  R  >  R  R  >  ^  <  <  L  L  <  L  L  L  <  ^  L  ^  L  L  <  L  <  
-^  >  r  >  R  >  R  ^  >  R  ^  L  L  <  L  L  L  L  L  L  <  L  L  ^  L  L  <  L  
->  r  >  R  >  R  ^  >  R  ^  L  ^  L  L  <  L  L  L  L  L  L  <  L  L  ^  L  L  <  
-R  >  R  >  R  R  >  R  R  ^  ^  L  L  L  L  <  L  L  L  L  L  L  <  L  L  ^  L  L  
-Correct actions (%) : 13.27
-Avg angular diffs   : 85.87
+r  v  v  >  r  v  r  v  v  >  >  >  >  >  >  ^  <  <  l  <  r  v  r  v  l  r  r  v  
+r  r  v  v  >  r  v  r  v  l  R  R  R  R  R  ^  L  L  <  L  >  r  v  l  v  v  r  v  
+r  r  r  v  v  >  >  r  r  v  l  R  R  R  ^  ^  ^  L  L  L  r  >  r  <  r  v  v  v  
+r  r  v  r  v  v  v  >  >  >  r  v  R  ^  ^  R  ^  ^  L  L  >  R  ^  r  v  r  v  l  
+r  >  v  >  r  v  l  R  R  ^  >  R  <  R  ^  L  ^  L  ^  L  R  ^  r  r  r  v  l  <  
+r  r  r  r  >  v  <  v  v  R  R  ^  L  <  R  ^  L  R  ^  ^  L  r  >  r  >  R  <  L  
+r  r  r  r  r  r  v  v  v  v  v  v  v  v  v  l  l  L  L  R  r  >  r  >  R  ^  L  <  
+v  r  r  r  r  r  r  r  r  v  v  v  v  v  l  l  l  v  v  r  >  r  >  R  ^  ^  ^  L  
+r  v  r  r  r  r  r  r  v  l  v  v  v  l  l  l  v  v  l  >  r  >  R  ^  R  ^  ^  L  
+>  r  v  r  r  r  v  l  r  v  v  v  l  l  <  r  v  l  l  r  >  R  ^  R  ^  R  ^  ^  
+r  >  r  >  r  r  r  v  l  r  v  l  l  l  v  l  l  <  l  >  R  R  ^  ^  R  ^  R  ^  
+>  R  ^  r  >  >  >  <  <  >  r  <  l  v  l  l  ^  L  l  R  R  ^  R  ^  ^  R  ^  ^  
+R  ^  r  >  R  R  R  ^  L  R  ^  L  v  l  l  l  v  l  l  l  ^  <  ^  ^  R  ^  ^  L  
+^  r  >  R  R  R  ^  L  R  ^  R  >  L  <  <  l  l  <  l  v  l  L  <  R  R  ^  ^  L  
+r  >  R  R  R  R  >  r  v  l  v  l  ^  L  L  <  ^  L  <  <  <  <  L  L  ^  R  ^  L  
+>  R  R  R  R  >  r  >  r  v  l  <  <  ^  L  L  <  ^  L  ^  L  <  L  L  L  ^  R  ^  
+R  R  R  R  >  r  >  R  >  L  <  L  <  <  ^  L  L  <  ^  L  ^  L  <  L  L  L  ^  ^  
+R  R  R  >  r  >  R  >  R  ^  L  l  L  <  <  L  L  L  <  ^  L  ^  L  <  l  L  L  ^  
+R  R  >  r  >  R  >  R  R  >  L  <  <  L  L  <  L  L  L  <  ^  L  ^  L  <  <  L  L  
+R  >  r  >  R  >  R  ^  >  R  ^  L  <  <  L  L  <  L  L  L  L  ^  L  ^  L  <  <  L  
+>  r  >  R  >  R  ^  >  R  ^  ^  L  L  <  <  L  L  <  L  L  L  <  ^  L  ^  L  L  L  
+>  >  R  >  R  ^  >  R  ^  ^  R  ^  L  L  <  <  L  L  <  L  L  L  L  ^  L  ^  L  L  
+Correct actions (%) : 9.18
+Avg angular diffs   : 90.46

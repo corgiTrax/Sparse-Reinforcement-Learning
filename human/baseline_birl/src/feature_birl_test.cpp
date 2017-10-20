@@ -51,8 +51,8 @@ int main(int argc, char** argv) {
 	const double min_r = -1.0;
 	const double max_r = 1.0;
 	const double step = 0.001;
-	const double alpha = 250;
-	const unsigned int chain_length = 12000; // 4002 must be a multiple of 3!
+	const double alpha = 50;
+	const unsigned int chain_length = 15000; // 4002 must be a multiple of 3!
 
 	const unsigned int interactions = 0; 
 
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 	const int numStates = grid_width * grid_height;
 
 	double losses[interactions+1] = {0}; 
-	double gamma = 0.99;
+	double gamma = 0.25;
 
 	double featureWeights[numFeatures] = {0,0,1,-0.1};
 
