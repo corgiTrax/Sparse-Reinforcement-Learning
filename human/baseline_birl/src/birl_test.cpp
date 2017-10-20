@@ -3,134 +3,164 @@
 #include <cmath>
 #include <stdlib.h>
 #include <ctime>
+#include <string>
+#include <map>
+
 #include "../include/mdp.hpp"
-#include "../include/birl.hpp"
+#include "../include/feature_birl.hpp"
+#include "../include/grid_domain.hpp"
 
-#define GRID_WIDTH 20
-#define GRID_HEIGHT 20
 
-#define MIN_R -5
-#define MAX_R 5
-
-#define CHAIN_LENGTH 3200
-
-#define NUM_EXP 5
+enum actions {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
 
 using namespace std;
 
 double policyLoss(vector<unsigned int> policy, GridMDP * mdp)
 {
-  unsigned int count = 0;
-  mdp -> calculateQValues();
+	unsigned int count = 0;
+	mdp -> calculateQValues();
 
-  for(unsigned int i=0; i < policy.size(); i++)
-  {
-    if(! mdp->isOptimalAction(i,policy[i])) {
-      count++;
-    }
-  }
-  return (double)count/(double)policy.size()*100;
+	for(unsigned int i=0; i < policy.size(); i++)
+	{
+		if(! mdp->isOptimalAction(i,policy[i])) {
+			//cout <<"incorect?" << i << " " << policy[i] << endl;
+			count++;
+		}
+	} 
+	return (double)count/(double)policy.size()*100; 
 }
 
-int main( ) {
 
-  double total_loss = 0;
+int main(int argc, char** argv) {
 
-  for(unsigned int itr = 0; itr < NUM_EXP; itr++)
-  { 
+	if (argc < 8) {
+		cout << " Usage: birl_test <subj> <trial> <task> <test_weight1> <test_weight2> <test_weight3> <test_weight4>" << endl;
+		return 0;
+	}
+	unsigned int subj = atoi(argv[1]);
+	unsigned int trial = atoi(argv[2]);
+	unsigned int task = atoi(argv[3]);
+	float weight1 = atof(argv[4]);
+	float weight2 = atof(argv[5]);
+	float weight3 = atof(argv[6]);
+	float weight4 = atof(argv[7]);
 
-          GridMDP mdp(GRID_WIDTH,GRID_HEIGHT); //ground truth mdp
-          
-          unsigned int terminal_state = rand()%mdp.getNumStates();//GRID_WIDTH - 1;
-          srand (time(NULL));
-          mdp.addTerminalState(terminal_state);
+	cout << "arguments: " << subj << " " << trial << " " << task << " " << weight1 << " " << weight2 << " " << weight3 << " " <<  weight4 << endl;
+	string feature_file_name = "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_domain_features.txt";
+	string demo_file_name    =  "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_demonstrations.txt";
 
-          cout << "\nInitializing gridworld task of size " << GRID_WIDTH << endl;
-          cout << "    Num states: " << mdp.getNumStates() << endl;
-          cout << "    Num actions: " << mdp.getNumActions() << endl;
+	srand (time(NULL));
 
-          double* rewards = new double[mdp.getNumStates()]; //random reward function
-          
-          for(unsigned int s=0; s<mdp.getNumStates(); s++)
-          {
-            rewards[s] = pow(-1,rand())*(rand()%100)/100.0; 
-          }
-          //rewards[terminal_state] = MAX_R;
-          mdp.setRewards(rewards);
-          cout << "\n-- True Rewards --" << endl;
-          mdp.displayRewards();
+	map<unsigned int, float> angle_map;
+	angle_map.insert(pair<unsigned int,float>(UP,0.0));
+	angle_map.insert(pair<unsigned int,float>(UP_RIGHT,45.0));
+	angle_map.insert(pair<unsigned int,float>(RIGHT,90.0));
+	angle_map.insert(pair<unsigned int,float>(DOWN_RIGHT,135.0));
+	angle_map.insert(pair<unsigned int,float>(DOWN,180.0));
+	angle_map.insert(pair<unsigned int,float>(DOWN_LEFT,225.0));
+	angle_map.insert(pair<unsigned int,float>(LEFT,270.0));
+	angle_map.insert(pair<unsigned int,float>(UP_LEFT,315.0));
 
-          //solve for the optimal policy
-          vector<unsigned int> opt_policy (mdp.getNumStates());
-          mdp.valueIteration(0.001);
-          mdp.deterministicPolicyIteration(opt_policy);
-          cout << "-- optimal policy --" << endl;
-          mdp.displayPolicy(opt_policy);
+	const unsigned int grid_width = 28;
+	const unsigned int grid_height = 22;
+	const double min_r = -1.0;
+	const double max_r = 1.0;
+	const double step = 0.001;
+	const double alpha = 250;
+	const unsigned int chain_length = 12000; // 4002 must be a multiple of 3!
 
-          //initializing birl with reward ranges, BIRL chain length and reward step size
+	const unsigned int interactions = 0; 
 
-          vector<unsigned int> policy (mdp.getNumStates());
-          BIRL birl(&mdp, MIN_R, MAX_R, CHAIN_LENGTH, 0.05);
-          birl.mdp->addTerminalState(terminal_state);
+	//test arrays to get features
+	const int numFeatures = 4; // target, obstacle, pathpoint, None
+	const int numStates = grid_width * grid_height;
 
-          vector<pair<unsigned int,unsigned int> > good_demos;
-          vector<pair<unsigned int,unsigned int> > bad_demos;
-          mdp.calculateQValues();
+	double losses[interactions+1] = {0}; 
+	double gamma = 0.99;
 
-          for(unsigned int s=0; s < mdp.getNumStates(); s++)
-          {
-            //int rand_state = rand() % mdp.getNumStates();
-            //good_demos.push_back(make_pair(idx, opt_policy[idx])); //ground truth policy as input
-            for (unsigned int a=0; a < mdp.getNumActions(); a++)
-            {
-              if(mdp.isOptimalAction(s,a) ) good_demos.push_back(make_pair(s,a));
-              else bad_demos.push_back(make_pair(s, a));
+	double featureWeights[numFeatures];
+	featureWeights[0] = weight1;
+	featureWeights[1] = weight2;
+	featureWeights[2] = weight3;
+	featureWeights[3] = weight4;
 
-            }
-          }
+	double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);
 
-          birl.addPositiveDemos(good_demos);
-          birl.addNegativeDemos(bad_demos);
-          birl.displayDemos();
+	vector<unsigned int> initStates = {};
+	vector<unsigned int> termStates = {};
 
-          clock_t c_start = clock();
-          birl.run();
-          clock_t c_end = clock();
-          cout << "\n[Timing] Time passed: "
-            << (c_end-c_start)*1.0 / CLOCKS_PER_SEC << " s\n";
+	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
 
-          /*if( mdp == birl.getMDP() ) cout << "Two rewards are equal!" << endl;
-            else cout << "Two rewards are not equal!" << endl;*/
+	cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
+	cout << "    Num states: " << mdp.getNumStates() << endl;
+	cout << "    Num actions: " << mdp.getNumActions() << endl;
 
-          cout << "\n-- Fianl Recovered Rewards --" << endl;
-          birl.getMAPmdp()->displayRewards(GRID_WIDTH);
+	srand (time(NULL));
 
-          cout << "\n-- Final Policy --" << endl;
-          birl.getMAPmdp()->deterministicPolicyIteration(policy);
+	//generate demos
+	vector<pair<unsigned int,unsigned int> > good_demos;
+	ifstream demo_file (demo_file_name);
 
-          mdp.displayPolicy(policy);
-          birl.getMAPmdp()->calculateQValues();
-          cout << endl;
-          for(unsigned int s=0; s < mdp.getNumStates(); s++)
-          {
-            for (unsigned int a=0; a < mdp.getNumActions(); a++)
-            {
-              if(birl.getMAPmdp()->isOptimalAction(s,a)) cout << "{" << s << "," << a << "},";
-            }
-          }
-          cout << endl;
 
-          cout.precision(12);
-          cout << "\nPosterior Probability: " << birl.getMAPposterior() << endl;
-          cout.precision(2);
+	cout << "recovered reward" << endl;
+	mdp.displayRewards();
 
-          double base_loss = policyLoss(policy, &mdp);
-          cout << "Current policy loss: " << base_loss << "%" << endl;
-          total_loss += base_loss;
+	vector<unsigned int> map_policy (mdp.getNumStates());
+	mdp.valueIteration(0.001);
+	mdp.deterministicPolicyIteration(map_policy);
 
-          delete [] rewards;
-  }
-  cout << "Ave policy loss: " << total_loss / NUM_EXP << "%" << endl;
-  
-  return 0;
+	cout << "-- optimal policy --" << endl;
+	mdp.displayPolicy(map_policy);
+
+	unsigned int correct_actions = 0;
+	unsigned int total_actions = 0;
+	double angle_diffs = 0.0;
+	if(demo_file.is_open())
+	{
+		string line;
+		while(getline(demo_file,line))
+		{
+			vector<string> results;
+			split(line,',', results);
+			unsigned int state = stoi(results[0]);
+			unsigned int action = stoi(results[1]);
+			good_demos.push_back(make_pair(state,map_policy[state]));
+			//cout << "state: " << state << ", action predicted: " << map_policy[state] <<", action took: " << action  << endl;
+			total_actions += 1;
+			if( action == map_policy[state] ) correct_actions += 1;
+			else
+			{
+				float angle1 = angle_map[action];
+				float angle2 = angle_map[map_policy[state]];
+				float angle = 0;
+				if( angle1 > angle2) angle = angle1 - angle2;
+				else angle = angle2 - angle1;
+				if (angle > 180) angle = 360 - angle;
+				angle_diffs += angle;
+			}
+
+		}
+		demo_file.close();
+	}
+	else{
+		return 1;
+	}   
+
+	float policy_overlap = float(correct_actions) / total_actions * 100;
+	float avg_ang_err = angle_diffs / total_actions;
+	cout << "Correct actions (%) : " << policy_overlap << endl;
+	cout << "Avg angular diffs   : " << avg_ang_err << endl;
+
+	//clean up memory
+	for(unsigned int s1 = 0; s1 < numStates; s1++)
+	{
+		delete[] stateFeatures[s1];
+	}
+	delete[] stateFeatures;
+
+	return 0;
 }
+
+
+
+

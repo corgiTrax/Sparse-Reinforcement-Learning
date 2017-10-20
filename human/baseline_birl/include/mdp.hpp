@@ -366,7 +366,6 @@ class FeatureGridMDP: public GridMDP{
             for(int i=0; i<numFeatures; i++)
                 featureWeights[i] = fWeights[i];
             stateFeatures = sFeatures;
-            
             //compute cached rewards
             computeCachedRewards();
                         

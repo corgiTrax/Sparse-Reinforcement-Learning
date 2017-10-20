@@ -43,6 +43,7 @@ double** initFeaturesDiscreteDomain(const int numStates, const int numFeatures, 
 
     if(feature_file.is_open())
     {
+        cout << "loading features..." << endl;
         string line;
         while(getline(feature_file,line))
         {
