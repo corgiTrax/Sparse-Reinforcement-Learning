@@ -11,4 +11,4 @@ for line in file:
 
 for task in angles_data:
     angles = angles_data[task]
-    print "task:",task, " err:", sum(angles)/len(angles),"+-", np.std(angles)
+    print "task:",task, " err:", sum(angles)/len(angles),"+-", np.std(angles)/np.sqrt(len(angles))

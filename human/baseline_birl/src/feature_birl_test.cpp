@@ -50,9 +50,9 @@ int main(int argc, char** argv) {
 	const unsigned int grid_height = 22;
 	const double min_r = -1.0;
 	const double max_r = 1.0;
-	const double step = 0.001;
-	const double alpha = 50;
-	const unsigned int chain_length = 15000; // 4002 must be a multiple of 3!
+	const double step = 0.0005;
+	const double alpha = 20;
+	const unsigned int chain_length = 20000; // 4002 must be a multiple of 3!
 
 	const unsigned int interactions = 0; 
 
@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
 	double losses[interactions+1] = {0}; 
 	double gamma = 0.25;
 
-	double featureWeights[numFeatures] = {0,0,1,-0.1};
+	double featureWeights[numFeatures] = {0,0,0,-0.1};
 
 	//double** stateFeatures = initRandomFeaturesRandomDomain(numStates, numFeatures);
 	double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);
