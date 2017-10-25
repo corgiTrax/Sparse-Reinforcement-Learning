@@ -5,6 +5,8 @@
 #include <ctime>
 #include <string>
 #include <map>
+#include <set>
+
 #include "../include/mdp.hpp"
 #include "../include/feature_birl.hpp"
 #include "../include/grid_domain.hpp"
@@ -61,7 +63,7 @@ int main(int argc, char** argv) {
 	const double min_r = -1.0;
 	const double max_r = 1.0;
 	const double step = 0.00025;
-	const double alpha = 25;
+	const double alpha = 100;
 	const unsigned int chain_length = 5000 ; // 4002 must be a multiple of 3!
 
 	const unsigned int interactions = 0; 
@@ -71,7 +73,7 @@ int main(int argc, char** argv) {
 	const int numStates = grid_width * grid_height;
 
 	double losses[interactions+1] = {0}; 
-	double gamma = 0.25;
+	double gamma = 0.35;
 
 	double featureWeights[numFeatures] = {0,0,0,-0.1};
 
@@ -92,25 +94,44 @@ int main(int argc, char** argv) {
 	srand (time(NULL));
 
 	//generate demos
+	vector<pair<unsigned int,unsigned int> > demos;
 	vector<pair<unsigned int,unsigned int> > good_demos;
+	map<unsigned int, unsigned int> demo_freq;
+	for(unsigned int s = 0; s < grid_width*grid_height; s++)  demo_freq.insert(pair<unsigned int,unsigned int>(s,0));
+        
 	ifstream demo_file (demo_file_name);
+	unsigned int demo_ct = 0;
 
 	if(demo_file.is_open())
 	{
 		string line;
 		while(getline(demo_file,line))
 		{
-			vector<string> results;
-			split(line,',', results);
-			unsigned int state = stoi(results[0]);
-			unsigned int action = stoi(results[1]);
-			good_demos.push_back(make_pair(state,action));
+		    demo_ct += 1;
+		    if(demo_ct > 10)
+		    {
+			    vector<string> results;
+			    split(line,',', results);
+			    unsigned int state = stoi(results[0]);
+			    unsigned int action = stoi(results[1]);
+			    demos.push_back(make_pair(state,action));
+			    demo_freq[state] += 1;
+			}
 		}
 		demo_file.close();
 	}
 	else{
 		return 1;
 	}   
+	
+	for(unsigned int d = 0; d < demos.size(); d++) 
+	{
+	    if(demo_freq[demos[d].first] < 3) good_demos.push_back(demos[d]);
+	}
+    cout << "\nTotal number of demos: " << good_demos.size() << endl;
+    
+    
+    
     
     double posterior = -1000;
     FeatureGridMDP* mapMDP;
@@ -123,8 +144,14 @@ int main(int argc, char** argv) {
     while(posterior < -50 && num_itr < 50)
     {
 	    //create feature birl and initialize with demos
-	    
-	    birl.addPositiveDemos(good_demos);
+	    vector<pair<unsigned int,unsigned int> > selected_demos;
+	    unsigned int skip = 1 + rand()%5;
+	    for(unsigned int d = rand()%skip; d < good_demos.size(); d += (1 + rand()%skip)) 
+	    {
+	        selected_demos.push_back(good_demos[d]);
+	    }
+	    cout << "\nSelected number of demos: " << selected_demos.size() << endl;
+	    birl.addPositiveDemos(selected_demos);
 	    birl.displayDemos();
 
 	    //run birl MCMC
@@ -146,13 +173,13 @@ int main(int argc, char** argv) {
 	    mapMDP->deterministicPolicyIteration(map_policy);
 	    unsigned int correct_actions = 0;
 	    double angle_diffs = 0.0;
-        for(unsigned int si = 0; si < good_demos.size(); si++)
+        for(unsigned int si = 0; si < demos.size(); si++)
         {
-            if(map_policy[good_demos[si].first] == good_demos[si].second) correct_actions += 1;
+            if(map_policy[demos[si].first] == demos[si].second) correct_actions += 1;
             else
 			{
-				float angle1 = angle_map[good_demos[si].second];
-				float angle2 = angle_map[map_policy[good_demos[si].first]];
+				float angle1 = angle_map[demos[si].second];
+				float angle2 = angle_map[map_policy[demos[si].first]];
 				float angle = 0;
 				if( angle1 > angle2) angle = angle1 - angle2;
 				else angle = angle2 - angle1;
@@ -160,11 +187,11 @@ int main(int argc, char** argv) {
 				angle_diffs += angle;
 			}
         }
-        float agreement = float(correct_actions)/good_demos.size()*100;
-	float curr_err = float(angle_diffs)/good_demos.size();
+        float agreement = float(correct_actions)/demos.size()*100;
+	    float curr_err = float(angle_diffs)/demos.size();
 
         cout << "Agreement with demo: " << agreement << "%" << endl;
-        cout << "Avg angular diffs: " << curr_err << "'" << endl;
+        cout << "Current angular diffs: " << curr_err << "'" << endl;
         if(curr_err < err)  //(posterior > best_posterior) 
         {
             //best_posterior = posterior;
@@ -174,7 +201,8 @@ int main(int argc, char** argv) {
         }
         num_itr++;
     }
-    
+    cout << "\n-----------------------------" << endl;
+    cout << "Avg angular diffs: " << err << "'" << endl;
     cout << "-- learned weights --" << endl;
     bestMDP->displayFeatureWeights();
     delete bestMDP;

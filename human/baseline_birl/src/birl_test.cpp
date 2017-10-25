@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 	const double max_r = 1.0;
 	const double step = 0.001;
 	const double alpha = 20;
-	const unsigned int chain_length = 20000; // 4002 must be a multiple of 3!
+	const unsigned int chain_length = 10000; // 4002 must be a multiple of 3!
 
 	const unsigned int interactions = 0; 
 
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 	const int numStates = grid_width * grid_height;
 
 	double losses[interactions+1] = {0}; 
-	double gamma = 0.25;
+	double gamma = 0.35;
 
 	double featureWeights[numFeatures];
 	featureWeights[0] = weight1;
@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
 	vector<pair<unsigned int,unsigned int> > good_demos;
 	ifstream demo_file (demo_file_name);
 
-
+    unsigned int demo_ct = 0;
 	cout << "recovered reward" << endl;
 	mdp.displayRewards();
 
@@ -115,29 +115,28 @@ int main(int argc, char** argv) {
 	unsigned int correct_actions = 0;
 	unsigned int total_actions = 0;
 	double angle_diffs = 0.0;
+	map<unsigned int, unsigned int> demo_freq;
+	for(unsigned int s = 0; s < grid_width*grid_height; s++)  demo_freq.insert(pair<unsigned int,unsigned int>(s,0));
+	
 	if(demo_file.is_open())
 	{
 		string line;
 		while(getline(demo_file,line))
 		{
-			vector<string> results;
-			split(line,',', results);
-			unsigned int state = stoi(results[0]);
-			unsigned int action = stoi(results[1]);
-			good_demos.push_back(make_pair(state,map_policy[state]));
-			//cout << "state: " << state << ", action predicted: " << map_policy[state] <<", action took: " << action  << endl;
-			total_actions += 1;
-			if( action == map_policy[state] ) correct_actions += 1;
-			else
-			{
-				float angle1 = angle_map[action];
-				float angle2 = angle_map[map_policy[state]];
-				float angle = 0;
-				if( angle1 > angle2) angle = angle1 - angle2;
-				else angle = angle2 - angle1;
-				if (angle > 180) angle = 360 - angle;
-				angle_diffs += angle;
-			}
+		    demo_ct += 1;
+		    if(demo_ct > 10) // skip first 10
+		    {
+		    
+			    vector<string> results;
+			    split(line,',', results);
+			    unsigned int state = stoi(results[0]);
+			    unsigned int action = stoi(results[1]);
+			    good_demos.push_back(make_pair(state,map_policy[state]));
+			    demo_freq[state] += 1;
+			    //cout << "state: " << state << ", action predicted: " << map_policy[state] <<", action took: " << action  << endl;
+			    
+			    
+			    
 
 		}
 		demo_file.close();
@@ -146,6 +145,25 @@ int main(int argc, char** argv) {
 		return 1;
 	}   
 
+    for(unsigned int i=0; i < good_demos.size(); i++)
+    {
+        unsigned int state = stoi(results[0]);
+		unsigned int action = stoi(results[1]);
+        total_actions += 1;
+        if( action == map_policy[state] ) correct_actions += 1;
+        else
+        {
+	        float angle1 = angle_map[action];
+	        float angle2 = angle_map[map_policy[state]];
+	        float angle = 0;
+	        if( angle1 > angle2) angle = angle1 - angle2;
+	        else angle = angle2 - angle1;
+	        if (angle > 180) angle = 360 - angle;
+	        angle_diffs += angle;
+        }
+    
+	}
+	
 	float policy_overlap = float(correct_actions) / total_actions * 100;
 	float avg_ang_err = angle_diffs / total_actions;
 	cout << "Correct actions (%) : " << policy_overlap << endl;
