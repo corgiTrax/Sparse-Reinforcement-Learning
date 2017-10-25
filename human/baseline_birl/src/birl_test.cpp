@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 	const int numStates = grid_width * grid_height;
 
 	double losses[interactions+1] = {0}; 
-	double gamma = 0.95;
+	double gamma = 0.25;
 
 	double featureWeights[numFeatures];
 	featureWeights[0] = weight1;

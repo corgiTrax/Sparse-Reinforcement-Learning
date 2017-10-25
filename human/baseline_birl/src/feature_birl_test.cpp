@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
 	const double max_r = 1.0;
 	const double step = 0.00025;
 	const double alpha = 25;
-	const unsigned int chain_length = 3000; // 4002 must be a multiple of 3!
+	const unsigned int chain_length = 5000 ; // 4002 must be a multiple of 3!
 
 	const unsigned int interactions = 0; 
 
@@ -114,13 +114,13 @@ int main(int argc, char** argv) {
     
     double posterior = -1000;
     FeatureGridMDP* mapMDP;
-    FeatureGridMDP* bestMDP;
+    FeatureGridMDP* bestMDP = mdp.deepcopy();
     FeatureBIRL birl(&mdp, min_r, max_r, chain_length, step, alpha);
     unsigned int num_itr = 0;
     //double best_posterior = -1000;
-    double err = -1000;
+    double err = 180;
     
-    while(posterior < -50 && num_itr < 5)
+    while(posterior < -50 && num_itr < 50)
     {
 	    //create feature birl and initialize with demos
 	    
