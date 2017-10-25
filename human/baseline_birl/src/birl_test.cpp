@@ -66,8 +66,8 @@ int main(int argc, char** argv) {
 	const double min_r = -1.0;
 	const double max_r = 1.0;
 	const double step = 0.001;
-	const double alpha = 250;
-	const unsigned int chain_length = 12000; // 4002 must be a multiple of 3!
+	const double alpha = 20;
+	const unsigned int chain_length = 20000; // 4002 must be a multiple of 3!
 
 	const unsigned int interactions = 0; 
 
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 	const int numStates = grid_width * grid_height;
 
 	double losses[interactions+1] = {0}; 
-	double gamma = 0.99;
+	double gamma = 0.35;
 
 	double featureWeights[numFeatures];
 	featureWeights[0] = weight1;
@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
 	mdp.displayRewards();
 
 	vector<unsigned int> map_policy (mdp.getNumStates());
-	mdp.valueIteration(0.001);
+	mdp.valueIteration(0.0005);
 	mdp.deterministicPolicyIteration(map_policy);
 
 	cout << "-- optimal policy --" << endl;

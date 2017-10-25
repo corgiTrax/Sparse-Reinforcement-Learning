@@ -52,6 +52,7 @@ double** initFeaturesDiscreteDomain(const int numStates, const int numFeatures, 
           unsigned int state = stoi(results[0]);
           unsigned int feature = stoi(results[1]);
           double value = stod(results[2]);
+          if ( state < 0 || state > numStates - 1) continue;
           stateFeatures[state][feature] = value;
         }
         feature_file.close();

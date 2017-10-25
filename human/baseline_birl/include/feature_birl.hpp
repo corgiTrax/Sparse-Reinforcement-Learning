@@ -83,8 +83,8 @@ class FeatureBIRL { // BIRL process
         
         R_chain = new FeatureGridMDP*[chain_length];
         posteriors = new double[chain_length];   
-        R_chain_long = new FeatureGridMDP*[chain_length*skip];
-        posteriors_long = new double[chain_length*skip];
+        R_chain_long = new FeatureGridMDP*[chain_length]; //*skip
+        posteriors_long = new double[chain_length]; //*skip
         //frequency =  new unsigned int[chain_length];   
         
         iteration = 0;
@@ -153,18 +153,18 @@ void FeatureBIRL::run()
     FeatureGridMDP* temp_mdp; 
     
     //BIRL iterations 
-    for(unsigned int itr=1; itr < chain_length*skip; itr++)
+    for(unsigned int itr=1; itr < chain_length; itr++) //*skip
     {
       //cout << "itr: " << itr << endl;
       //sample_length++; 
-      if( itr > 20){
+      /*if( itr > 20){
           if( (reject_cnt/(double)(itr+2)) <= 0.56 ) step_count++;
           else if ( (reject_cnt/(double)(itr+2)) >= 0.58 ) step_count--;
           step_count = min(10,step_count);
           step_count = max(1,step_count);
           if (step_count == 100) step_size *= 1.01;
           else if (step_count == 2) step_size /= 1.01;
-      }
+      }*/
       
       //if ( itr % 20 == 0) cout << "Iteration: " << itr/skip << endl;
       temp_mdp = mdp->deepcopy();

@@ -15,7 +15,7 @@ birl_test: $(OBJS)
 	$(CC) $(LFLAGS) build/birl_test.o -o birl_test
 
 
-build/birl_test.o: src/birl_test.cpp include/birl.hpp include/mdp.hpp
+build/birl_test.o: src/birl_test.cpp include/feature_birl.hpp include/mdp.hpp
 	$(CC) $(CFLAGS) src/birl_test.cpp -o build/birl_test.o
 
 build/feature_birl_test.o: src/feature_birl_test.cpp include/feature_birl.hpp include/mdp.hpp include/grid_domain.hpp

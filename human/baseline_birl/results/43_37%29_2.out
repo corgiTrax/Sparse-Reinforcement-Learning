@@ -1,4 +1,4 @@
-arguments: 43 29 2 -0.00796813 -0.878486 -0.0139442 -0.0996016
+arguments: 43 29 2 -0.122723 0.71093 0.0704698 -0.0958773
 
 Initializing gridworld of size 28 by 22..
     Num states: 616
@@ -27,25 +27,25 @@ recovered reward
 -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, 
 -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, -0.10, 
 -- optimal policy --
-r  v  >  L  <  >  >  >  >  ^  R  <  >  >  >  >  >  ^  <  >  >  >  L  <  R  L  R  r  
-v  l  <  ^  L  R  R  R  ^  ^  ^  L  R  R  R  R  ^  L  L  R  R  R  ^  L  ^  ^  R  v  
-L  <  L  v  v  v  l  v  l  <  >  r  v  >  r  v  r  v  r  v  r  v  r  v  >  >  >  R  
-^  L  v  v  l  l  v  l  <  L  >  >  r  >  >  r  >  r  >  r  >  r  v  r  R  R  R  ^  
-<  <  v  l  v  v  l  <  L  v  >  >  >  >  >  >  >  >  >  >  >  >  r  >  >  >  >  R  
-^  L  l  <  v  v  <  L  r  v  v  R  ^  R  R  ^  R  ^  R  ^  R  R  r  v  R  R  R  ^  
-v  l  <  L  v  l  <  v  v  r  v  v  v  v  v  v  >  >  >  >  >  >  >  r  r  v  v  v  
-l  <  L  v  l  ^  L  v  v  v  r  v  v  v  v  v  v  R  R  R  >  >  >  >  >  >  r  v  
-^  L  v  v  l  <  v  r  v  v  v  r  v  v  v  v  v  l  v  R  R  R  R  ^  R  R  >  r  
-L  <  v  l  <  L  v  v  r  v  v  v  r  v  v  v  l  v  v  >  >  >  >  >  >  >  >  v  
-r  L  l  <  L  v  v  v  v  r  v  v  v  r  v  l  v  v  l  v  R  R  R  R  >  >  >  >  
-<  l  <  L  v  v  v  v  v  v  r  v  v  v  l  v  v  l  v  v  >  >  r  R  R  R  R  ^  
-<  L  L  v  v  v  v  v  v  v  v  r  v  v  v  v  l  <  l  l  v  R  >  >  >  >  >  >  
-^  L  v  v  v  v  v  v  v  v  v  v  r  v  v  l  v  l  v  v  v  v  >  >  >  >  >  r  
-v  v  v  v  v  v  v  v  v  l  r  v  v  l  l  v  l  <  v  v  v  v  v  R  R  R  R  ^  
-v  v  v  v  v  v  v  v  l  v  v  r  v  l  l  l  v  v  v  v  v  l  r  v  >  >  v  l  
-v  v  l  l  r  v  v  l  v  v  v  v  l  v  l  v  v  v  v  v  l  v  >  r  v  >  r  v  
-v  v  l  v  >  >  r  v  v  v  l  r  v  l  v  r  v  v  v  l  v  l  v  >  r  v  >  R  
-v  l  <  r  v  R  ^  r  v  l  v  v  v  <  r  v  r  v  l  v  l  v  v  v  >  r  v  v  
-<  <  L  v  v  r  v  v  l  v  v  l  l  L  v  r  v  l  <  l  v  l  v  v  v  >  >  >  
-L  L  >  r  v  v  >  r  ^  >  r  v  v  l  v  v  l  <  r  v  l  <  r  v  v  R  ^  r  
-l  <  >  >  r  l  ^  ^  v  >  v  l  l  <  v  v  <  L  >  v  <  R  >  l  v  <  >  v  
+r  ^  r  r  r  r  l  <  <  L  l  v  v  v  L  >  <  >  R  >  l  v  l  R  ^  <  <  R  
+l  ^  >  R  ^  <  R  r  v  >  v  >  r  r  R  ^  v  v  >  >  L  v  l  <  <  R  r  <  
+r  v  r  R  v  <  >  v  L  ^  ^  l  >  <  v  <  v  l  <  <  ^  l  l  L  r  L  r  v  
+v  l  >  ^  ^  <  l  v  R  v  >  v  v  >  r  L  R  v  l  r  r  ^  v  r  l  r  L  R  
+L  >  l  R  v  v  l  v  L  L  >  v  R  l  <  l  v  <  <  r  >  ^  l  <  ^  r  <  r  
+r  l  L  >  v  >  ^  <  L  l  L  ^  <  r  v  r  R  L  R  l  l  r  R  v  r  >  >  ^  
+>  R  r  <  >  >  R  L  l  R  r  >  L  >  >  l  <  R  l  r  v  >  R  r  >  >  ^  <  
+l  >  <  v  v  v  >  L  R  ^  v  >  l  ^  l  <  >  <  ^  R  r  l  L  ^  <  v  r  R  
+L  r  r  >  <  <  L  >  >  ^  ^  ^  ^  v  L  l  v  <  ^  L  L  v  v  >  r  R  >  v  
+l  <  l  >  v  l  l  L  ^  <  r  >  <  r  L  >  ^  ^  v  v  <  <  R  r  >  l  <  <  
+>  l  L  <  ^  <  R  <  ^  >  l  ^  R  R  L  ^  R  ^  >  R  ^  L  r  <  l  L  v  v  
+>  L  L  l  <  ^  ^  <  <  R  L  >  ^  <  >  l  ^  r  l  R  r  v  <  r  R  v  <  L  
+l  >  R  v  r  v  r  v  v  ^  L  L  R  ^  r  l  >  <  L  >  <  <  ^  v  >  <  v  ^  
+L  >  L  <  l  <  >  l  >  <  r  R  <  >  v  ^  L  ^  l  r  <  <  <  L  L  <  l  r  
+L  r  r  ^  <  L  <  ^  l  R  l  v  ^  l  l  <  v  r  <  R  r  ^  L  <  <  l  l  l  
+^  L  R  R  >  R  R  R  v  ^  l  r  R  L  ^  R  <  r  ^  L  l  <  v  l  >  l  ^  R  
+L  l  L  R  >  v  <  l  l  r  L  r  r  <  l  R  l  r  <  v  l  <  R  L  R  l  <  ^  
+L  <  R  v  v  v  l  L  >  ^  <  v  r  l  v  r  ^  r  L  r  l  l  ^  L  v  R  v  l  
+>  >  l  ^  l  >  v  r  R  r  >  ^  r  R  v  l  L  <  R  L  <  v  >  ^  ^  >  R  v  
+^  l  r  L  v  R  L  r  ^  R  l  R  L  v  R  >  r  r  v  >  v  r  r  >  ^  >  L  ^  
+l  v  v  r  r  ^  >  ^  R  r  ^  l  L  l  >  ^  ^  v  >  r  ^  L  <  v  >  v  R  L  
+L  v  L  >  <  l  <  v  l  R  v  L  L  v  <  ^  ^  R  ^  ^  l  >  r  l  r  v  ^  >  

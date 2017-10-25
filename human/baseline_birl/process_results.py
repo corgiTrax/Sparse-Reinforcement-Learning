@@ -35,7 +35,7 @@ for subj in subjects:
             for j in range(4):
                 data[subj][i][idx][j] /= total_weight 
 
-        for weights in  data[subj][i]:
+        for weights in data[subj][i]:
             print weights
 
     for i in range(1,tasks+1):
@@ -51,3 +51,5 @@ for subj in subjects:
                     print out
                     output_file = open('./results/'+str(subj)+"_"+str(base_trial_number)+"%"+str(trial_number)+"_"+str(i)+".out", "w")
                     output_file.write(out)
+                    
+                    
