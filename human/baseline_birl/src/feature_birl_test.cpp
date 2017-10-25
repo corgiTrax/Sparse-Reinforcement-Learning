@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
 	const int numStates = grid_width * grid_height;
 
 	double losses[interactions+1] = {0}; 
-	double gamma = 0.95;
+	double gamma = 0.25;
 
 	double featureWeights[numFeatures] = {0,0,0,-0.1};
 
@@ -117,9 +117,10 @@ int main(int argc, char** argv) {
     FeatureGridMDP* bestMDP;
     FeatureBIRL birl(&mdp, min_r, max_r, chain_length, step, alpha);
     unsigned int num_itr = 0;
-    double best_posterior = -1000;
+    //double best_posterior = -1000;
+    double err = -1000;
     
-    while(posterior < -50 && num_itr < 20)
+    while(posterior < -50 && num_itr < 5)
     {
 	    //create feature birl and initialize with demos
 	    
@@ -160,11 +161,15 @@ int main(int argc, char** argv) {
 			}
         }
         float agreement = float(correct_actions)/good_demos.size()*100;
+	float curr_err = float(angle_diffs)/good_demos.size();
+
         cout << "Agreement with demo: " << agreement << "%" << endl;
-        cout << "Avg angular diffs: " << float(angle_diffs)/good_demos.size() << "'" << endl;
-        if(posterior > best_posterior) 
+        cout << "Avg angular diffs: " << curr_err << "'" << endl;
+        if(curr_err < err)  //(posterior > best_posterior) 
         {
-            best_posterior = posterior;
+            //best_posterior = posterior;
+            err = curr_err;
+            delete bestMDP;
             bestMDP = mapMDP->deepcopy();
         }
         num_itr++;
