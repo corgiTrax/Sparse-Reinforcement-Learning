@@ -212,6 +212,7 @@ class MDP { // General MDP
     friend bool operator== (MDP & lhs, MDP & rhs);
     bool isOptimalAction(unsigned int state, unsigned int action);
     void getOptimalPolicy(vector<unsigned int> & opt);
+    void getOptimalActions(unsigned int state, vector<unsigned int> & actions);
 
 };
 
@@ -466,6 +467,7 @@ class FeatureGridMDP: public GridMDP{
 
 bool MDP::isOptimalAction(unsigned int state, unsigned int action)
 {
+  calculateQValues();
   double max_q = numeric_limits<double>::lowest();
   for(unsigned int a = 0; a < numActions; a++)
   {
@@ -479,12 +481,34 @@ bool MDP::isOptimalAction(unsigned int state, unsigned int action)
 
 }
 
+void MDP::getOptimalActions(unsigned int state, vector<unsigned int> & actions)
+{
+    calculateQValues();
+    //double max_q = 0;
+    double max_q = numeric_limits<double>::lowest();
+    for(unsigned int a = 0; a < numActions; a++)
+    {
+      if( Q[state][a] > max_q )
+      {
+        max_q  = Q[state][a];
+      }
+    }
+    //cout << "max q value:" << max_q << endl;
+    for(unsigned int a = 0; a < numActions; a++)
+    {
+      if( Q[state][a] == max_q ) actions.push_back(a);
+    }
+      
+}
+
+
 void MDP::getOptimalPolicy(vector<unsigned int> & opt)
 {
   calculateQValues();
   for(unsigned int s = 0; s < numStates; s++)
   {
-    double max_q = 0;
+    //double max_q = 0;
+    double max_q = numeric_limits<double>::lowest();
     unsigned int max_action = 0;
     for(unsigned int a = 0; a < numActions; a++)
     {

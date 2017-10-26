@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 	const int numStates = grid_width * grid_height;
 
 	double losses[interactions+1] = {0}; 
-	double gamma = 0.35;
+	double gamma = 0.85;
 
 	double featureWeights[numFeatures];
 	featureWeights[0] = weight1;
@@ -104,10 +104,13 @@ int main(int argc, char** argv) {
     unsigned int demo_ct = 0;
 	cout << "recovered reward" << endl;
 	mdp.displayRewards();
+	
 
 	vector<unsigned int> map_policy (mdp.getNumStates());
 	mdp.valueIteration(0.0005);
 	mdp.deterministicPolicyIteration(map_policy);
+	
+	mdp.calculateQValues();
 
 	cout << "-- optimal policy --" << endl;
 	mdp.displayPolicy(map_policy);
@@ -131,14 +134,11 @@ int main(int argc, char** argv) {
 			    split(line,',', results);
 			    unsigned int state = stoi(results[0]);
 			    unsigned int action = stoi(results[1]);
-			    good_demos.push_back(make_pair(state,map_policy[state]));
+			    good_demos.push_back(make_pair(state,action));
 			    demo_freq[state] += 1;
 			    //cout << "state: " << state << ", action predicted: " << map_policy[state] <<", action took: " << action  << endl;
-			    
-			    
-			    
-
-		}
+			}
+	    }
 		demo_file.close();
 	}
 	else{
@@ -147,25 +147,41 @@ int main(int argc, char** argv) {
 
     for(unsigned int i=0; i < good_demos.size(); i++)
     {
-        unsigned int state = stoi(results[0]);
-		unsigned int action = stoi(results[1]);
-        total_actions += 1;
-        if( action == map_policy[state] ) correct_actions += 1;
-        else
+        
+        unsigned int state = good_demos[i].first;
+		unsigned int action = good_demos[i].second;
+		
+		if( demo_freq[state] < 2)
         {
-	        float angle1 = angle_map[action];
-	        float angle2 = angle_map[map_policy[state]];
-	        float angle = 0;
-	        if( angle1 > angle2) angle = angle1 - angle2;
-	        else angle = angle2 - angle1;
-	        if (angle > 180) angle = 360 - angle;
-	        angle_diffs += angle;
+            total_actions += 1;
+            if(  mdp.isOptimalAction(state,action) )  correct_actions += 1;
+            else{
+                vector<unsigned int> actions;
+                mdp.getOptimalActions(state, actions);
+                double min_diff = 180;
+                //cout << "optimal actions : ";
+                for(unsigned int a: actions)
+                {
+                    //cout << a << ", " ;
+	                float angle1 = angle_map[a];
+	                float angle2 = angle_map[action];
+	                float angle = 0;
+	                if( angle1 > angle2) angle = angle1 - angle2;
+	                else angle = angle2 - angle1;
+	                if (angle > 180) angle = 360 - angle;
+	                
+	                if (angle < min_diff) min_diff = angle;
+	            }
+	            //cout << endl;
+	            angle_diffs += min_diff;
+            }
         }
     
 	}
 	
 	float policy_overlap = float(correct_actions) / total_actions * 100;
 	float avg_ang_err = angle_diffs / total_actions;
+	cout << "Total actions tested : " << total_actions << endl;
 	cout << "Correct actions (%) : " << policy_overlap << endl;
 	cout << "Avg angular diffs   : " << avg_ang_err << endl;
 

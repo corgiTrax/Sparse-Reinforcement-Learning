@@ -38,18 +38,27 @@ for subj in subjects:
         for weights in data[subj][i]:
             print weights
 
+
     for i in range(1,tasks+1):
+        # 1,2,3 -> 4
+        # 1,2,4 -> 3
+        # 1.3.4 -> 2
+        # 2.3,4 -> 1
         print "Eavluating Task", i
         for idx in range(len(data[subj][i])):
-            weights = data[subj][i][idx]
-            base_trial_number = weights[-1]
+            weights = [0.0,0.0,0.0,0.0] # data[subj][i][idx]
+            base_trial_number = data[subj][i][idx][-1] 
             for idx2 in range(len(data[subj][i])):
                 if idx2 != idx:
-                    trial_number = data[subj][i][idx2][-1]
-                    p = Popen(['./birl_test',str(subj), str(trial_number), str(i), str(weights[0]), str(weights[1]), str(weights[2]), str(weights[3])],stdout=PIPE, stderr=PIPE)
-                    out, err = p.communicate()
-                    print out
-                    output_file = open('./results/'+str(subj)+"_"+str(base_trial_number)+"%"+str(trial_number)+"_"+str(i)+".out", "w")
-                    output_file.write(out)
+                    for w in range(4): # iterate through weights
+                        weights[w] += data[subj][i][idx2][w]
+            for w in range(4): # iterate through weights
+                weights[w] /= 3.0
+            p = Popen(['./birl_test', str(subj), str(base_trial_number), str(i), str(weights[0]), str(weights[1]), str(weights[2]), str(weights[3])],stdout=PIPE, stderr=PIPE)
+            out, err = p.communicate()
+            print out
+            output_file = open('./three_fold_test/'+str(subj)+"_"+str(base_trial_number)+"_"+str(i)+".out", "w")
+            output_file.write(out)
+            output_file.close()
                     
                     
