@@ -1,0 +1,60 @@
+loading features...
+
+Initializing gridworld of size 28 by 22..
+    Num states: 616
+    Num actions: 8
+
+Total number of demos: 54
+
+Selected number of demos: 27
+
+-- Positive Demos --
+ (137,1),  (220,1),  (333,1),  (388,6),  (387,2),  (440,2),  (409,6),  (465,2),  (463,4),  (377,0),  (321,0),  (209,0),  (126,4),  (96,2),  (95,2),  (121,6),  (147,6),  (175,6),  (230,1),  (258,1),  (340,1),  (369,1),  (454,1),  (508,2),  (479,2),  (477,6), 
+
+
+[Timing] Time passed: 588.337284 s
+
+Posterior Probability: -688.0021442
+Agreement with demo: 10%
+Current angular diffs: 93'
+
+Selected number of demos: 34
+
+-- Positive Demos --
+ (82,1),  (137,1),  (220,1),  (305,1),  (333,1),  (388,6),  (387,2),  (413,6),  (412,6),  (439,2),  (409,2),  (437,1),  (465,2),  (463,4),  (462,4),  (433,4),  (377,0),  (321,0),  (265,0),  (238,0),  (209,0),  (154,4),  (126,4),  (96,2),  (94,2),  (120,6),  (147,6),  (230,1),  (286,1),  (340,1),  (369,1),  (454,1),  (482,2),  (479,2), 
+
+
+[Timing] Time passed: 572.679951 s
+
+Posterior Probability: -978.7050236
+Agreement with demo: 9.3%
+Current angular diffs: 99'
+
+Selected number of demos: 37
+
+-- Positive Demos --
+ (109,1),  (137,1),  (193,1),  (249,1),  (333,1),  (359,6),  (387,2),  (413,6),  (440,2),  (439,2),  (409,2),  (437,1),  (437,7),  (464,2),  (463,4),  (462,4),  (433,4),  (348,0),  (265,0),  (209,0),  (182,0),  (154,4),  (126,4),  (97,4),  (96,2),  (94,2),  (121,6),  (120,6),  (175,6),  (258,1),  (340,1),  (369,1),  (454,1),  (482,6),  (508,2),  (479,2),  (477,6), 
+
+
+[Timing] Time passed: 573.770981 s
+
+Posterior Probability: -456.0016663
+Agreement with demo: 9.3%
+Current angular diffs: 95'
+
+Selected number of demos: 12
+
+-- Positive Demos --
+ (137,1),  (333,1),  (412,6),  (439,2),  (409,2),  (463,4),  (348,0),  (154,4),  (94,2),  (230,1),  (396,1),  (482,6), 
+
+
+[Timing] Time passed: 555.902522 s
+
+Posterior Probability: -19.38401473
+Agreement with demo: 20%
+Current angular diffs: 75'
+
+-----------------------------
+Avg angular diffs: 75'
+-- learned weights --
+Feature Weights: -0.009, -0.325, -0.709, -0.1, 

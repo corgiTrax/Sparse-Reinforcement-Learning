@@ -1,0 +1,48 @@
+loading features...
+
+Initializing gridworld of size 28 by 22..
+    Num states: 616
+    Num actions: 8
+
+Total number of demos: 41
+
+Selected number of demos: 15
+
+-- Positive Demos --
+ (163,6),  (302,1),  (384,6),  (465,2),  (406,0),  (295,0),  (239,0),  (155,0),  (68,2),  (121,6),  (285,6),  (394,6),  (422,1),  (478,6),  (479,3), 
+
+
+[Timing] Time passed: 214.467755 s
+
+Posterior Probability: -303.8915544
+Agreement with demo: 3.6%
+Current angular diffs: 91'
+
+Selected number of demos: 13
+
+-- Positive Demos --
+ (302,1),  (329,6),  (384,6),  (410,6),  (464,4),  (406,0),  (350,0),  (239,0),  (155,0),  (95,2),  (202,6),  (367,6),  (478,6), 
+
+
+[Timing] Time passed: 215.244619 s
+
+Posterior Probability: -110.360485
+Agreement with demo: 16%
+Current angular diffs: 1e+02'
+
+Selected number of demos: 11
+
+-- Positive Demos --
+ (301,1),  (465,2),  (464,2),  (435,0),  (239,0),  (183,0),  (68,2),  (121,6),  (285,6),  (367,6),  (450,1), 
+
+
+[Timing] Time passed: 214.740782 s
+
+Posterior Probability: -33.51067228
+Agreement with demo: 14%
+Current angular diffs: 92'
+
+-----------------------------
+Avg angular diffs: 91'
+-- learned weights --
+Feature Weights: -0.717, -0.0155, -0.4195, -0.1, 

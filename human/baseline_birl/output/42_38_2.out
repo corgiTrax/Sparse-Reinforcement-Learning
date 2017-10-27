@@ -1,0 +1,60 @@
+loading features...
+
+Initializing gridworld of size 28 by 22..
+    Num states: 616
+    Num actions: 8
+
+Total number of demos: 73
+
+Selected number of demos: 25
+
+-- Positive Demos --
+ (540,3),  (576,3),  (580,3),  (553,3),  (530,5),  (471,4),  (442,2),  (410,4),  (410,2),  (409,2),  (408,2),  (407,2),  (433,2),  (402,2),  (374,4),  (316,4),  (231,4),  (173,4),  (116,5),  (34,3),  (37,3),  (20,3),  (53,3), 
+
+
+[Timing] Time passed: 149.747329 s
+
+Posterior Probability: -281.7337845
+Agreement with demo: 19%
+Current angular diffs: 70'
+
+Selected number of demos: 51
+
+-- Positive Demos --
+ (539,3),  (540,3),  (541,3),  (544,3),  (574,3),  (576,3),  (578,3),  (579,3),  (581,3),  (554,3),  (555,3),  (556,5),  (530,5),  (474,2),  (472,2),  (471,4),  (470,4),  (441,2),  (440,2),  (410,4),  (409,2),  (408,2),  (407,2),  (434,2),  (433,2),  (402,2),  (374,4),  (373,4),  (316,4),  (288,4),  (288,0),  (231,4),  (201,4),  (173,4),  (144,4),  (144,0),  (116,5),  (89,5),  (61,5),  (62,3),  (34,3),  (36,3),  (10,3),  (12,3),  (20,3),  (22,3),  (52,3), 
+
+
+[Timing] Time passed: 147.85858 s
+
+Posterior Probability: -224.9504543
+Agreement with demo: 22%
+Current angular diffs: 71'
+
+Selected number of demos: 35
+
+-- Positive Demos --
+ (541,3),  (544,3),  (576,3),  (578,3),  (581,3),  (554,3),  (556,5),  (530,5),  (472,2),  (471,4),  (441,2),  (440,2),  (410,4),  (409,2),  (408,2),  (434,2),  (402,2),  (374,4),  (344,4),  (316,4),  (288,4),  (288,0),  (259,4),  (201,4),  (173,4),  (116,5),  (89,5),  (61,5),  (62,3),  (36,3),  (11,3),  (12,3),  (22,3),  (52,3), 
+
+
+[Timing] Time passed: 144.268892 s
+
+Posterior Probability: -824.2874956
+Agreement with demo: 20%
+Current angular diffs: 76'
+
+Selected number of demos: 20
+
+-- Positive Demos --
+ (539,3),  (541,3),  (574,3),  (576,3),  (578,3),  (555,3),  (472,2),  (442,2),  (440,4),  (409,2),  (403,2),  (374,4),  (288,0),  (173,4),  (144,0),  (88,5),  (34,3),  (11,3),  (52,3), 
+
+
+[Timing] Time passed: 138.842473 s
+
+Posterior Probability: -35.91960369
+Agreement with demo: 17%
+Current angular diffs: 75'
+
+-----------------------------
+Avg angular diffs: 70'
+-- learned weights --
+Feature Weights: -0.21575, 0.16025, 0.204, -0.1, 
