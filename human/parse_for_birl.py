@@ -39,12 +39,11 @@ class DataPoint(object):
         print "obstacles:"   , self.obstacles
         print "pathpoints:"  , self.pathpoints
 
-
   
 
 class HumanDataParser():
 
-    def __init__(self, file_dir='data/subj26/26_18_2.data'): 
+    def __init__(self, file_dir='data/subj63/63_16_1.data'): 
         f = open(file_dir)       
         self.data = {}
         self.trajectory = []
@@ -82,8 +81,8 @@ class HumanDataParser():
         ax.set_xlim((-2.8, 2.8))
         ax.set_ylim((-2.4, 2.0))
         ax.grid(color='g', linestyle='-', linewidth=1)
-        #plt.show()
-        plt.savefig("birl_data/"+prefix+"_configuration.png", bbox_inches='tight')
+        plt.show()
+        #plt.savefig("birl_data/"+prefix+"_configuration.png", bbox_inches='tight')
 
 
     def OutputDomainFeatures(self,prefix="test"):
@@ -157,4 +156,8 @@ class HumanDataParser():
             outfile.write(str(sa[0])+","+str(sa[1])+"\n")
     
 
+if __name__ == '__main__':
+    parser = HumanDataParser()
+    parser.ProcessData()
+    parser.Visualize()
 
