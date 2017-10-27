@@ -1,0 +1,24 @@
+loading features...
+
+Initializing gridworld of size 28 by 22..
+    Num states: 616
+    Num actions: 8
+
+Total number of demos: 78
+
+Selected number of demos: 22
+
+-- Positive Demos --
+ (133,1),  (161,6),  (273,7),  (359,7),  (468,2),  (464,2),  (404,4),  (291,3),  (265,5),  (182,5),  (127,0),  (39,2),  (7,4),  (6,4),  (4,6),  (31,6),  (87,7),  (144,7),  (258,1),  (313,1),  (454,1),  (505,6), 
+
+
+[Timing] Time passed: 123.103144 s
+
+Posterior Probability: -49.81439297
+Agreement with demo: 7.5%
+Current angular diffs: 97'
+
+-----------------------------
+Avg angular diffs: 97'
+-- learned weights --
+Feature Weights: 0.00725, 0.00975, -0.178, -0.1, 

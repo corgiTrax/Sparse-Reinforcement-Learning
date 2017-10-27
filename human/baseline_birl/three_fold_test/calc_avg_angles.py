@@ -1,6 +1,6 @@
 import numpy as np
 
-file = open('angular_diffs.out')
+file = open('angular_diffs.txt')
 
 angles_data = {1:[],2:[],3:[],4:[]}
 
