@@ -1,6 +1,7 @@
 import numpy as np
+import sys
 
-file = open('angular_diffs.txt')
+file = open(sys.argv[1]) #'angular_diffs.txt')
 
 angles_data = {1:[],2:[],3:[],4:[]}
 
@@ -11,4 +12,6 @@ for line in file:
 
 for task in angles_data:
     angles = angles_data[task]
+    if len(angles) < 1:
+        break
     print "task:",task, " err:", sum(angles)/len(angles),"+-", np.std(angles)/np.sqrt(len(angles))

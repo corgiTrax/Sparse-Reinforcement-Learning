@@ -59,12 +59,13 @@ class HumanDataParser():
         state_0 = (-2.8, 1.8)
         traj = []
         for point in object_points:
-            state_x = (math.floor(point[0]*10/2)*2)/10.0 # point[0] - 0.1 #
-            state_y = (math.floor(point[1]*10/2)*2)/10.0 # point[1] - 0.1 #
+            state_x =  (math.floor(point[0]*10/2)*2)/10.0 #point[0] - 0.1 #
+            state_y =  (math.floor(point[1]*10/2)*2)/10.0 #point[1] - 0.1 #
             circle2 = plt.Circle((state_x+0.1, state_y+0.1), size, color=color)
             ax.add_artist(circle2)
-            state_idx = (state_0[1]-state_y)/0.2*28 + (state_x - state_0[0])/0.2
-            traj.append(int(state_idx))
+            state_idx = (state_0[1]-state_y)/0.2 * 28 + (state_x - state_0[0]) / 0.2
+            if state_idx >= 0 and state_idx < 28*22:
+                traj.append(int(state_idx))
         return traj
     
     def ProcessData(self):      
@@ -81,8 +82,9 @@ class HumanDataParser():
         ax.set_xlim((-2.8, 2.8))
         ax.set_ylim((-2.4, 2.0))
         ax.grid(color='g', linestyle='-', linewidth=1)
-        plt.show()
-        #plt.savefig("birl_data/"+prefix+"_configuration.png", bbox_inches='tight')
+        traj = self.plotObjects(self.trajectory,'k', 0.05, self.ax )
+        #plt.show()
+        plt.savefig("birl_data/"+prefix+"_configuration.png", bbox_inches='tight')
 
 
     def OutputDomainFeatures(self,prefix="test"):
@@ -90,37 +92,59 @@ class HumanDataParser():
         for state in self.targets:
             #print "stateFeatures["+str(state)+"][0] = 1.0;"
             outfile.write(str(state)+",0,1.0\n")
-            outfile.write(str(state-28)+",0,0.5\n")
-            outfile.write(str(state+28)+",0,0.5\n")
+            if state >= 28:
+                outfile.write(str(state-28)+",0,1.0\n")
+            outfile.write(str(state+28)+",0,1.0\n")
            
             if not state % 28 == 0 :
-                outfile.write(str(state-1)+",0,0.5\n")
-                outfile.write(str(state-28-1)+",0,0.25\n")
-                outfile.write(str(state+28-1)+",0,0.25\n")
+                if state > 0:
+                    outfile.write(str(state-1)+",0,1.0\n")
+                if state > 28:
+                    outfile.write(str(state-28-1)+",0,1.0\n")
+                outfile.write(str(state+28-1)+",0,1.0\n")
 
             if not state % 28 == 27 :
-                outfile.write(str(state+1)+",0,0.5\n")
-                outfile.write(str(state-28+1)+",0,0.25\n")
-                outfile.write(str(state+28+1)+",0,0.25\n")
+                outfile.write(str(state+1)+",0,1.0\n")
+                if state >= 28:
+                    outfile.write(str(state-28+1)+",0,1.0\n")
+                outfile.write(str(state+28+1)+",0,1.0\n")
             
         for state in self.obstacles:
             #print "stateFeatures["+str(state)+"][1] = 1.0;"
             outfile.write(str(state)+",1,1.0\n")
-            outfile.write(str(state-28)+",1,0.25\n")
-            outfile.write(str(state+28)+",1,0.25\n")
+            if state >= 28:
+                outfile.write(str(state-28)+",1,1.0\n")
+            outfile.write(str(state+28)+",1,1.0\n")
             if not state % 28 == 0 :
-                outfile.write(str(state-1)+",1,0.25\n")
-                outfile.write(str(state-28-1)+",1,0.05\n")
-                outfile.write(str(state+28-1)+",1,0.05\n")
+                if state > 0:
+                    outfile.write(str(state-1)+",1,1.0\n")
+                if state > 28:
+                    outfile.write(str(state-28-1)+",1,1.0\n")
+                outfile.write(str(state+28-1)+",1,1.0\n")
             if not state % 28 == 27 :
-                outfile.write(str(state+1)+",1,0.25\n")
-                outfile.write(str(state-28+1)+",1,0.05\n")
-                outfile.write(str(state+28+1)+",1,0.05\n")
+                outfile.write(str(state+1)+",1,1.0\n")
+                if state >= 28:
+                    outfile.write(str(state-28+1)+",1,1.0\n")
+                outfile.write(str(state+28+1)+",1,1.0\n")
             
         idx = 1
         for state in self.path:
             #print "stateFeatures["+str(state)+"][2] =" + str(idx/10.0) +";"
             outfile.write(str(state)+",2,"+ str(idx/10.0) +"\n")
+            if state >= 28:
+                outfile.write(str(state-28)+",2,"+ str(idx/10.0*0.5) +"\n")
+            outfile.write(str(state+28)+",2"+ str(idx/10.0*0.5) +"\n")
+            if not state % 28 == 0 :
+                if state > 0:
+                    outfile.write(str(state-1)+",2"+ str(idx/10.0*0.5) +"\n")
+                if state > 28:
+                    outfile.write(str(state-28-1)+",2"+ str(idx/10.0*0.5) +"\n")
+                outfile.write(str(state+28-1)+",2"+ str(idx/10.0*0.5) +"\n")
+            if not state % 28 == 27 :
+                outfile.write(str(state+1)+",2"+ str(idx/10.0*0.5) +"\n")
+                if state >= 28:
+                    outfile.write(str(state-28+1)+",2"+ str(idx/10.0*0.5) +"\n")
+                outfile.write(str(state+28+1)+",2"+ str(idx/10.0*0.5) +"\n")
             idx += 1
 
     def OutputDemonstrations(self,prefix="test"):
@@ -129,8 +153,8 @@ class HumanDataParser():
         demo = []
         width = 28
         height = 22
-        for pt in range(len(self.trajectory)-1):
-            action = 0 # STAY
+        for pt in range(len(traj)-1):
+            action = 0 # UP
             v = self.trajectory[pt+1] - self.trajectory[pt]
             alpha = math.atan2(v[1], v[0])
             k = alpha / (math.pi/8)
@@ -151,6 +175,7 @@ class HumanDataParser():
             elif -7 < k <= -5:
                 action = 6                   
             demo.append((traj[pt],action))
+            
         for sa in demo:
             #print "good_demos.push_back(make_pair"+str(sa)+");"
             outfile.write(str(sa[0])+","+str(sa[1])+"\n")
