@@ -133,18 +133,18 @@ class HumanDataParser():
             outfile.write(str(state)+",2,"+ str(idx/10.0) +"\n")
             if state >= 28:
                 outfile.write(str(state-28)+",2,"+ str(idx/10.0*0.5) +"\n")
-            outfile.write(str(state+28)+",2"+ str(idx/10.0*0.5) +"\n")
+            outfile.write(str(state+28)+",2,"+ str(idx/10.0*0.5) +"\n")
             if not state % 28 == 0 :
                 if state > 0:
-                    outfile.write(str(state-1)+",2"+ str(idx/10.0*0.5) +"\n")
+                    outfile.write(str(state-1)+",2,"+ str(idx/10.0*0.5) +"\n")
                 if state > 28:
-                    outfile.write(str(state-28-1)+",2"+ str(idx/10.0*0.5) +"\n")
-                outfile.write(str(state+28-1)+",2"+ str(idx/10.0*0.5) +"\n")
+                    outfile.write(str(state-28-1)+",2,"+ str(idx/10.0*0.5) +"\n")
+                outfile.write(str(state+28-1)+",2,"+ str(idx/10.0*0.5) +"\n")
             if not state % 28 == 27 :
-                outfile.write(str(state+1)+",2"+ str(idx/10.0*0.5) +"\n")
+                outfile.write(str(state+1)+",2,"+ str(idx/10.0*0.5) +"\n")
                 if state >= 28:
-                    outfile.write(str(state-28+1)+",2"+ str(idx/10.0*0.5) +"\n")
-                outfile.write(str(state+28+1)+",2"+ str(idx/10.0*0.5) +"\n")
+                    outfile.write(str(state-28+1)+",2,"+ str(idx/10.0*0.5) +"\n")
+                outfile.write(str(state+28+1)+",2,"+ str(idx/10.0*0.5) +"\n")
             idx += 1
 
     def OutputDemonstrations(self,prefix="test"):
