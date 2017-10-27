@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 	//test arrays to get features
 	const int numFeatures = 4;  // target, obstacle, pathpoint, None
 	const int numStates = grid_width * grid_height;
-	double gamma = 0.85;
+	double gamma = 0.25;
 
 	double featureWeights[numFeatures] = {0,0,0,-0.1};
 	double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);

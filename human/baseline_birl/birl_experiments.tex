@@ -5,6 +5,9 @@
 \usepackage{amsmath}
 \usepackage[letterpaper, margin=1in]{geometry}
 \usepackage{fancyhdr}
+\usepackage{graphicx, wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \lhead{ Experiment Report }
 \rhead{ baseline_birl }
@@ -20,12 +23,25 @@
 \section{Domain Representations}
 
 \begin{figure}[h!]
-     \includegraphics[height=1.3in]{discretized.png}
-     \label{Example of a Discretized Gridworld}
-     \ref{gridworld}
+    \centering
+    \begin{subfigure}[h]{1\textwidth}
+        \centering
+        \includegraphics[height=1.9in]{original.png}
+        \caption{Original Data}
+    \end{subfigure}
+    ~ 
+    \begin{subfigure}[h]{1\textwidth}
+        \centering
+        \includegraphics[height=1.9in]{discretized.png}
+        \caption{Discretized Data}
+    \end{subfigure}
+    \caption{Example of data discretization}
+    \label{gridworld}
 \end{figure}
 
-In order to make the problem tractable by BIRL, the 2D test area is discretized into a gridworld of size $28\times 22$ with $0.2 \times 0.2$ $m^2$ square cells.  
+In order to make the problem tractable by BIRL, the 2D test area is discretized into a gridworld of size $28\times 22$ with $0.2 \times 0.2$ $m^2$ square cells. The (center) location of targets, obstacles,  pathpoints and the subject's waypoints are approximated with their closest discrete state as shown in figure \ref{gridworld}.   \par
+
+The problem is formulated as weight-learning for the three different features: targets, obstacles and pathpoints. The three features are represented using three different continuous values at each state. More specifically, the nine cells around targets and obstacles all have a feature value of 1.0 for the corresponding feature, while the the centers of pathpoints take an increasing value as their order increases (since all tasks involves following the pathpoints). The reward at any given state is computed as the linear combination of these features using their corresponding weights. \par
 
 \section{Experimental Design Choices}
 
