@@ -93,45 +93,45 @@ class HumanDataParser():
             #print "stateFeatures["+str(state)+"][0] = 1.0;"
             outfile.write(str(state)+",0,1.0\n")
             if state >= 28:
-                outfile.write(str(state-28)+",0,1.0\n")
-            outfile.write(str(state+28)+",0,1.0\n")
+                outfile.write(str(state-28)+",0,0.5\n")
+            outfile.write(str(state+28)+",0,0.5\n")
            
             if not state % 28 == 0 :
                 if state > 0:
-                    outfile.write(str(state-1)+",0,1.0\n")
+                    outfile.write(str(state-1)+",0,0.5\n")
                 if state > 28:
-                    outfile.write(str(state-28-1)+",0,1.0\n")
-                outfile.write(str(state+28-1)+",0,1.0\n")
+                    outfile.write(str(state-28-1)+",0,0.5\n")
+                outfile.write(str(state+28-1)+",0,0.5\n")
 
             if not state % 28 == 27 :
-                outfile.write(str(state+1)+",0,1.0\n")
+                outfile.write(str(state+1)+",0,0.5\n")
                 if state >= 28:
-                    outfile.write(str(state-28+1)+",0,1.0\n")
-                outfile.write(str(state+28+1)+",0,1.0\n")
+                    outfile.write(str(state-28+1)+",0,0.5\n")
+                outfile.write(str(state+28+1)+",0,0.5\n")
             
         for state in self.obstacles:
             #print "stateFeatures["+str(state)+"][1] = 1.0;"
-            outfile.write(str(state)+",1,1.0\n")
+            outfile.write(str(state)+",1,0.5\n")
             if state >= 28:
-                outfile.write(str(state-28)+",1,1.0\n")
-            outfile.write(str(state+28)+",1,1.0\n")
+                outfile.write(str(state-28)+",1,0.5\n")
+            outfile.write(str(state+28)+",1,0.5\n")
             if not state % 28 == 0 :
                 if state > 0:
-                    outfile.write(str(state-1)+",1,1.0\n")
+                    outfile.write(str(state-1)+",1,0.5\n")
                 if state > 28:
-                    outfile.write(str(state-28-1)+",1,1.0\n")
-                outfile.write(str(state+28-1)+",1,1.0\n")
+                    outfile.write(str(state-28-1)+",1,0.5\n")
+                outfile.write(str(state+28-1)+",1,0.5\n")
             if not state % 28 == 27 :
-                outfile.write(str(state+1)+",1,1.0\n")
+                outfile.write(str(state+1)+",1,0.5\n")
                 if state >= 28:
-                    outfile.write(str(state-28+1)+",1,1.0\n")
-                outfile.write(str(state+28+1)+",1,1.0\n")
+                    outfile.write(str(state-28+1)+",1,0.5\n")
+                outfile.write(str(state+28+1)+",1,0.5\n")
             
         idx = 1
         for state in self.path:
             #print "stateFeatures["+str(state)+"][2] =" + str(idx/10.0) +";"
             outfile.write(str(state)+",2,"+ str(idx/10.0) +"\n")
-            if state >= 28:
+            '''if state >= 28:
                 outfile.write(str(state-28)+",2,"+ str(idx/10.0*0.5) +"\n")
             outfile.write(str(state+28)+",2,"+ str(idx/10.0*0.5) +"\n")
             if not state % 28 == 0 :
@@ -144,7 +144,7 @@ class HumanDataParser():
                 outfile.write(str(state+1)+",2,"+ str(idx/10.0*0.5) +"\n")
                 if state >= 28:
                     outfile.write(str(state-28+1)+",2,"+ str(idx/10.0*0.5) +"\n")
-                outfile.write(str(state+28+1)+",2,"+ str(idx/10.0*0.5) +"\n")
+                outfile.write(str(state+28+1)+",2,"+ str(idx/10.0*0.5) +"\n")'''
             idx += 1
 
     def OutputDemonstrations(self,prefix="test"):
