@@ -10,8 +10,15 @@ for line in file:
     task = int(line.split(":")[0].split("_")[-1].split(".")[0])
     angles_data[task].append(float(line.split(":")[2]))
 
+print "\\begin{center}"
+print "\\begin{tabular}{|c|c|}"
+print "\\hline"
+print " Task & Average angular difference \\\\ \\hline"
 for task in angles_data:
     angles = angles_data[task]
     if len(angles) < 1:
         break
-    print "task:",task, " err:", sum(angles)/len(angles),"+-", np.std(angles)/np.sqrt(len(angles))
+    print task, " & ", round(sum(angles)/len(angles),3),"$\pm$", round(np.std(angles)/np.sqrt(len(angles)),3), "\\\\"
+print "\\hline"
+print "\\end{tabular}"
+print "\\end{center}"

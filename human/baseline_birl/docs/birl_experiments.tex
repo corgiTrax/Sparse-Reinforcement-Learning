@@ -26,29 +26,372 @@
     \centering
     \begin{subfigure}[h]{0.45\textwidth}
         \centering
-        \includegraphics[height=1.9in]{original.png}
+        \includegraphics[height=2in]{original.png}
         \caption{Original Data}
     \end{subfigure}
     ~ 
     \begin{subfigure}[h]{0.45\textwidth}
         \centering
-        \includegraphics[height=1.9in]{discretized.png}
+        \includegraphics[height=2in]{discretized.png}
         \caption{Discretized Data}
     \end{subfigure}
     \caption{Example of data discretization}
     \label{gridworld}
 \end{figure}
 
-In order to make the problem tractable by BIRL, the test area is discretized into a 2D gridworld of size $28\times 22$ with $0.2 \times 0.2$ $\text{m}^2$ cells. Each cell is a state in the MDP. There are 8 directions/actions an agent can take at any state to move to an adjacent state. The (center) location of targets, obstacles,  pathpoints and the subject's waypoints are approximated with their closest discrete state as shown in figure \ref{gridworld}.  The problem is formulated as weight-learning for the three different features: targets, obstacles and pathpoints.  \par
-The three features are represented using three different continuous values at each state. More specifically, the nine cells around targets and obstacles all have a feature value of 1.0 for the corresponding feature, while the the centers of pathpoints take an increasing value as their order increases. The reward at any given state is computed as the linear combination of these features using their corresponding weights. The observations are a set of state-action pairs extracted from the human's trajectory.\par
+In order to make the problem tractable by BIRL, the test area is discretized into a 2D gridworld of size $28\times 22$ with $0.2 \times 0.2$ $\text{m}^2$ cells. Each cell is a state in the MDP. The actions are discretized into 8 directions so that an agent can move to any adjacent state in the gridworld. The (center) location of targets, obstacles,  pathpoints and the subject's waypoints are approximated with their closest discrete state as shown in figure \ref{gridworld}. \par
+
+The problem is formulated as learning the weights for the three different features: targets, obstacles and pathpoints. The three features are represented using three different continuous values at each state. More specifically, the center cell of targets and obstacles have a feature value of 1.0 for the corresponding feature and the eight adjacent cells will take the value of 0.5, while the the centers of pathpoints take an increasing value as their order increases. The reward at any given state is computed as the linear combination of these features using their corresponding weights. The observations are a set of state-action pairs extracted from the human's trajectory. \par
 
 \section{Experimental Design Choices}
 Since the discretization as well as test-time error can introduce noise into the data, only a (randomly sampled) subset of available human state-action pairs is used per itration of BIRL. The model with lowest training error across 50 iterations is used as its final prediction. \par
 
-The parameters for BIRL are set empirically. The confidence factor $\alpha$ is set at 100 and the chain length is set to be 3000 (since there are only three values, i.e. feature weights to be tweaked, which is relatively small). 0.85 is used as the discount factor for MDPs. \par
+The parameters for BIRL are set empirically. The confidence factor $\alpha$ is set at 100 and the chain length is set to be 3000 (since there are only three values, i.e. feature weights to be tweaked, which is relatively small). 0.25 is used as the discount factor for MDPs with the assumption that the decision making process of humans tends to prefer immediate rewards. \par
 
 
 \section{Results}
+\subsection{Average performance across subjects}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  53.913 $\pm$ 2.54 \\
+2  &  53.409 $\pm$ 2.709 \\
+3  &  59.856 $\pm$ 1.997 \\
+4  &  51.063 $\pm$ 2.593 \\
+\hline
+\end{tabular}
+\end{center}
+\par
+
+\subsection{Performance per subject}
+Subject ID  26 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  28.102 $\pm$ 6.593 \\
+2  &  56.231 $\pm$ 8.117 \\
+3  &  72.996 $\pm$ 2.01 \\
+4  &  66.936 $\pm$ 2.782 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  27 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  71.298 $\pm$ 2.143 \\
+2  &  63.631 $\pm$ 8.417 \\
+3  &  73.013 $\pm$ 1.335 \\
+4  &  63.328 $\pm$ 10.718 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  28 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  52.038 $\pm$ 11.266 \\
+2  &  63.698 $\pm$ 2.403 \\
+3  &  72.775 $\pm$ 2.296 \\
+4  &  21.3 $\pm$ 1.613 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  31 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  68.127 $\pm$ 11.727 \\
+2  &  62.79 $\pm$ 4.864 \\
+3  &  51.341 $\pm$ 12.189 \\
+4  &  75.07 $\pm$ 3.244 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  32 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  62.917 $\pm$ 11.987 \\
+2  &  39.36 $\pm$ 11.98 \\
+3  &  30.295 $\pm$ 2.014 \\
+4  &  39.843 $\pm$ 11.66 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  33 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  61.881 $\pm$ 12.049 \\
+2  &  58.009 $\pm$ 13.688 \\
+3  &  71.132 $\pm$ 3.861 \\
+4  &  56.822 $\pm$ 13.512 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  34 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  76.871 $\pm$ 8.415 \\
+2  &  74.661 $\pm$ 4.55 \\
+3  &  73.39 $\pm$ 2.909 \\
+4  &  77.317 $\pm$ 3.127 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  35 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  47.282 $\pm$ 15.993 \\
+2  &  69.235 $\pm$ 0.837 \\
+3  &  65.007 $\pm$ 11.036 \\
+4  &  31.16 $\pm$ 12.727 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  36 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  47.036 $\pm$ 10.412 \\
+2  &  43.106 $\pm$ 17.267 \\
+3  &  49.129 $\pm$ 13.396 \\
+4  &  79.417 $\pm$ 5.735 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  37 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  79.528 $\pm$ 5.452 \\
+2  &  65.886 $\pm$ 16.982 \\
+3  &  71.9 $\pm$ 4.103 \\
+4  &  77.418 $\pm$ 3.452 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  38 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  67.316 $\pm$ 2.553 \\
+2  &  78.237 $\pm$ 5.031 \\
+3  &  33.727 $\pm$ 1.826 \\
+4  &  15.505 $\pm$ 2.04 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  39 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  48.528 $\pm$ 15.749 \\
+2  &  82.601 $\pm$ 6.687 \\
+3  &  40.801 $\pm$ 7.712 \\
+4  &  43.805 $\pm$ 15.795 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  42 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  45.479 $\pm$ 11.671 \\
+2  &  10.618 $\pm$ 1.683 \\
+3  &  54.398 $\pm$ 12.366 \\
+4  &  56.364 $\pm$ 9.343 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  43 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  68.002 $\pm$ 2.478 \\
+2  &  11.637 $\pm$ 1.286 \\
+3  &  81.341 $\pm$ 2.508 \\
+4  &  36.878 $\pm$ 11.635 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  44 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  78.791 $\pm$ 2.986 \\
+2  &  46.058 $\pm$ 15.931 \\
+3  &  69.221 $\pm$ 3.912 \\
+4  &  70.405 $\pm$ 2.103 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  45 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  71.065 $\pm$ 7.463 \\
+2  &  12.925 $\pm$ 0.665 \\
+3  &  57.408 $\pm$ 9.027 \\
+4  &  56.713 $\pm$ 12.502 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  46 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  32.997 $\pm$ 12.932 \\
+2  &  67.45 $\pm$ 3.604 \\
+3  &  78.446 $\pm$ 4.298 \\
+4  &  18.815 $\pm$ 0.644 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  47 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  54.126 $\pm$ 14.343 \\
+2  &  19.99 $\pm$ 1.742 \\
+3  &  29.846 $\pm$ 1.748 \\
+4  &  44.143 $\pm$ 11.713 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  48 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  44.499 $\pm$ 10.585 \\
+2  &  74.592 $\pm$ 5.037 \\
+3  &  75.599 $\pm$ 3.458 \\
+4  &  39.064 $\pm$ 8.041 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  54 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  34.989 $\pm$ 13.017 \\
+2  &  79.911 $\pm$ 1.405 \\
+3  &  68.111 $\pm$ 4.007 \\
+4  &  44.712 $\pm$ 11.939 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  56 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  45.078 $\pm$ 7.215 \\
+2  &  70.324 $\pm$ 5.918 \\
+3  &  28.161 $\pm$ 2.13 \\
+4  &  29.036 $\pm$ 11.581 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  59 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  52.767 $\pm$ 7.486 \\
+2  &  53.219 $\pm$ 10.744 \\
+3  &  49.437 $\pm$ 8.545 \\
+4  &  72.352 $\pm$ 4.009 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  61 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  46.511 $\pm$ 15.732 \\
+2  &  11.256 $\pm$ 2.559 \\
+3  &  36.445 $\pm$ 6.13 \\
+4  &  77.837 $\pm$ 1.816 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  63 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  56.442 $\pm$ 11.574 \\
+2  &  72.277 $\pm$ 4.968 \\
+3  &  71.945 $\pm$ 3.254 \\
+4  &  57.861 $\pm$ 10.215 \\
+\hline
+\end{tabular}
+\end{center}
+
+\par Subject ID  64 :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ Task & Average angular difference \\ \hline
+1  &  16.468 $\pm$ 4.118 \\
+2  &  24.179 $\pm$ 10.995 \\
+3  &  51.322 $\pm$ 13.496 \\
+4  &  26.093 $\pm$ 11.173 \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
 
 
 \end{document}

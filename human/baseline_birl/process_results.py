@@ -32,21 +32,7 @@ for subj in subjects:
                     weights.append(int(trial_number))
                     data[subj][i].append(weights)
                 else:
-                    print "Latest experiment does not contain wegihts for", filename
-                    output_file = open('./output/best_1026/'+str(subj)+"_"+trial_number+"_"+str(i)+".out")
-                    weights = []
-                    weights_found = False
-                    for line in output_file:
-                        line = line.strip()
-                        line = line.rstrip(',')
-                        if "Weights" in line:
-                            weights_found = True
-                            weights = [ float(x) if len(x) > 0 else 0 for x in line.split(":")[1].split(",") ]
-                    if weights_found:
-                        weights.append(int(trial_number))
-                        data[subj][i].append(weights)
-                    else:
-                        print "Error ! No weights found for ", filename
+                    print "Error ! No weights found for ", filename
 
     for i in range(1,tasks+1): # Tasks
         #print "Task", i
