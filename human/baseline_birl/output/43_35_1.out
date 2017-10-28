@@ -6,31 +6,19 @@ Initializing gridworld of size 28 by 22..
 
 Total number of demos: 31
 
-Selected number of demos: 14
+Selected number of demos: 10
 
 -- Positive Demos --
- (410,6),  (464,2),  (435,0),  (406,0),  (295,0),  (210,0),  (126,4),  (95,6),  (94,6),  (202,6),  (230,6),  (367,6),  (422,1),  (477,1), 
+ (465,2),  (464,2),  (463,4),  (295,0),  (155,4),  (96,2),  (95,6),  (148,6),  (312,6),  (477,1), 
 
 
-[Timing] Time passed: 175.810241 s
+[Timing] Time passed: 400.200114 s
 
-Posterior Probability: -74.11262844
-Agreement with demo: 11%
-Current angular diffs: 83'
-
-Selected number of demos: 14
-
--- Positive Demos --
- (464,2),  (406,0),  (295,0),  (267,0),  (210,0),  (155,4),  (96,2),  (94,6),  (148,6),  (202,6),  (257,6),  (312,6),  (449,1),  (477,1), 
-
-
-[Timing] Time passed: 174.329923 s
-
-Posterior Probability: -28.27618878
-Agreement with demo: 2.2%
-Current angular diffs: 94'
+Posterior Probability: -44.88063208
+Agreement with demo: 20%
+Current angular diffs: 78'
 
 -----------------------------
-Avg angular diffs: 83'
+Avg angular diffs: 78'
 -- learned weights --
-Feature Weights: -0.09925, -0.602, 0.37275, -0.1, 
+Feature Weights: 0.0895, 0.28625, -0.49025, -0.1, 

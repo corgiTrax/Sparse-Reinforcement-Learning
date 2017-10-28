@@ -6,55 +6,19 @@ Initializing gridworld of size 28 by 22..
 
 Total number of demos: 45
 
-Selected number of demos: 13
+Selected number of demos: 15
 
 -- Positive Demos --
- (80,1),  (137,1),  (192,1),  (356,6),  (435,0),  (407,0),  (350,0),  (295,0),  (154,4),  (125,0),  (123,2),  (201,6),  (309,6), 
+ (80,1),  (109,1),  (248,1),  (383,6),  (409,6),  (437,6),  (436,0),  (407,0),  (267,0),  (182,0),  (125,0),  (149,6),  (200,6),  (309,6),  (391,1), 
 
 
-[Timing] Time passed: 160.970532 s
+[Timing] Time passed: 163.44936 s
 
-Posterior Probability: -58.47402761
-Agreement with demo: 12%
-Current angular diffs: 78'
-
-Selected number of demos: 18
-
--- Positive Demos --
- (80,1),  (137,1),  (303,6),  (356,6),  (409,6),  (436,0),  (350,0),  (209,0),  (125,0),  (96,6),  (122,2),  (201,6),  (228,6),  (282,6),  (309,6),  (364,1),  (391,1),  (420,1), 
-
-
-[Timing] Time passed: 161.130427 s
-
-Posterior Probability: -150.8415365
-Agreement with demo: 4.5%
-Current angular diffs: 92'
-
-Selected number of demos: 12
-
--- Positive Demos --
- (80,1),  (192,1),  (356,6),  (383,6),  (436,0),  (350,0),  (239,4),  (125,0),  (148,6),  (200,6),  (282,6),  (336,1), 
-
-
-[Timing] Time passed: 157.558225 s
-
-Posterior Probability: -129.4227403
-Agreement with demo: 12%
+Posterior Probability: -45.4890843
+Agreement with demo: 7.5%
 Current angular diffs: 98'
 
-Selected number of demos: 14
-
--- Positive Demos --
- (80,1),  (192,1),  (356,6),  (383,6),  (409,6),  (407,0),  (350,0),  (182,0),  (96,6),  (148,6),  (228,6),  (282,6),  (420,1), 
-
-
-[Timing] Time passed: 149.19204 s
-
-Posterior Probability: -25.40599213
-Agreement with demo: 18%
-Current angular diffs: 86'
-
 -----------------------------
-Avg angular diffs: 78'
+Avg angular diffs: 98'
 -- learned weights --
-Feature Weights: -0.48225, 0.494, -0.01075, -0.1, 
+Feature Weights: -0.472, -0.2805, 0.138, -0.1, 
