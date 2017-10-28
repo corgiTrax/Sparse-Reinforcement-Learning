@@ -6,113 +6,149 @@ Initializing gridworld of size 28 by 22..
 
 Total number of demos: 46
 
-Selected number of demos: 35
+Selected number of demos: 21
 
 -- Positive Demos --
- (83,2),  (108,6),  (135,6),  (163,1),  (191,6),  (217,6),  (246,6),  (273,1),  (329,6),  (355,6),  (383,6),  (410,6),  (438,6),  (465,2),  (463,2),  (462,0),  (378,0),  (350,5),  (268,0),  (240,0),  (211,0),  (127,4),  (99,4),  (98,4),  (68,6),  (94,6),  (121,6),  (148,6),  (202,6),  (230,6),  (284,6),  (338,6),  (393,1),  (450,6),  (478,6), 
+ (83,2),  (135,6),  (191,6),  (246,6),  (329,6),  (355,6),  (438,6),  (465,2),  (462,0),  (434,0),  (323,0),  (240,0),  (127,4),  (69,2),  (68,6),  (94,6),  (202,6),  (257,6),  (338,6),  (422,1),  (478,6), 
 
 
-[Timing] Time passed: 327.392722 s
+[Timing] Time passed: 621.691288 s
 
-Posterior Probability: -887.8922398
-Agreement with demo: 6.3%
-Current angular diffs: 88'
-
-Selected number of demos: 14
-
--- Positive Demos --
- (109,6),  (217,6),  (273,1),  (438,6),  (464,2),  (378,0),  (211,0),  (156,0),  (69,2),  (148,6),  (338,6),  (422,1),  (450,6),  (478,6), 
-
-
-[Timing] Time passed: 327.772741 s
-
-Posterior Probability: -437.2406628
+Posterior Probability: -203.4868566
 Agreement with demo: 6.3%
 Current angular diffs: 91'
 
 Selected number of demos: 13
 
 -- Positive Demos --
- (191,6),  (383,6),  (463,2),  (378,0),  (268,0),  (98,4),  (95,6),  (94,6),  (121,6),  (148,6),  (202,6),  (338,6),  (478,6), 
+ (191,6),  (246,6),  (329,6),  (383,6),  (462,0),  (350,5),  (240,0),  (211,0),  (69,2),  (148,6),  (338,6),  (393,1),  (478,6), 
 
 
-[Timing] Time passed: 333.583498 s
+[Timing] Time passed: 624.588026 s
 
-Posterior Probability: -302.1029563
-Agreement with demo: 9.5%
-Current angular diffs: 95'
+Posterior Probability: -92.67283838
+Agreement with demo: 13%
+Current angular diffs: 96'
 
-Selected number of demos: 22
-
--- Positive Demos --
- (109,6),  (135,6),  (191,6),  (273,1),  (383,6),  (438,6),  (464,2),  (463,2),  (462,0),  (378,0),  (323,0),  (240,0),  (127,4),  (69,2),  (95,6),  (94,6),  (148,6),  (257,6),  (338,6),  (422,1),  (478,6), 
-
-
-[Timing] Time passed: 330.217281 s
-
-Posterior Probability: -330.6811582
-Agreement with demo: 21%
-Current angular diffs: 99'
-
-Selected number of demos: 15
+Selected number of demos: 46
 
 -- Positive Demos --
- (108,6),  (163,1),  (246,6),  (273,1),  (355,6),  (438,6),  (462,0),  (350,5),  (156,0),  (69,2),  (121,6),  (257,6),  (367,6),  (393,1),  (422,1), 
+ (83,2),  (109,6),  (108,6),  (135,6),  (163,1),  (191,6),  (217,6),  (246,6),  (273,1),  (329,6),  (355,6),  (383,6),  (410,6),  (438,6),  (465,2),  (464,2),  (463,2),  (462,0),  (434,0),  (378,0),  (350,5),  (323,0),  (268,0),  (240,0),  (211,0),  (156,0),  (127,4),  (99,4),  (98,4),  (69,2),  (68,6),  (95,6),  (94,6),  (121,6),  (148,6),  (202,6),  (230,6),  (257,6),  (284,6),  (338,6),  (367,6),  (393,1),  (422,1),  (450,6),  (478,6), 
 
 
-[Timing] Time passed: 335.35776 s
+[Timing] Time passed: 626.071355 s
 
-Posterior Probability: -570.8682191
-Agreement with demo: 9.5%
+Posterior Probability: -194.4740271
+Agreement with demo: 11%
+Current angular diffs: 86'
+
+Selected number of demos: 12
+
+-- Positive Demos --
+ (191,6),  (217,6),  (273,1),  (410,6),  (438,6),  (462,0),  (323,0),  (268,0),  (211,0),  (68,6),  (230,6),  (393,1), 
+
+
+[Timing] Time passed: 625.131997 s
+
+Posterior Probability: -163.029842
+Agreement with demo: 14%
+Current angular diffs: 86'
+
+Selected number of demos: 12
+
+-- Positive Demos --
+ (135,6),  (273,1),  (355,6),  (464,2),  (462,0),  (378,0),  (268,0),  (240,0),  (98,4),  (148,6),  (367,6),  (478,6), 
+
+
+[Timing] Time passed: 612.566299 s
+
+Posterior Probability: -88.60084301
+Agreement with demo: 24%
+Current angular diffs: 87'
+
+Selected number of demos: 31
+
+-- Positive Demos --
+ (109,6),  (135,6),  (163,1),  (191,6),  (217,6),  (273,1),  (329,6),  (383,6),  (438,6),  (464,2),  (462,0),  (434,0),  (378,0),  (350,5),  (323,0),  (268,0),  (240,0),  (211,0),  (156,0),  (99,4),  (69,2),  (68,6),  (95,6),  (121,6),  (202,6),  (257,6),  (284,6),  (338,6),  (393,1),  (422,1),  (478,6), 
+
+
+[Timing] Time passed: 625.063115 s
+
+Posterior Probability: -207.779216
+Agreement with demo: 14%
 Current angular diffs: 92'
 
-Selected number of demos: 14
+Selected number of demos: 31
 
 -- Positive Demos --
- (108,6),  (163,1),  (246,6),  (273,1),  (410,6),  (462,0),  (434,0),  (323,0),  (156,0),  (99,4),  (94,6),  (121,6),  (284,6),  (450,6), 
+ (109,6),  (108,6),  (135,6),  (163,1),  (217,6),  (246,6),  (273,1),  (329,6),  (383,6),  (410,6),  (465,2),  (464,2),  (462,0),  (378,0),  (323,0),  (240,0),  (156,0),  (127,4),  (98,4),  (69,2),  (68,6),  (94,6),  (148,6),  (202,6),  (230,6),  (284,6),  (367,6),  (422,1),  (450,6),  (478,6), 
 
 
-[Timing] Time passed: 331.834694 s
+[Timing] Time passed: 622.984731 s
 
-Posterior Probability: -534.4868839
-Agreement with demo: 13%
-Current angular diffs: 93'
+Posterior Probability: -318.607306
+Agreement with demo: 9.5%
+Current angular diffs: 1e+02'
 
-Selected number of demos: 20
-
--- Positive Demos --
- (109,6),  (191,6),  (246,6),  (273,1),  (410,6),  (464,2),  (462,0),  (434,0),  (268,0),  (240,0),  (156,0),  (98,4),  (94,6),  (121,6),  (230,6),  (257,6),  (338,6),  (450,6),  (478,6), 
-
-
-[Timing] Time passed: 343.401091 s
-
-Posterior Probability: -407.8721745
-Agreement with demo: 21%
-Current angular diffs: 99'
-
-Selected number of demos: 16
+Selected number of demos: 32
 
 -- Positive Demos --
- (135,6),  (163,1),  (246,6),  (329,6),  (410,6),  (465,2),  (462,0),  (350,5),  (240,0),  (211,0),  (99,4),  (69,2),  (148,6),  (338,6),  (367,6),  (422,1), 
+ (83,2),  (108,6),  (135,6),  (163,1),  (217,6),  (246,6),  (273,1),  (329,6),  (355,6),  (383,6),  (410,6),  (438,6),  (465,2),  (463,2),  (462,0),  (378,0),  (323,0),  (268,0),  (240,0),  (156,0),  (99,4),  (98,4),  (68,6),  (94,6),  (121,6),  (148,6),  (202,6),  (257,6),  (338,6),  (393,1),  (450,6), 
 
 
-[Timing] Time passed: 332.482654 s
+[Timing] Time passed: 621.413669 s
 
-Posterior Probability: -642.7437002
-Agreement with demo: 11%
-Current angular diffs: 94'
+Posterior Probability: -327.2481298
+Agreement with demo: 4.8%
+Current angular diffs: 91'
+
+Selected number of demos: 13
+
+-- Positive Demos --
+ (83,2),  (191,6),  (355,6),  (438,6),  (462,0),  (350,5),  (211,0),  (98,4),  (94,6),  (148,6),  (202,6),  (338,6),  (450,6), 
+
+
+[Timing] Time passed: 581.710774 s
+
+Posterior Probability: -77.92780266
+Agreement with demo: 4.8%
+Current angular diffs: 1e+02'
+
+Selected number of demos: 10
+
+-- Positive Demos --
+ (191,6),  (217,6),  (383,6),  (462,0),  (323,0),  (156,0),  (95,6),  (230,6),  (367,6),  (478,6), 
+
+
+[Timing] Time passed: 572.965507 s
+
+Posterior Probability: -93.14301613
+Agreement with demo: 9.5%
+Current angular diffs: 92'
 
 Selected number of demos: 29
 
 -- Positive Demos --
- (109,6),  (135,6),  (163,1),  (191,6),  (246,6),  (329,6),  (355,6),  (410,6),  (465,2),  (463,2),  (462,0),  (378,0),  (350,5),  (268,0),  (240,0),  (211,0),  (127,4),  (98,4),  (68,6),  (95,6),  (94,6),  (121,6),  (148,6),  (202,6),  (257,6),  (284,6),  (367,6),  (422,1),  (478,6), 
+ (83,2),  (109,6),  (135,6),  (163,1),  (217,6),  (273,1),  (355,6),  (410,6),  (465,2),  (463,2),  (462,0),  (434,0),  (350,5),  (268,0),  (211,0),  (156,0),  (127,4),  (99,4),  (98,4),  (68,6),  (94,6),  (148,6),  (202,6),  (230,6),  (257,6),  (338,6),  (393,1),  (422,1),  (478,6), 
 
 
-[Timing] Time passed: 327.961114 s
+[Timing] Time passed: 543.823335 s
 
-Posterior Probability: -1247.734618
-Agreement with demo: 6.3%
-Current angular diffs: 98'
+Posterior Probability: -206.561808
+Agreement with demo: 4.8%
+Current angular diffs: 1e+02'
+
+Selected number of demos: 21
+
+-- Positive Demos --
+ (83,2),  (135,6),  (217,6),  (273,1),  (383,6),  (465,2),  (463,2),  (462,0),  (434,0),  (323,0),  (240,0),  (211,0),  (99,4),  (98,4),  (95,6),  (148,6),  (257,6),  (284,6),  (393,1),  (422,1),  (450,6), 
+
+
+[Timing] Time passed: 554.961987 s
+
+Posterior Probability: -63.26628575
+Agreement with demo: 14%
+Current angular diffs: 86'
 
 Selected number of demos: 46
 
@@ -120,10 +156,130 @@ Selected number of demos: 46
  (83,2),  (109,6),  (108,6),  (135,6),  (163,1),  (191,6),  (217,6),  (246,6),  (273,1),  (329,6),  (355,6),  (383,6),  (410,6),  (438,6),  (465,2),  (464,2),  (463,2),  (462,0),  (434,0),  (378,0),  (350,5),  (323,0),  (268,0),  (240,0),  (211,0),  (156,0),  (127,4),  (99,4),  (98,4),  (69,2),  (68,6),  (95,6),  (94,6),  (121,6),  (148,6),  (202,6),  (230,6),  (257,6),  (284,6),  (338,6),  (367,6),  (393,1),  (422,1),  (450,6),  (478,6), 
 
 
-[Timing] Time passed: 341.295085 s
+[Timing] Time passed: 541.231571 s
 
-Posterior Probability: -1765.098062
+Posterior Probability: -315.512359
+Agreement with demo: 6.3%
+Current angular diffs: 93'
+
+Selected number of demos: 29
+
+-- Positive Demos --
+ (109,6),  (108,6),  (163,1),  (217,6),  (246,6),  (329,6),  (383,6),  (438,6),  (464,2),  (462,0),  (434,0),  (378,0),  (350,5),  (323,0),  (240,0),  (211,0),  (127,4),  (98,4),  (69,2),  (68,6),  (95,6),  (94,6),  (148,6),  (230,6),  (257,6),  (284,6),  (367,6),  (422,1),  (478,6), 
+
+
+[Timing] Time passed: 539.889153 s
+
+Posterior Probability: -300.3326541
+Agreement with demo: 21%
+Current angular diffs: 91'
+
+Selected number of demos: 17
+
+-- Positive Demos --
+ (109,6),  (163,1),  (246,6),  (383,6),  (464,2),  (463,2),  (378,0),  (323,0),  (240,0),  (127,4),  (68,6),  (148,6),  (257,6),  (338,6),  (367,6),  (422,1),  (478,6), 
+
+
+[Timing] Time passed: 483.997178 s
+
+Posterior Probability: -156.8614601
 Agreement with demo: 11%
+Current angular diffs: 86'
+
+Selected number of demos: 46
+
+-- Positive Demos --
+ (83,2),  (109,6),  (108,6),  (135,6),  (163,1),  (191,6),  (217,6),  (246,6),  (273,1),  (329,6),  (355,6),  (383,6),  (410,6),  (438,6),  (465,2),  (464,2),  (463,2),  (462,0),  (434,0),  (378,0),  (350,5),  (323,0),  (268,0),  (240,0),  (211,0),  (156,0),  (127,4),  (99,4),  (98,4),  (69,2),  (68,6),  (95,6),  (94,6),  (121,6),  (148,6),  (202,6),  (230,6),  (257,6),  (284,6),  (338,6),  (367,6),  (393,1),  (422,1),  (450,6),  (478,6), 
+
+
+[Timing] Time passed: 454.416682 s
+
+Posterior Probability: -425.4383328
+Agreement with demo: 9.5%
+Current angular diffs: 91'
+
+Selected number of demos: 25
+
+-- Positive Demos --
+ (108,6),  (135,6),  (163,1),  (217,6),  (273,1),  (329,6),  (410,6),  (465,2),  (464,2),  (462,0),  (378,0),  (350,5),  (240,0),  (156,0),  (127,4),  (98,4),  (95,6),  (94,6),  (121,6),  (230,6),  (284,6),  (338,6),  (393,1),  (422,1),  (478,6), 
+
+
+[Timing] Time passed: 447.445688 s
+
+Posterior Probability: -72.56151297
+Agreement with demo: 3.2%
+Current angular diffs: 94'
+
+Selected number of demos: 18
+
+-- Positive Demos --
+ (109,6),  (135,6),  (246,6),  (273,1),  (329,6),  (410,6),  (463,2),  (378,0),  (323,0),  (211,0),  (156,0),  (98,4),  (69,2),  (68,6),  (148,6),  (257,6),  (367,6),  (422,1), 
+
+
+[Timing] Time passed: 454.48635 s
+
+Posterior Probability: -187.9520171
+Agreement with demo: 16%
+Current angular diffs: 91'
+
+Selected number of demos: 33
+
+-- Positive Demos --
+ (83,2),  (109,6),  (108,6),  (135,6),  (191,6),  (246,6),  (273,1),  (355,6),  (383,6),  (410,6),  (438,6),  (465,2),  (463,2),  (462,0),  (434,0),  (350,5),  (323,0),  (240,0),  (211,0),  (156,0),  (99,4),  (98,4),  (68,6),  (95,6),  (94,6),  (121,6),  (202,6),  (230,6),  (257,6),  (338,6),  (393,1),  (450,6),  (478,6), 
+
+
+[Timing] Time passed: 459.334341 s
+
+Posterior Probability: -450.4988862
+Agreement with demo: 13%
+Current angular diffs: 91'
+
+Selected number of demos: 29
+
+-- Positive Demos --
+ (109,6),  (135,6),  (191,6),  (246,6),  (273,1),  (329,6),  (355,6),  (383,6),  (410,6),  (465,2),  (464,2),  (463,2),  (462,0),  (434,0),  (350,5),  (268,0),  (211,0),  (127,4),  (98,4),  (68,6),  (94,6),  (148,6),  (202,6),  (230,6),  (284,6),  (338,6),  (393,1),  (450,6),  (478,6), 
+
+
+[Timing] Time passed: 448.317337 s
+
+Posterior Probability: -317.2671365
+Agreement with demo: 16%
+Current angular diffs: 93'
+
+Selected number of demos: 17
+
+-- Positive Demos --
+ (108,6),  (135,6),  (246,6),  (355,6),  (465,2),  (464,2),  (462,0),  (323,0),  (156,0),  (127,4),  (98,4),  (94,6),  (230,6),  (257,6),  (338,6),  (450,6),  (478,6), 
+
+
+[Timing] Time passed: 449.176562 s
+
+Posterior Probability: -104.6679795
+Agreement with demo: 17%
+Current angular diffs: 97'
+
+Selected number of demos: 13
+
+-- Positive Demos --
+ (108,6),  (163,1),  (329,6),  (438,6),  (464,2),  (378,0),  (240,0),  (127,4),  (69,2),  (121,6),  (202,6),  (257,6),  (393,1), 
+
+
+[Timing] Time passed: 432.611364 s
+
+Posterior Probability: -78.45568193
+Agreement with demo: 16%
+Current angular diffs: 86'
+
+Selected number of demos: 21
+
+-- Positive Demos --
+ (109,6),  (163,1),  (246,6),  (273,1),  (329,6),  (410,6),  (465,2),  (463,2),  (462,0),  (350,5),  (240,0),  (211,0),  (99,4),  (98,4),  (68,6),  (94,6),  (148,6),  (230,6),  (338,6),  (393,1),  (478,6), 
+
+
+[Timing] Time passed: 443.123465 s
+
+Posterior Probability: -124.704068
+Agreement with demo: 14%
 Current angular diffs: 94'
 
 Selected number of demos: 46
@@ -132,97 +288,73 @@ Selected number of demos: 46
  (83,2),  (109,6),  (108,6),  (135,6),  (163,1),  (191,6),  (217,6),  (246,6),  (273,1),  (329,6),  (355,6),  (383,6),  (410,6),  (438,6),  (465,2),  (464,2),  (463,2),  (462,0),  (434,0),  (378,0),  (350,5),  (323,0),  (268,0),  (240,0),  (211,0),  (156,0),  (127,4),  (99,4),  (98,4),  (69,2),  (68,6),  (95,6),  (94,6),  (121,6),  (148,6),  (202,6),  (230,6),  (257,6),  (284,6),  (338,6),  (367,6),  (393,1),  (422,1),  (450,6),  (478,6), 
 
 
-[Timing] Time passed: 331.493977 s
+[Timing] Time passed: 426.520544 s
 
-Posterior Probability: -3126.27281
-Agreement with demo: 11%
+Posterior Probability: -277.2269431
+Agreement with demo: 7.9%
 Current angular diffs: 91'
 
-Selected number of demos: 14
+Selected number of demos: 32
 
 -- Positive Demos --
- (83,2),  (108,6),  (163,1),  (217,6),  (355,6),  (464,2),  (462,0),  (378,0),  (211,0),  (69,2),  (94,6),  (230,6),  (367,6),  (478,6), 
+ (83,2),  (109,6),  (135,6),  (163,1),  (191,6),  (246,6),  (273,1),  (355,6),  (383,6),  (438,6),  (465,2),  (464,2),  (462,0),  (434,0),  (378,0),  (323,0),  (240,0),  (211,0),  (127,4),  (99,4),  (98,4),  (68,6),  (95,6),  (121,6),  (202,6),  (230,6),  (257,6),  (284,6),  (338,6),  (393,1),  (422,1),  (478,6), 
 
 
-[Timing] Time passed: 326.061714 s
+[Timing] Time passed: 427.79292 s
 
-Posterior Probability: -885.5096525
-Agreement with demo: 13%
-Current angular diffs: 92'
+Posterior Probability: -177.6973204
+Agreement with demo: 6.3%
+Current angular diffs: 96'
 
 Selected number of demos: 17
 
 -- Positive Demos --
- (109,6),  (217,6),  (246,6),  (383,6),  (410,6),  (438,6),  (465,2),  (462,0),  (434,0),  (350,5),  (211,0),  (127,4),  (68,6),  (95,6),  (230,6),  (367,6),  (422,1), 
+ (83,2),  (108,6),  (135,6),  (191,6),  (217,6),  (383,6),  (465,2),  (462,0),  (378,0),  (268,0),  (99,4),  (95,6),  (148,6),  (202,6),  (284,6),  (338,6),  (422,1), 
 
 
-[Timing] Time passed: 303.738173 s
+[Timing] Time passed: 377.688852 s
 
-Posterior Probability: -325.6477832
-Agreement with demo: 7.9%
-Current angular diffs: 95'
+Posterior Probability: -117.2331901
+Agreement with demo: 4.8%
+Current angular diffs: 1e+02'
+
+Selected number of demos: 19
+
+-- Positive Demos --
+ (108,6),  (135,6),  (217,6),  (273,1),  (383,6),  (465,2),  (462,0),  (350,5),  (268,0),  (240,0),  (99,4),  (68,6),  (94,6),  (121,6),  (202,6),  (230,6),  (284,6),  (367,6),  (478,6), 
+
+
+[Timing] Time passed: 395.443624 s
+
+Posterior Probability: -106.9422237
+Agreement with demo: 11%
+Current angular diffs: 93'
 
 Selected number of demos: 13
 
 -- Positive Demos --
- (163,1),  (191,6),  (383,6),  (463,2),  (462,0),  (350,5),  (240,0),  (98,4),  (68,6),  (95,6),  (94,6),  (121,6),  (338,6), 
+ (163,1),  (217,6),  (383,6),  (410,6),  (462,0),  (323,0),  (240,0),  (99,4),  (121,6),  (230,6),  (257,6),  (284,6),  (478,6), 
 
 
-[Timing] Time passed: 293.568922 s
+[Timing] Time passed: 398.874206 s
 
-Posterior Probability: -305.914986
-Agreement with demo: 7.9%
+Posterior Probability: -66.32831535
+Agreement with demo: 14%
 Current angular diffs: 91'
 
-Selected number of demos: 46
+Selected number of demos: 16
 
 -- Positive Demos --
- (83,2),  (109,6),  (108,6),  (135,6),  (163,1),  (191,6),  (217,6),  (246,6),  (273,1),  (329,6),  (355,6),  (383,6),  (410,6),  (438,6),  (465,2),  (464,2),  (463,2),  (462,0),  (434,0),  (378,0),  (350,5),  (323,0),  (268,0),  (240,0),  (211,0),  (156,0),  (127,4),  (99,4),  (98,4),  (69,2),  (68,6),  (95,6),  (94,6),  (121,6),  (148,6),  (202,6),  (230,6),  (257,6),  (284,6),  (338,6),  (367,6),  (393,1),  (422,1),  (450,6),  (478,6), 
+ (108,6),  (163,1),  (273,1),  (383,6),  (465,2),  (463,2),  (350,5),  (268,0),  (240,0),  (99,4),  (98,4),  (121,6),  (148,6),  (202,6),  (338,6),  (478,6), 
 
 
-[Timing] Time passed: 307.964405 s
+[Timing] Time passed: 376.389262 s
 
-Posterior Probability: -1358.903214
-Agreement with demo: 9.5%
-Current angular diffs: 1e+02'
-
-Selected number of demos: 14
-
--- Positive Demos --
- (108,6),  (163,1),  (273,1),  (329,6),  (410,6),  (463,2),  (462,0),  (434,0),  (378,0),  (211,0),  (68,6),  (121,6),  (284,6),  (450,6), 
-
-
-[Timing] Time passed: 302.717511 s
-
-Posterior Probability: -824.9422195
-Agreement with demo: 11%
-Current angular diffs: 92'
-
-Selected number of demos: 27
-
--- Positive Demos --
- (83,2),  (108,6),  (163,1),  (217,6),  (273,1),  (329,6),  (383,6),  (438,6),  (464,2),  (462,0),  (434,0),  (350,5),  (323,0),  (268,0),  (240,0),  (156,0),  (99,4),  (69,2),  (95,6),  (121,6),  (202,6),  (257,6),  (338,6),  (367,6),  (422,1),  (450,6),  (478,6), 
-
-
-[Timing] Time passed: 297.926864 s
-
-Posterior Probability: -429.5592784
-Agreement with demo: 4.8%
+Posterior Probability: -30.97021417
+Agreement with demo: 14%
 Current angular diffs: 95'
 
-Selected number of demos: 24
-
--- Positive Demos --
- (108,6),  (135,6),  (217,6),  (273,1),  (355,6),  (410,6),  (438,6),  (464,2),  (462,0),  (378,0),  (350,5),  (323,0),  (211,0),  (99,4),  (98,4),  (69,2),  (95,6),  (121,6),  (202,6),  (284,6),  (338,6),  (367,6),  (393,1),  (478,6), 
-
-
-[Timing] Time passed: 287.076371 s
-
-Posterior Probability: -49.73288532
-Agreement with demo: 9.5%
-Current angular diffs: 89'
-
 -----------------------------
-Avg angular diffs: 88'
+Avg angular diffs: 86'
 -- learned weights --
-Feature Weights: -0.76825, -0.01075, -0.2325, -0.1, 
+Feature Weights: -0.33025, -0.256, 0.14175, -0.1, 

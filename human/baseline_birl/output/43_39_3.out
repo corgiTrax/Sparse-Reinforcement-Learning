@@ -6,115 +6,43 @@ Initializing gridworld of size 28 by 22..
 
 Total number of demos: 38
 
-Selected number of demos: 18
-
--- Positive Demos --
- (412,6),  (440,6),  (495,2),  (464,0),  (407,0),  (351,0),  (267,0),  (153,4),  (124,4),  (123,4),  (63,2),  (62,1),  (115,2),  (170,1),  (197,1),  (254,1),  (365,1),  (449,1), 
-
-
-[Timing] Time passed: 123.994815 s
-
-Posterior Probability: -431.3936732
-Agreement with demo: 7.7%
-Current angular diffs: 97'
-
-Selected number of demos: 8
-
--- Positive Demos --
- (412,6),  (494,4),  (407,0),  (324,0),  (123,4),  (117,6),  (170,1),  (365,1), 
-
-
-[Timing] Time passed: 149.514575 s
-
-Posterior Probability: -437.4926499
-Agreement with demo: 1.9%
-Current angular diffs: 1e+02'
-
-Selected number of demos: 13
-
--- Positive Demos --
- (467,6),  (494,4),  (436,0),  (324,0),  (239,4),  (123,4),  (94,4),  (62,1),  (117,6),  (115,6),  (197,1),  (337,1),  (477,1), 
-
-
-[Timing] Time passed: 147.213838 s
-
-Posterior Probability: -289.4195748
-Agreement with demo: 5.8%
-Current angular diffs: 1e+02'
-
-Selected number of demos: 13
-
--- Positive Demos --
- (440,6),  (465,4),  (351,0),  (324,0),  (153,4),  (94,4),  (62,1),  (115,2),  (142,1),  (197,1),  (254,1),  (392,1),  (477,1), 
-
-
-[Timing] Time passed: 150.871282 s
-
-Posterior Probability: -247.0122708
-Agreement with demo: 9.6%
-Current angular diffs: 98'
-
-Selected number of demos: 19
-
--- Positive Demos --
- (412,6),  (495,2),  (465,4),  (464,0),  (351,0),  (324,0),  (239,4),  (153,4),  (124,4),  (94,4),  (62,6),  (62,1),  (116,2),  (115,6),  (142,1),  (197,1),  (337,1),  (365,1),  (477,1), 
-
-
-[Timing] Time passed: 130.203218 s
-
-Posterior Probability: -505.9755247
-Agreement with demo: 7.7%
-Current angular diffs: 94'
-
 Selected number of demos: 16
 
 -- Positive Demos --
- (385,1),  (467,6),  (465,4),  (436,0),  (324,0),  (239,4),  (153,4),  (124,4),  (64,2),  (62,1),  (115,2),  (170,1),  (254,1),  (282,1),  (365,1),  (449,1), 
+ (385,1),  (467,6),  (494,4),  (465,4),  (407,0),  (324,0),  (209,4),  (123,4),  (94,4),  (62,6),  (62,1),  (115,6),  (170,1),  (254,1),  (337,1),  (477,1), 
 
 
-[Timing] Time passed: 127.6474 s
+[Timing] Time passed: 176.11555 s
 
-Posterior Probability: -660.5520414
-Agreement with demo: 9.6%
-Current angular diffs: 93'
+Posterior Probability: -146.8359642
+Agreement with demo: 7.7%
+Current angular diffs: 95'
 
-Selected number of demos: 26
+Selected number of demos: 14
 
 -- Positive Demos --
- (385,1),  (440,6),  (467,6),  (494,4),  (464,0),  (436,0),  (351,0),  (267,0),  (239,4),  (153,4),  (123,4),  (64,2),  (62,6),  (62,1),  (116,2),  (115,6),  (142,1),  (170,1),  (197,1),  (254,1),  (337,1),  (365,1),  (392,1),  (449,1),  (477,1), 
+ (412,6),  (465,4),  (324,0),  (209,4),  (123,4),  (63,2),  (62,6),  (116,2),  (115,2),  (142,1),  (170,1),  (282,1),  (477,1), 
 
 
-[Timing] Time passed: 126.340786 s
+[Timing] Time passed: 177.229669 s
 
-Posterior Probability: -755.0640005
+Posterior Probability: -126.7454183
 Agreement with demo: 5.8%
 Current angular diffs: 1e+02'
 
-Selected number of demos: 21
+Selected number of demos: 12
 
 -- Positive Demos --
- (440,6),  (467,6),  (495,2),  (465,4),  (464,0),  (436,0),  (351,0),  (267,0),  (209,4),  (153,4),  (94,4),  (62,6),  (62,1),  (117,6),  (115,2),  (142,1),  (197,1),  (337,1),  (392,1),  (449,1),  (477,1), 
+ (467,6),  (465,4),  (324,0),  (153,4),  (124,4),  (123,4),  (94,4),  (63,2),  (116,2),  (197,1),  (337,1),  (449,1), 
 
 
-[Timing] Time passed: 120.848438 s
+[Timing] Time passed: 161.847682 s
 
-Posterior Probability: -245.3937935
-Agreement with demo: 5.8%
-Current angular diffs: 1.1e+02'
-
-Selected number of demos: 9
-
--- Positive Demos --
- (495,2),  (407,0),  (209,4),  (153,4),  (64,2),  (63,2),  (115,2),  (197,1),  (392,1), 
-
-
-[Timing] Time passed: 114.592907 s
-
-Posterior Probability: -39.16976015
+Posterior Probability: -43.30433487
 Agreement with demo: 7.7%
-Current angular diffs: 97'
+Current angular diffs: 96'
 
 -----------------------------
-Avg angular diffs: 93'
+Avg angular diffs: 95'
 -- learned weights --
-Feature Weights: 0.4245, 0.298, -0.42, -0.1, 
+Feature Weights: -0.59675, 0.3695, 0.79075, -0.1, 
