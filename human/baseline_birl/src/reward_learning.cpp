@@ -17,7 +17,7 @@ using namespace std;
 int main(int argc, char** argv) {
 
 	if (argc < 4) {
-		cout << " Usage: feature_birl_test <subj> <trial> <task>" << endl;
+		cout << " Usage: reward_learning <subj> <trial> <task>" << endl;
 		return 0;
 	}
 	unsigned int subj = atoi(argv[1]);

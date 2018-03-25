@@ -84,8 +84,8 @@ int main(int argc, char** argv) {
 	mdp.deterministicPolicyIteration(opt_policy);
 	mdp.calculateQValues();
 
-	//cout << "-- optimal policy --" << endl;
-	//mdp.displayPolicy(opt_policy);
+	cout << "-- optimal policy --" << endl;
+	mdp.displayPolicy(opt_policy);
 
 	unsigned int correct_actions = 0;
 	unsigned int total_actions = 0;
@@ -115,6 +115,7 @@ int main(int argc, char** argv) {
 		return 1;
 	}   
 
+	cout << "BIRL Actions:";
 	for(unsigned int i=0; i < good_demos.size(); i++)
 	{
 		unsigned int state = good_demos[i].first;
@@ -122,11 +123,16 @@ int main(int argc, char** argv) {
 		if( demo_freq[state] < 2)
 		{
 			total_actions += 1;
-			if(  mdp.isOptimalAction(state,action) )  correct_actions += 1;
+			cout << "(" << state << "," ;
+			if(  mdp.isOptimalAction(state,action) )  {
+				correct_actions += 1;
+				cout << action << "), ";
+			}
 			else{
 				vector<unsigned int> actions;
 				mdp.getOptimalActions(state, actions);
 				double min_diff = 180;
+				unsigned int min_action = action;
 				//cout << "optimal actions : ";
 				for(unsigned int a: actions)
 				{
@@ -138,11 +144,30 @@ int main(int argc, char** argv) {
 					else angle = angle2 - angle1;
 					if (angle > 180) angle = 360 - angle;
 
-					if (angle < min_diff) min_diff = angle;
+					if (angle < min_diff){
+						min_diff = angle;
+						min_action = a;
+					}
 				}
-				//cout << endl;
+				cout << min_action << "), ";
 				angle_diffs += min_diff;
 			}
+		}
+	}
+	cout << endl;
+	cout << "BIRL Generated Trajectory:";
+	for(unsigned int i=0; i < good_demos.size(); i++)
+	{
+		unsigned int curr_state = good_demos[i].first;
+		unsigned int action = good_demos[i].second;
+                unsigned int prev_state;
+		for(unsigned int j=i; j < good_demos.size(); j++)
+		{
+                        prev_state = curr_state;
+			cout << "(" << curr_state ;
+			cout << "," << opt_policy[curr_state] << "),";
+			curr_state = mdp.getNextState(curr_state, opt_policy[curr_state]);
+                        if(curr_state == prev_state) break;
 		}
 	}
 	float policy_overlap = float(correct_actions) / total_actions * 100;
