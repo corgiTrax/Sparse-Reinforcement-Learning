@@ -69,7 +69,7 @@ for subj in subjects:
                     continue
                 for w in range(4): # iterate through weights
                     weights[w] /= ct
-                output_file = open('./three_fold_test/'+str(subj)+"_"+str(base_trial_number)+"_"+str(i)+".out", "w")
+                output_file = open('./trajectories/'+str(subj)+"_"+str(base_trial_number)+"_"+str(i)+".out", "w")
                 p = Popen(['./test_reward', str(subj), str(base_trial_number), str(i), str(weights[0]), str(weights[1]), str(weights[2]), str(weights[3])],stdout=PIPE, stderr=PIPE)
                 out, err = p.communicate()
                 output_file.write(out)

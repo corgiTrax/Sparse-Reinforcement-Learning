@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 	string feature_file_name = "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_domain_features.txt";
 	string demo_file_name    =  "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_demonstrations.txt";
 
-	srand (time(NULL));
+	srand (time(NULL) + rand());
 
 	map<unsigned int, float> angle_map;
 	angle_map.insert(pair<unsigned int,float>(UP,0.0));
@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 	const int numFeatures = 4; // target, obstacle, pathpoint, None
 	const int numStates = grid_width * grid_height;
 
-	double gamma = 0.25;
+	double gamma = 0.35;
 	double featureWeights[numFeatures];
 
 	featureWeights[0] = weight1;
@@ -67,9 +67,9 @@ int main(int argc, char** argv) {
 	vector<unsigned int> termStates = {};
 
 	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
-	cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
-	cout << "    Num states: " << mdp.getNumStates() << endl;
-	cout << "    Num actions: " << mdp.getNumActions() << endl;
+	// cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
+	// cout << "    Num states: " << mdp.getNumStates() << endl;
+	// cout << "    Num actions: " << mdp.getNumActions() << endl;
 
 	srand (time(NULL));
 
@@ -81,11 +81,11 @@ int main(int argc, char** argv) {
 	//mdp.displayRewards();
 	vector<unsigned int> opt_policy (mdp.getNumStates());
 	mdp.valueIteration(0.0005);
-	mdp.deterministicPolicyIteration(opt_policy);
 	mdp.calculateQValues();
+	mdp.deterministicPolicyIteration(opt_policy);
 
-	cout << "-- optimal policy --" << endl;
-	mdp.displayPolicy(opt_policy);
+	// cout << "-- optimal policy --" << endl;
+	// mdp.displayPolicy(opt_policy);
 
 	unsigned int correct_actions = 0;
 	unsigned int total_actions = 0;
@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
 		while(getline(demo_file,line))
 		{
 			demo_ct += 1;
-			if(demo_ct > 10) // skip first 10
+			if(demo_ct > 5) // skip first 5
 			{
 				vector<string> results;
 				split(line,',', results);
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
 		return 1;
 	}   
 
-	cout << "BIRL Actions:";
+	// cout << "BIRL Actions:";
 	for(unsigned int i=0; i < good_demos.size(); i++)
 	{
 		unsigned int state = good_demos[i].first;
@@ -123,10 +123,10 @@ int main(int argc, char** argv) {
 		if( demo_freq[state] < 2)
 		{
 			total_actions += 1;
-			cout << "(" << state << "," ;
+			// cout << "(" << state << "," ;
 			if(  mdp.isOptimalAction(state,action) )  {
 				correct_actions += 1;
-				cout << action << "), ";
+				// cout << action << "), ";
 			}
 			else{
 				vector<unsigned int> actions;
@@ -143,38 +143,60 @@ int main(int argc, char** argv) {
 					if( angle1 > angle2) angle = angle1 - angle2;
 					else angle = angle2 - angle1;
 					if (angle > 180) angle = 360 - angle;
-
 					if (angle < min_diff){
 						min_diff = angle;
 						min_action = a;
 					}
 				}
-				cout << min_action << "), ";
+				// cout << min_action << "), ";
 				angle_diffs += min_diff;
 			}
 		}
 	}
 	cout << endl;
-	cout << "BIRL Generated Trajectory:";
-	for(unsigned int i=0; i < good_demos.size(); i++)
+	// cout << "BIRL Trajectories:" << endl;
+	for(unsigned int traj_ct = 0; traj_ct < 200; traj_ct++)
 	{
-		unsigned int curr_state = good_demos[i].first;
-		unsigned int action = good_demos[i].second;
-                unsigned int prev_state;
-		for(unsigned int j=i; j < good_demos.size(); j++)
+		cout << "[" ;
+		unsigned int curr_state = good_demos[rand()%50].first;
+		unsigned int prev_state;
+		for(unsigned int i=0; i < good_demos.size(); i++)
 		{
-                        prev_state = curr_state;
-			cout << "(" << curr_state ;
-			cout << "," << opt_policy[curr_state] << "),";
-			curr_state = mdp.getNextState(curr_state, opt_policy[curr_state]);
-                        if(curr_state == prev_state) break;
+			prev_state = curr_state;
+			vector<unsigned int> curr_actions = mdp.getValidActions(curr_state);
+			double total_q = 0.0;
+			for(unsigned int a: curr_actions) total_q += exp(mdp.getQValue(curr_state,a));
+			vector<double> probabilities;
+			for(unsigned int a: curr_actions) 
+			{
+				if(probabilities.size() > 0)
+					probabilities.push_back(exp(mdp.getQValue(curr_state,a))/total_q + probabilities.back());
+				else
+					probabilities.push_back(exp(mdp.getQValue(curr_state,a))/total_q );
+				// cout << a << ":" << probabilities.back() << endl;
+			}
+			double rand_num = rand()%1000/1000.0;
+			unsigned int selected_idx = 0;
+			for(unsigned int idx=0; idx < probabilities.size(); idx++)
+			{
+				if(rand_num < probabilities[idx]) 
+				{
+					selected_idx = idx;
+					break;
+				}
+			}
+			cout << "(" << curr_state;
+			cout << "," << curr_actions[selected_idx] << "),";
+			curr_state = mdp.getNextState(curr_state, curr_actions[selected_idx]);
+			//if(curr_state == prev_state) break;
 		}
+		cout << "]" << endl;
 	}
 	float policy_overlap = float(correct_actions) / total_actions * 100;
 	float avg_ang_err = angle_diffs / total_actions;
-	cout << "Total actions tested : " << total_actions << endl;
-	cout << "Correct actions (%) : " << policy_overlap << endl;
-	cout << "Avg angular diffs   : " << avg_ang_err << endl;
+	 cout << "Total actions tested : " << total_actions << endl;
+	 cout << "Correct actions (%) : " << policy_overlap << endl;
+	 cout << "Avg angular diffs   : " << avg_ang_err << endl;
 
 	//clean up memory
 	for(unsigned int s1 = 0; s1 < numStates; s1++)
