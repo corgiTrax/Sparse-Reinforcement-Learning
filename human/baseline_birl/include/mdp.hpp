@@ -364,9 +364,13 @@ class FeatureGridMDP: public GridMDP{
         FeatureGridMDP(unsigned int width, unsigned int height, vector<unsigned int> initStates, vector<unsigned int> termStates, unsigned int nFeatures, double* fWeights, double** sFeatures, double gamma=0.95): GridMDP(width, height, initStates, termStates, gamma), numFeatures(nFeatures)
         {
             featureWeights = new double[numFeatures];
-            for(int i=0; i<numFeatures; i++)
+            stateFeatures = new double* [width*height];
+            for(unsigned int i=0; i<numFeatures; i++)
                 featureWeights[i] = fWeights[i];
-            stateFeatures = sFeatures;
+            for(unsigned int i=0; i<width*height; i++)
+             {   stateFeatures[i] = new double[numFeatures];
+                for(unsigned int f=0; f<numFeatures;f++) stateFeatures[i][f] = sFeatures[i][f];
+               }
             //compute cached rewards
             computeCachedRewards();
                         
@@ -377,7 +381,13 @@ class FeatureGridMDP: public GridMDP{
             featureWeights = new double[numFeatures];
             for(int i=0; i<numFeatures; i++)
                 featureWeights[i] = fWeights[i];
-            stateFeatures = sFeatures;
+            stateFeatures = new double* [width*height];
+            for(unsigned int i=0; i<numFeatures; i++)
+                featureWeights[i] = fWeights[i];
+            for(unsigned int i=0; i<width*height; i++)
+             {   stateFeatures[i] = new double[numFeatures];
+                for(unsigned int f=0; f<numFeatures;f++) stateFeatures[i][f] = sFeatures[i][f];
+               }
             computeCachedRewards();
         };
         
@@ -388,6 +398,10 @@ class FeatureGridMDP: public GridMDP{
                 return copy;
          };
          
+        void setFeatureAtState(unsigned int s, double * features){
+             for(unsigned int f=0; f<numFeatures;f++) stateFeatures[s][f] = features[f];
+        };
+
         long double L2_distance(FeatureGridMDP* in_mdp)
         {
             long double dist = 0;
@@ -418,6 +432,9 @@ class FeatureGridMDP: public GridMDP{
         ~FeatureGridMDP()
         {
             delete[] featureWeights;
+             for(unsigned int i=0; i<gridWidth*gridHeight; i++)
+                delete[] stateFeatures[i];
+            delete[] stateFeatures;
         
         };
         unsigned int getNumFeatures(){return numFeatures;};

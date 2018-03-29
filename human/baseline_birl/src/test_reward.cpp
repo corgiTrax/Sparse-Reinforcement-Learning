@@ -50,10 +50,10 @@ int main(int argc, char** argv) {
 	const unsigned int grid_height = 24;
 
 	//test arrays to get features
-	const int numFeatures = 4; // target, obstacle, pathpoint, None
+	const int numFeatures = 4; // target, obstacle, pathpoint, None (to introduce negative living reward)
 	const int numStates = grid_width * grid_height;
 
-	double gamma = 0.3;
+	double gamma = 0.7;
 	double featureWeights[numFeatures];
 
 	featureWeights[0] = weight1;
@@ -67,9 +67,9 @@ int main(int argc, char** argv) {
 	vector<unsigned int> termStates = {};
 
 	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
-	// cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
-	// cout << "    Num states: " << mdp.getNumStates() << endl;
-	// cout << "    Num actions: " << mdp.getNumActions() << endl;
+	 cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
+	 cout << "    Num states: " << mdp.getNumStates() << endl;
+	 cout << "    Num actions: " << mdp.getNumActions() << endl;
 
 	srand (time(NULL));
 
@@ -155,24 +155,29 @@ int main(int argc, char** argv) {
 	}
 	cout << endl;
 	// cout << "BIRL Trajectories:" << endl;
+        double visited_features[4] = {0.0,0.0,0.0,1.0}; 
 	for(unsigned int traj_ct = 0; traj_ct < 200; traj_ct++)
 	{
+                FeatureGridMDP* fmdp = mdp.deepcopy();
+                
 		cout << "[" ;
-		unsigned int curr_state = good_demos[rand()%50].first;
+		unsigned int curr_state = good_demos[rand()%20].first;
 		unsigned int prev_state;
 		for(unsigned int i=0; i < good_demos.size(); i++)
 		{
+                        fmdp->valueIteration(0.0005);
+	                fmdp->calculateQValues();
 			prev_state = curr_state;
-			vector<unsigned int> curr_actions = mdp.getValidActions(curr_state);
+			vector<unsigned int> curr_actions = fmdp->getValidActions(curr_state);
 			double total_q = 0.0;
-			for(unsigned int a: curr_actions) total_q += exp(mdp.getQValue(curr_state,a));
+			for(unsigned int a: curr_actions) total_q += 0.1*exp(10*fmdp->getQValue(curr_state,a));
 			vector<double> probabilities;
 			for(unsigned int a: curr_actions) 
 			{
 				if(probabilities.size() > 0)
-					probabilities.push_back(exp(mdp.getQValue(curr_state,a))/total_q + probabilities.back());
+					probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q + probabilities.back());
 				else
-					probabilities.push_back(exp(mdp.getQValue(curr_state,a))/total_q );
+					probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q );
 				// cout << a << ":" << probabilities.back() << endl;
 			}
 			double rand_num = rand()%1000/1000.0;
@@ -187,7 +192,23 @@ int main(int argc, char** argv) {
 			}
 			cout << "(" << curr_state;
 			cout << "," << curr_actions[selected_idx] << "),";
-			curr_state = mdp.getNextState(curr_state, curr_actions[selected_idx]);
+			fmdp->setFeatureAtState(curr_state, visited_features);
+                        if(curr_state%grid_width < grid_width - 1){
+                               fmdp->setFeatureAtState(curr_state+1, visited_features);
+                               if(curr_state - grid_width > 0) fmdp->setFeatureAtState(curr_state - grid_width + 1, visited_features);
+                               if(curr_state + grid_width + 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width + 1, visited_features);
+                        }
+                        if(curr_state%grid_width > 1){
+                               fmdp->setFeatureAtState(curr_state-1, visited_features);
+                               if(curr_state - grid_width - 1> 0) fmdp->setFeatureAtState(curr_state - grid_width - 1, visited_features);
+                               if(curr_state + grid_width - 1< numStates) fmdp->setFeatureAtState(curr_state + grid_width - 1, visited_features);
+                        }
+                        if(curr_state - grid_width > 0) fmdp->setFeatureAtState(curr_state - grid_width, visited_features);
+                        if(curr_state + grid_width < numStates) fmdp->setFeatureAtState(curr_state + grid_width, visited_features);
+                        fmdp->computeCachedRewards();
+
+                        curr_state = fmdp->getNextState(curr_state, curr_actions[selected_idx]);
+                        
 			//if(curr_state == prev_state) break;
 		}
 		cout << "]" << endl;

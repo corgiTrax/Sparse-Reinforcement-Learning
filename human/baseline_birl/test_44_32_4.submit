@@ -1,0 +1,11 @@
++Group = "Grad"
++Project = "AI_ROBOTICS"
++ProjectDescription = "simulation of reward learning using bayesian inverse reinforcement learning algorithm"
+Executable = test_reward 
+arguments = 44 32 4 0.0655321950293 0.211715273872 -0.257683333785 -0.108556511334 
+Output = ./trajectories/44_32_4.out 
+Log = ./log/44_32_4.log 
+Error = ./log/44_32_4.err 
+
+Queue 1 
+ 
