@@ -1,108 +1,24 @@
 loading features...
 
-Initializing gridworld of size 28 by 22..
-    Num states: 616
+Initializing gridworld of size 32 by 24..
+    Num states: 768
     Num actions: 8
 
-Total number of demos: 41
-
-Selected number of demos: 23
-
--- Positive Demos --
- (136,1),  (191,6),  (246,1),  (329,6),  (384,6),  (410,6),  (438,2),  (464,2),  (435,0),  (350,0),  (295,0),  (267,0),  (155,0),  (127,0),  (68,2),  (94,6),  (148,6),  (202,6),  (285,6),  (394,6),  (422,1),  (450,1),  (479,3), 
-
-
-[Timing] Time passed: 482.090893 s
-
-Posterior Probability: -168.8821848
-Agreement with demo: 11%
-Current angular diffs: 99'
-
-Selected number of demos: 19
-
--- Positive Demos --
- (136,1),  (246,1),  (301,1),  (384,6),  (410,6),  (465,2),  (464,4),  (435,0),  (406,0),  (350,0),  (267,0),  (155,0),  (70,2),  (94,6),  (148,6),  (285,6),  (367,6),  (450,1),  (478,6), 
-
-
-[Timing] Time passed: 437.184805 s
-
-Posterior Probability: -90.50590052
-Agreement with demo: 11%
-Current angular diffs: 99'
+Total number of demos: 56
 
 Selected number of demos: 22
 
 -- Positive Demos --
- (136,1),  (163,6),  (191,6),  (301,1),  (329,6),  (355,6),  (384,6),  (410,6),  (465,2),  (464,4),  (435,0),  (379,0),  (267,0),  (183,0),  (127,0),  (68,2),  (94,6),  (121,6),  (230,6),  (312,6),  (422,1),  (450,1), 
+ (350,1),  (405,6),  (484,6),  (597,2),  (515,0),  (338,0),  (186,4),  (167,2),  (174,2),  (221,6),  (265,6),  (306,6),  (397,6),  (611,1),  (656,6),  (665,6),  (655,4),  (662,3),  (669,0),  (660,0),  (642,3), 
 
 
-[Timing] Time passed: 407.952736 s
+[Timing] Time passed: 120.302207 s
 
-Posterior Probability: -256.5135547
-Agreement with demo: 14%
-Current angular diffs: 96'
-
-Selected number of demos: 41
-
--- Positive Demos --
- (136,1),  (163,6),  (191,6),  (246,1),  (302,1),  (301,1),  (329,6),  (355,6),  (384,6),  (410,6),  (438,2),  (465,2),  (464,2),  (464,4),  (435,0),  (406,0),  (379,0),  (350,0),  (295,0),  (267,0),  (239,0),  (183,0),  (155,0),  (127,0),  (98,4),  (70,2),  (68,2),  (95,2),  (94,6),  (121,6),  (148,6),  (202,6),  (230,6),  (285,6),  (312,6),  (367,6),  (394,6),  (422,1),  (450,1),  (478,6),  (479,3), 
-
-
-[Timing] Time passed: 395.693878 s
-
-Posterior Probability: -373.2742522
+Posterior Probability: -43.22336536
 Agreement with demo: 12%
-Current angular diffs: 1.1e+02'
-
-Selected number of demos: 20
-
--- Positive Demos --
- (191,6),  (301,1),  (384,6),  (410,6),  (438,2),  (464,4),  (435,0),  (350,0),  (267,0),  (155,0),  (127,0),  (98,4),  (70,2),  (95,2),  (121,6),  (202,6),  (285,6),  (394,6),  (422,1),  (479,3), 
-
-
-[Timing] Time passed: 381.347198 s
-
-Posterior Probability: -157.180053
-Agreement with demo: 12%
-Current angular diffs: 89'
-
-Selected number of demos: 20
-
--- Positive Demos --
- (136,1),  (246,1),  (301,1),  (355,6),  (384,6),  (410,6),  (438,2),  (464,4),  (379,0),  (350,0),  (239,0),  (155,0),  (98,4),  (68,2),  (94,6),  (148,6),  (230,6),  (312,6),  (422,1),  (479,3), 
-
-
-[Timing] Time passed: 346.616321 s
-
-Posterior Probability: -252.5455084
-Agreement with demo: 11%
-Current angular diffs: 89'
-
-Selected number of demos: 41
-
--- Positive Demos --
- (136,1),  (163,6),  (191,6),  (246,1),  (302,1),  (301,1),  (329,6),  (355,6),  (384,6),  (410,6),  (438,2),  (465,2),  (464,2),  (464,4),  (435,0),  (406,0),  (379,0),  (350,0),  (295,0),  (267,0),  (239,0),  (183,0),  (155,0),  (127,0),  (98,4),  (70,2),  (68,2),  (95,2),  (94,6),  (121,6),  (148,6),  (202,6),  (230,6),  (285,6),  (312,6),  (367,6),  (394,6),  (422,1),  (450,1),  (478,6),  (479,3), 
-
-
-[Timing] Time passed: 348.493219 s
-
-Posterior Probability: -361.221134
-Agreement with demo: 18%
 Current angular diffs: 84'
-
-Selected number of demos: 11
-
--- Positive Demos --
- (301,1),  (384,6),  (435,0),  (239,0),  (183,0),  (68,2),  (148,6),  (394,6),  (422,1),  (450,1),  (479,3), 
-
-
-[Timing] Time passed: 307.487907 s
-
-Posterior Probability: -44.93503764
-Agreement with demo: 7.1%
-Current angular diffs: 93'
 
 -----------------------------
 Avg angular diffs: 84'
 -- learned weights --
-Feature Weights: -0.73275, 0.5065, 0.48325, -0.1, 
+Feature Weights: 0.025, -0.014, -0.025, -0.1, 
