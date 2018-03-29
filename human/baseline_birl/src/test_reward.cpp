@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 	const int numFeatures = 4; // target, obstacle, pathpoint, None (to introduce negative living reward)
 	const int numStates = grid_width * grid_height;
 
-	double gamma = 0.7;
+	double gamma = 0.5;
 	double featureWeights[numFeatures];
 
 	featureWeights[0] = weight1;
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 	{
 		string line;
 		while(getline(demo_file,line))
-		{
+                {
 			demo_ct += 1;
 			if(demo_ct > 5) // skip first 5
 			{
@@ -114,6 +114,9 @@ int main(int argc, char** argv) {
 	else{
 		return 1;
 	}   
+        for(pair<unsigned int,unsigned int> demo: good_demos)
+            cout << "(" << demo.first << "," << demo.second << ")";
+        cout << endl;
 
 	// cout << "BIRL Actions:";
 	for(unsigned int i=0; i < good_demos.size(); i++)
@@ -161,7 +164,7 @@ int main(int argc, char** argv) {
                 FeatureGridMDP* fmdp = mdp.deepcopy();
                 
 		cout << "[" ;
-		unsigned int curr_state = good_demos[rand()%20].first;
+		unsigned int curr_state = good_demos[rand()%5].first;
 		unsigned int prev_state;
 		for(unsigned int i=0; i < good_demos.size(); i++)
 		{
@@ -178,7 +181,7 @@ int main(int argc, char** argv) {
 					probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q + probabilities.back());
 				else
 					probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q );
-				// cout << a << ":" << probabilities.back() << endl;
+				//cout << a << ":" << probabilities.back() << endl;
 			}
 			double rand_num = rand()%1000/1000.0;
 			unsigned int selected_idx = 0;
