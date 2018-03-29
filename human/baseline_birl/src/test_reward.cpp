@@ -46,14 +46,14 @@ int main(int argc, char** argv) {
 	angle_map.insert(pair<unsigned int,float>(LEFT,270.0));
 	angle_map.insert(pair<unsigned int,float>(UP_LEFT,315.0));
 
-	const unsigned int grid_width = 28;
-	const unsigned int grid_height = 22;
+	const unsigned int grid_width = 32;
+	const unsigned int grid_height = 24;
 
 	//test arrays to get features
 	const int numFeatures = 4; // target, obstacle, pathpoint, None
 	const int numStates = grid_width * grid_height;
 
-	double gamma = 0.35;
+	double gamma = 0.3;
 	double featureWeights[numFeatures];
 
 	featureWeights[0] = weight1;

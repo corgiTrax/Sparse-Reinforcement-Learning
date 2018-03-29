@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
 	angle_map.insert(pair<unsigned int,float>(LEFT,270.0));
 	angle_map.insert(pair<unsigned int,float>(UP_LEFT,315.0));
 
-	const unsigned int grid_width = 28;
-	const unsigned int grid_height = 22;
+	const unsigned int grid_width = 32;
+	const unsigned int grid_height = 24;
 	const double min_r = -1.0;
 	const double max_r = 1.0;
 	const double step  = 0.00025;
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 	//test arrays to get features
 	const int numFeatures = 4;  // target, obstacle, pathpoint, None
 	const int numStates = grid_width * grid_height;
-	double gamma = 0.25;
+	double gamma = 0.3;
 
 	double featureWeights[numFeatures] = {0,0,0,-0.1};
 	double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);
