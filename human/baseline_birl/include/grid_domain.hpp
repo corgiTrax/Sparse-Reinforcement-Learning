@@ -27,16 +27,14 @@ void split(const string& s, char c,
 double** initFeaturesDiscreteDomain(const int numStates, const int numFeatures, string domain_file_name)
 {
     double** stateFeatures;
-    stateFeatures = new double*[numStates]; //numFeatures = 3; // target, obstacle, pathpoint
+    stateFeatures = new double*[numStates]; //numFeatures = 4; // target, obstacle, pathpoint
     
     //Initialize all features to 0
     for(int i=0; i<numStates; i++)
     {
         stateFeatures[i] = new double[numFeatures];
-        double feature[numFeatures];
-        for (int feat=0; feat < numFeatures; feat++) feature[feat] = 0;
-        feature[3] = 1;
-        copy(feature, feature+numFeatures, stateFeatures[i]);
+        for (int feat=0; feat < numFeatures; feat++) stateFeatures[i][feat] = 0;
+        stateFeatures[i][3] = 1;
     }
     
     ifstream feature_file (domain_file_name);

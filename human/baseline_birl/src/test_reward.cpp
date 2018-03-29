@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
 	}
 	cout << endl;
 	// cout << "BIRL Trajectories:" << endl;
-        double visited_features[4] = {0.0,0.0,0.0,1.0}; 
+        double visited_features[numFeatures] = {0.0,0.0,0.0,1.0}; 
 	for(unsigned int traj_ct = 0; traj_ct < 200; traj_ct++)
 	{
                 FeatureGridMDP* fmdp = mdp.deepcopy();
@@ -193,18 +193,18 @@ int main(int argc, char** argv) {
 			cout << "(" << curr_state;
 			cout << "," << curr_actions[selected_idx] << "),";
 			fmdp->setFeatureAtState(curr_state, visited_features);
-                        if(curr_state%grid_width < grid_width - 1){
-                               fmdp->setFeatureAtState(curr_state+1, visited_features);
-                               if(curr_state - grid_width > 0) fmdp->setFeatureAtState(curr_state - grid_width + 1, visited_features);
+                        if(curr_state % grid_width + 1 < grid_width ){
+                               fmdp->setFeatureAtState(curr_state + 1, visited_features);
+                               if(curr_state > grid_width - 1) fmdp->setFeatureAtState(curr_state - grid_width + 1, visited_features);
                                if(curr_state + grid_width + 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width + 1, visited_features);
                         }
-                        if(curr_state%grid_width > 1){
+                        if(curr_state % grid_width > 1){
                                fmdp->setFeatureAtState(curr_state-1, visited_features);
-                               if(curr_state - grid_width - 1> 0) fmdp->setFeatureAtState(curr_state - grid_width - 1, visited_features);
-                               if(curr_state + grid_width - 1< numStates) fmdp->setFeatureAtState(curr_state + grid_width - 1, visited_features);
+                               if(curr_state > grid_width + 1) fmdp->setFeatureAtState(curr_state - grid_width - 1, visited_features);
+                               if(curr_state + grid_width - 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width - 1, visited_features);
                         }
-                        if(curr_state - grid_width > 0) fmdp->setFeatureAtState(curr_state - grid_width, visited_features);
-                        if(curr_state + grid_width < numStates) fmdp->setFeatureAtState(curr_state + grid_width, visited_features);
+                        if(curr_state > grid_width) fmdp->setFeatureAtState(curr_state - grid_width, visited_features);
+                        if((curr_state + grid_width) < numStates) fmdp->setFeatureAtState(curr_state + grid_width, visited_features);
                         fmdp->computeCachedRewards();
 
                         curr_state = fmdp->getNextState(curr_state, curr_actions[selected_idx]);

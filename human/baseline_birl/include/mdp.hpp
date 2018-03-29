@@ -399,6 +399,7 @@ class FeatureGridMDP: public GridMDP{
          };
          
         void setFeatureAtState(unsigned int s, double * features){
+             //cout << "Setting features for state " << s << endl;
              for(unsigned int f=0; f<numFeatures;f++) stateFeatures[s][f] = features[f];
         };
 
