@@ -1,5 +1,5 @@
-OBJS = build/birl_test.o build/feature_birl_test.o
-TEST_OBJS =  build/birl_test.o build/feature_birl_test.o
+OBJS = build/birl_test.o build/feature_birl_test.o build/cmdp.o
+TEST_OBJS =  build/birl_test.o build/feature_birl_test.o build/cmdp.o
 CC = g++ -std=c++11 -O3
 DEBUG = -g  
 CFLAGS = -c $(DEBUG)
@@ -14,6 +14,11 @@ reward_learning: build/feature_birl_test.o
 test_reward: $(OBJS)
 	$(CC) $(LFLAGS) build/test_reward.o -o test_reward
 
+cmdp_test: $(OBJS)
+	$(CC) $(LFLAGS) build/cmdp.o -o cmdp_test
+
+build/cmdp.o: src/cmdp_reward_learning.cpp include/continuous_mdp.hpp
+	$(CC) $(CFLAGS) src/cmdp_reward_learning.cpp -o build/cmdp.o
 
 build/birl_test.o: src/test_reward.cpp include/feature_birl.hpp include/mdp.hpp
 	$(CC) $(CFLAGS) src/test_reward.cpp -o build/test_reward.o

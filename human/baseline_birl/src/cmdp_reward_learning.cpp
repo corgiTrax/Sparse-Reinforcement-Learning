@@ -7,16 +7,16 @@
 #include <map>
 #include <set>
 
-#include "../include/mdp.hpp"
-#include "../include/feature_birl.hpp"
-#include "../include/grid_domain.hpp"
+#include "../include/continuous_mdp.hpp"
+//#include "../include/feature_birl.hpp"
+//#include "../include/grid_domain.hpp"
 
-enum actions {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+enum Action {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, NUM_ACTIONS};
 using namespace std;
 
 int main(int argc, char** argv) {
 
-	if (argc < 4) {
+	/*if (argc < 4) {
 		cout << " Usage: reward_learning <subj> <trial> <task>" << endl;
 		return 0;
 	}
@@ -42,27 +42,26 @@ int main(int argc, char** argv) {
 	const double min_r = -1.0;
 	const double max_r = 1.0;
 	const double step  = 0.00025;
-	const double alpha = 50;
-	const unsigned int chain_length = 5000 ; 
+	const double alpha = 100;
+	const unsigned int chain_length = 3000 ; */
 
 	//test arrays to get features
 	const int numFeatures = 4;  // target, obstacle, pathpoint, None
-	const int numStates = grid_width * grid_height;
-	double gamma = 0.4;
-
+	double gamma = 0.3;
 	double featureWeights[numFeatures] = {0,0,0,-0.1};
-	double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);
+        double step_size = 0.57;
+
+	//double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);
 
 	vector<unsigned int> initStates = {};
 	vector<unsigned int> termStates = {};
 
-	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
-	cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
-	cout << "    Num states: " << mdp.getNumStates() << endl;
-	cout << "    Num actions: " << mdp.getNumActions() << endl;
+	MDP mdp(gamma, step_size, numFeatures, featureWeights);
+	cout << "\nInitializing MDP with " << numFeatures << " features.. " << endl;
 	srand (time(NULL));
-	//read in demos
-	vector<pair<unsigned int,unsigned int> > demos;
+	
+        //read in demos
+	/*vector<pair<unsigned int,unsigned int> > demos;
 	vector<pair<unsigned int,unsigned int> > good_demos;
 	map<unsigned int, unsigned int> demo_freq;
 	for(unsigned int s = 0; s < grid_width*grid_height; s++) demo_freq.insert(pair<unsigned int,unsigned int>(s,0));
@@ -102,13 +101,14 @@ int main(int argc, char** argv) {
 	FeatureGridMDP* bestMDP = mdp.deepcopy();
 	FeatureBIRL birl(&mdp, min_r, max_r, chain_length, step, alpha);
 	unsigned int num_itr = 0;
+	//double best_posterior = -1000;
 	double err = 180;
 
 	while( posterior < -50 && num_itr < 50 )
 	{
 		// randomly sample a subset of the original demonstrations
 		vector<pair<unsigned int,unsigned int> > selected_demos;
-		unsigned int skip = 1 + rand()%3;
+		unsigned int skip = 1 + rand()%6;
 		for(unsigned int d = rand()%skip; d < good_demos.size(); d += (1 + rand()%skip)) selected_demos.push_back(good_demos[d]);
 		cout << "\nSelected number of demos: " << selected_demos.size() << endl;
 		birl.addPositiveDemos(selected_demos);
@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
 	{
 		delete[] stateFeatures[s1];
 	}
-	delete[] stateFeatures;
+	delete[] stateFeatures;*/
 
 	return 0;
 }
