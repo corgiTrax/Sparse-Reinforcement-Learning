@@ -7,11 +7,10 @@ from scipy.stats import sem
 import numpy
 
 # get all .data files from subject data
-if len(sys.argv) != 3:
-    print("USAGE: python evaluate.py [directory to the human data file] [evaluation method: a(aggregated)|o(own)]")
+if len(sys.argv) < 2:
+    print("USAGE: python evaluate.py [directory to the human data file]")
 
 direct = sys.argv[1]
-EVAL = sys.argv[2]
 files = [f for f in listdir(direct)]
 dataFiles = []
 for f in files:

@@ -74,9 +74,9 @@ class inverse_rl:
         
         # l1 norm on w
         if self.sparse:
-            delta = 0.25 # sparsity bias, requires tuning
+            delta = 45 # sparsity bias, requires tuning
             for i in range(NUM_MODULE): 
-                logl = logl - delta * x[i * 2]
+                logl = logl - delta * x[i * 2] #should be L1 norm but x is constrained to be non negative
 
         data_file.close()
         obj = -logl
@@ -145,10 +145,6 @@ class inverse_rl:
         self.result = minimize(self.construct_obj, x0, method = 'SLSQP', bounds = bound).x # note: in python2, this should be ['x'] since it was dictionary, now it's a class
         self.result = self.result.tolist()
         print(self.result) 
-        #print(self.result)
-#        rranges = (slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1),slice(0,1,0.1), slice(0,0.99,0.1))
-#        resbrute =  brute(self.construct_obj, rranges, full_output = True, finish = fmin)
-#        return resbrute
     
     def write_result(self):
         out_file = open(self.out_filename, 'w')
