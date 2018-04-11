@@ -160,16 +160,15 @@ def nearest_obj(agentPos, objs):
 
 def point_on_line(pos1, pos2, pos3):
     '''return if pos3 is on line segment btw pos1 and pos2. Threshold: tolerance'''
-    thresh = 0.01 #1cm ok for touched in our setup
+    thresh = 1e-4 # meters
     return abs(calc_dist(pos1, pos2) - (calc_dist(pos1, pos3) + calc_dist(pos2, pos3))) <= thresh 
 
-def intersect_object(pos1, pos2, c_pos, r):
+def intersect_circle(pos1, pos2, c_pos, r):
     '''determine if a circle with c_pos and radius r intersects a line segement btw pos1, pos2'''
     # pos needs to be transformed so circle is at (0,0)
     x1, y1, x2, y2 = pos1[0] - c_pos[0], pos1[1] - c_pos[1], pos2[0] - c_pos[0], pos2[1] - c_pos[1]
-    #if x1 == x2 and y1 == y2: 
-    #    print("Warning")
-    #    return calc_dist([x1,y1], [0,0]) <= r 
+    if x1 == x2 and y1 == y2: 
+        return calc_dist([x1,y1], [0,0]) <= r 
     dx = x2 - x1
     dy = y2 - y1
     dr = math.sqrt(dx**2 + dy**2)
@@ -189,6 +188,44 @@ def intersect_object(pos1, pos2, c_pos, r):
         y_2 = (-D * dx - abs(dy) * math.sqrt(delta)) / (dr**2)
         return point_on_line([x1,y1], [x2,y2], [x_1,y_1]) or point_on_line([x1,y1], [x2,y2], [x_2,y_2])
 
+
+
+''' See https://www.geeksforgeeks.org/orientation-3-ordered-points for details of below formula for line-line intersection'''
+def onSegment(p, q, r):
+    if (q[0] <= max(p[0], r[0]) and q[0] >= min(p[0], r[0]) and q[1] <= max(p[1], r[1]) and q[1] >= min(p[1], r[1])):
+        return True
+    return False
+
+def orientation(p, q, r):
+    val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
+    if val == 0: return 0  # colinear
+    return 1 if val > 0 else 2
+
+def doIntersect(line1, line2):
+    p1, q1 = line1[0], line1[1]
+    p2, q2 = line2[0], line2[1]
+    o1 = orientation(p1, q1, p2)
+    o2 = orientation(p1, q1, q2)
+    o3 = orientation(p2, q2, p1)
+    o4 = orientation(p2, q2, q1)
+
+    if (o1 != o2 and o3 != o4):
+        return True
+    if (o1 == 0 and onSegment(p1, p2, q1)): return True
+    if (o2 == 0 and onSegment(p1, q2, q1)): return True
+    if (o3 == 0 and onSegment(p2, p1, q2)): return True
+    if (o4 == 0 and onSegment(p2, q1, q2)): return True
+ 
+    return False 
+ 
+def intersect_square(pos1, pos2, s_pos, r):
+    '''determine if a square with s_pos as center and r as half width intersects a line segment btw pos1, pos2'''
+    ul = [s_pos[0] - r, s_pos[1] - r]
+    ur = [s_pos[0] - r, s_pos[1] + r]
+    ll = [s_pos[0] + r, s_pos[1] - r]  
+    lr = [s_pos[0] + r, s_pos[1] + r]    
+    base = [pos1, pos2]
+    return doIntersect(base, [ul, ur]) or doIntersect(base, [ul, ll]) or doIntersect(base, [ur, lr]) or doIntersect(base, [ll, lr])
 
 if __name__ == '__main__':
     #print(calc_bin(calc_angle([0,0], [1,1])))
