@@ -158,6 +158,37 @@ def nearest_obj(agentPos, objs):
 #        else: pass
 #    return dist,curPath
 
+def point_on_line(pos1, pos2, pos3):
+    '''return if pos3 is on line segment btw pos1 and pos2. Threshold: tolerance'''
+    thresh = 0.01 #1cm ok for touched in our setup
+    return abs(calc_dist(pos1, pos2) - (calc_dist(pos1, pos3) + calc_dist(pos2, pos3))) <= thresh 
+
+def intersect_object(pos1, pos2, c_pos, r):
+    '''determine if a circle with c_pos and radius r intersects a line segement btw pos1, pos2'''
+    # pos needs to be transformed so circle is at (0,0)
+    x1, y1, x2, y2 = pos1[0] - c_pos[0], pos1[1] - c_pos[1], pos2[0] - c_pos[0], pos2[1] - c_pos[1]
+    #if x1 == x2 and y1 == y2: 
+    #    print("Warning")
+    #    return calc_dist([x1,y1], [0,0]) <= r 
+    dx = x2 - x1
+    dy = y2 - y1
+    dr = math.sqrt(dx**2 + dy**2)
+    D = x1 * y2 - x2 * y1
+    sign = -1 if dy < 0 else 1
+
+    delta = r**2 * (dr**2) - D**2
+    if delta < 0: return False
+    if delta == 0: # one intersection
+        x = D * dy / (dr**2)
+        y = -D * dx / (dr**2)
+        return point_on_line([x1,y1], [x2,y2], [x,y])
+    if delta > 0: 
+        x_1 = (D * dy + sign * dx * math.sqrt(delta)) / (dr**2)
+        y_1 = (-D * dx + abs(dy) * math.sqrt(delta)) / (dr**2) 
+        x_2 = (D * dy - sign * dx * math.sqrt(delta)) / (dr**2)
+        y_2 = (-D * dx - abs(dy) * math.sqrt(delta)) / (dr**2)
+        return point_on_line([x1,y1], [x2,y2], [x_1,y_1]) or point_on_line([x1,y1], [x2,y2], [x_2,y_2])
+
 
 if __name__ == '__main__':
     #print(calc_bin(calc_angle([0,0], [1,1])))
