@@ -16,7 +16,7 @@ ROOM_X = 8.534 * SIZE
 ROOM_Z = 7.315 * SIZE
 OFF_X = ROOM_X/2
 OFF_Z = ROOM_Z/2
-TAR_SIZE = 0.2134 * SIZE #0.1524 * SIZE # radius
+TAR_SIZE = 0.2134 * SIZE # including the triggering distance: 0.2ft
 OBS_SIZE = 0.1753 * SIZE
 AGENT_SIZE = 0.05 * SIZE
 FONT_SIZE = SIZE / 10 
@@ -27,8 +27,8 @@ FONT_SIZE = SIZE / 10
 # visualization parameters
 VIS = False; MOUSE = VIS # visualize or not
 SHOW_GRID = False
-PILG = True # use PIL or graphics.py for visualization
-ALPHA = 8 # range 0~255, controls opacity of the trajectory
+PILG = False # use PIL or graphics.py for visualization
+ALPHA = 8 # default: 8 range 0~255, controls opacity of the trajectory
 TRAJ_WID = 3 # width of fitted trajectories
 
 # adjustable parameters
@@ -39,10 +39,10 @@ VISCONE = True # using distance now only
 
 DISCRETE = False
 
-SOFTMAX_ACT = True # for free run only
+SOFTMAX_ACT = False # for free run only
 TAU = 1 # temperature parameter for softmax selection
-NUM_TRAJ = 200
-MAX_STEP = 80 # do not exceed this, ow abandon current trial
+NUM_TRAJ = 1
+MAX_STEP = 80 #80, do not exceed this, ow abandon current trial
 
 # tuning
 SUBJ_DIC = [26,27,28,31,32,33,34,35,36,37,38,39,42,43,44,45,46,47,48,54,56,59,61,63,64]
@@ -80,6 +80,6 @@ CELL = int(SIZE * VEC[0]) # state granularity
 VIS_DIST = VEC[1] * SIZE # visual cone radius
 NUM_PATH_LOOKAHEAD = VEC[2]
 SKIP_THRESH = VEC[3]
-EXCLUDE = VEC[4] * SIZE #0.5 * SIZE for plotting  # exclude data that are too close to start/elevator, only for fitting, when generating traj should be 0 
+EXCLUDE = 0 #TODO VEC[4] * SIZE #0.5 * SIZE for plotting  # exclude data that are too close to start/elevator, only for fitting, when generating traj should be 0 
 PATH_SIZE = VEC[5] * SIZE # for IRL landing distance, if gets into this range, the distance is 0.
 

@@ -8,6 +8,7 @@ from config import *
 import utils
 import sys
 import numpy as np
+from scipy import stats
 import roulette
 from PIL import Image
 from PIL import ImageDraw
@@ -357,7 +358,7 @@ class Trial:
         params = np.zeros(NUM_MODULE * 2)
         for ct, line in enumerate(sol_file):
             params[ct] = float(line)
-        print("The weight and discount factors we use are: "),; print(params)
+        # print("The weight and discount factors we use are: "),; print(params)
 
         # exclude stuff that are too close to start/elevator due to noise
         for time in range(self.timeSteps - 1):
@@ -398,7 +399,9 @@ class Trial:
                 topLeft = (elevPos[0] * FACTOR -  2 * TAR_SIZE * FACTOR, elevPos[1] * FACTOR - 2 * TAR_SIZE * FACTOR)
                 bottomRight = (elevPos[0] * FACTOR + 2 * TAR_SIZE * FACTOR, elevPos[1] * FACTOR + 2* TAR_SIZE * FACTOR)
                 backDraw.ellipse([topLeft,bottomRight], fill=(255,255,0,255)) # yellow
-
+        
+        # Start of simulations 
+        num_target_touched, num_obst_touched = [], []
         for trial in range(NUM_TRAJ):
             # reset stuff
             targets = cp.deepcopy(targets_init)
@@ -417,7 +420,7 @@ class Trial:
             arrived = False
             stepCount = 0
     
-            # begin iterations
+            # begin trajectory
             while not arrived and stepCount < MAX_STEP: 
                 global_Q = np.zeros(len(ACTIONS))
                 # targets
@@ -471,11 +474,15 @@ class Trial:
                             for act in ACTIONS:
                                 global_Q[act] += r * unit_r * (gamma ** utils.conseq(agentPos, utils.tile(elevPos), act, PATH_SIZE))
                 # Take an action
-                if SOFTMAX_ACT:
-                    roul = roulette.Roulette(global_Q)
-                    pred_action = roul.select()
+                # random action
+                if AGENT == RANDOM:
+                    pred_action = random.randint(0, NUM_ACT - 1)
                 else:
-                    pred_action = np.argmax(global_Q)
+                    if SOFTMAX_ACT:
+                        roul = roulette.Roulette(global_Q)
+                        pred_action = roul.select()
+                    else:
+                        pred_action = np.argmax(global_Q)
                 
                 # 2.0 visualization of agent trajectory
                 if PILG:
@@ -493,16 +500,24 @@ class Trial:
                 agentPos = utils.move(agentPos, pred_action) # agent moves
                 # remove touched stuff
                 for targetPos in targets[:]:
-                    if utils.calc_dist(agentPos, targetPos) < TAR_SIZE: targets.remove(targetPos)  
+                    #if utils.calc_dist(agentPos, targetPos) < TAR_SIZE: targets.remove(targetPos)
+                    if utils.intersect_circle(lastAgentPos, agentPos, targetPos, TAR_SIZE): targets.remove(targetPos)  
                 # obstacles
                 for obstPos in obsts[:]:
-                    if utils.calc_dist(agentPos, obstPos) < OBS_SIZE: obsts.remove(obstPos)  
+                    #if utils.calc_dist(agentPos, obstPos) < OBS_SIZE: obsts.remove(obstPos)
+                    if utils.intersect_square(lastAgentPos, agentPos, obstPos, OBS_SIZE): obsts.remove(obstPos)   
                 #if utils.calc_dist(agentPos, elevs[0]) < ARR_DIST: arrived = True
                 if self.startSide == 0: # which side the agent starts, alternate by trials
                     if pass_index == len(self.allPaths): arrived = True
                 else: 
                     if pass_index == -1: arrived = True
                 stepCount += 1 
+
+            num_target_touched.append(len(targets_init) - len(targets))
+            num_obst_touched.append(len(obsts_init) - len(obsts))
+            
+            #print(num_target_touched)
+            #print(num_obst_touched)
 
         # Now get actual human trajectory
         for time in range(self.timeSteps - 1):
@@ -515,18 +530,39 @@ class Trial:
                 startTime = time; break # the stored agentPos and agent angle is the start
         
         lastAgentPos = cp.deepcopy(agentPos)
+        targets = cp.deepcopy(targets_init)
+        obsts = cp.deepcopy(obsts_init)
 
         # 3.0 visualization of actual human trajectory
         for time in range(startTime, self.timeSteps - 1): # exclude the last one which we can't compute action
             # draw agent path over time
             agentPos = self.agents[time][0]
-            backDraw.line([(agentPos[0] * FACTOR, agentPos[1] * FACTOR), (lastAgentPos[0] * FACTOR, lastAgentPos[1] * FACTOR)], fill=(0,0,0,255), width = TRAJ_WID) # black
+            # targets
+            for targetPos in targets[:]:
+                #if utils.calc_dist(agentPos, targetPos) < TAR_SIZE: targets.remove(targetPos)
+                if utils.intersect_circle(lastAgentPos, agentPos, targetPos, TAR_SIZE): targets.remove(targetPos)   
+            # obstacles
+            for obstPos in obsts[:]:
+                #if utils.calc_dist(agentPos, obstPos) < OBS_RADIUS: obsts.remove(obstPos)
+                if utils.intersect_square(lastAgentPos, agentPos, obstPos, OBS_SIZE): obsts.remove(obstPos)   
+            if PILG:
+                backDraw.line([(agentPos[0] * FACTOR, agentPos[1] * FACTOR), (lastAgentPos[0] * FACTOR, lastAgentPos[1] * FACTOR)], fill=(0,0,0,255), width = TRAJ_WID) # black
             lastAgentPos = cp.deepcopy(agentPos)
+        
+        # Report number of object touched
+        #print("Human number of targets touched: %s" % (len(targets_init) - len(targets)))
+        #print("Human number of obsts touched: %s " % (len(obsts_init) - len(obsts)))
+        num_t = np.asarray(num_target_touched)
+        num_o = np.asarray(num_obst_touched)
+        #print("Agent number of targets touched: %s; sem: %s" % (np.mean(num_t), stats.sem(num_t)))
+        #print("Agent number of obstacles touched: %s; sem: %s" % (np.mean(num_o), stats.sem(num_o)))
+        print("%.2f %.2f %.2f %.2f %.2f %.2f" %((len(targets_init) - len(targets)), (len(obsts_init) - len(obsts)), np.mean(num_t), 0, np.mean(num_o), 0))
 
         # saves the current TKinter object in postscript format
-        fname = self.file_continuous + ".png"
-        self.window.save(fname, "PNG")
-    
+        if PILG:
+            fname = self.file_continuous + ".png"
+            self.window.save(fname, "PNG")
+
     def drawToWin(self, window):
         '''draw to a given window, for visualize data from human subjects from different trials'''
         # Now draw actual human trajectory
@@ -554,7 +590,7 @@ if __name__ == '__main__':
     if sys.argv[2] == 'b': # build irl data, called by the .sh script 
         trial0.build_irl_data()
     elif sys.argv[2] == 'v': # visualize fitted action
-        VIS = True; MOUSE = False
+        VIS = True; MOUSE = True
         trial0.visualize_result(sys.argv[3]) # solution filename
         raw_input("Please press enter to exit")
     elif sys.argv[2] == 'a': # just run trial and get angular error
@@ -565,7 +601,7 @@ if __name__ == '__main__':
         trial0.draw()
         raw_input("Please press enter to exit")
     elif sys.argv[2] == 'f': #free run 
-        VIS = True; MOUSE = False
+        VIS = True; MOUSE = True
         trial0.free_run(sys.argv[3]) # solution filename
 #        trial1 = Trial(sys.argv[4])
 #        trial1.drawToWin(trial0.window)

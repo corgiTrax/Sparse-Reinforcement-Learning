@@ -11,16 +11,17 @@ class Roulette:
         self.weight = cp.deepcopy(weight)
         self.num_actions = len(self.weight)
         # softmax version
-#        total_weight = 0
-#        for i,q in enumerate(self.weight):
-#            temp = math.exp(q / float(TAU))
-#            self.weight[i] = temp
-#            total_weight += temp
+        total_weight = 0
+        for i,q in enumerate(self.weight):
+            temp = math.exp(q / float(TAU))
+            self.weight[i] = temp
+            total_weight += temp
+
         # proportional version        
         #normalize, get probability for each action
-        total_weight = 0
-        for i in range(self.num_actions):
-            total_weight += self.weight[i]
+#        total_weight = 0
+#        for i in range(self.num_actions):
+#            total_weight += self.weight[i]
 
         for i in range(self.num_actions):
             self.weight[i] = 1.0 * self.weight[i] / total_weight
