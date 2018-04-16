@@ -1,4 +1,4 @@
-loading features...
+processing file :../birl_data/43_35_1_objects.txt
 
 Initializing gridworld of size 32 by 24..
     Num states: 768
@@ -9,88 +9,87 @@ Total number of demos: 37
 Selected number of demos: 37
 
 -- Positive Demos --
- (543,6),  (577,6),  (597,2),  (605,2),  (600,4),  (580,0),  (547,0),  (512,0),  (467,0),  (424,0),  (381,0),  (336,0),  (294,0),  (249,4),  (217,4),  (196,2),  (186,2),  (187,6),  (204,6),  (227,6),  (260,6),  (298,6),  (339,6),  (377,6),  (414,6),  (452,6),  (491,6),  (531,1),  (569,1),  (606,1),  (634,1),  (654,0),  (649,4),  (647,3),  (647,1),  (649,7),  (648,5), 
+ (543,6),  (577,6),  (597,2),  (605,2),  (600,4), 
 
 
-[Timing] Time passed: 362.910881 s
-
-Posterior Probability: -155.2663645
-Agreement with demo: 20%
-Current angular diffs: 76'
-
-Selected number of demos: 37
+ - [Timing] Time passed: 112.84024 s
+- Current feature weights:0.003378378378, 0.0005405405405, -0.001959459459, -0.0001
+ - Posterior Probability: -10.0304
+ - Agreement with demo: 40%
+ - Current angular diffs: 72'
 
 -- Positive Demos --
- (543,6),  (577,6),  (597,2),  (605,2),  (600,4),  (580,0),  (547,0),  (512,0),  (467,0),  (424,0),  (381,0),  (336,0),  (294,0),  (249,4),  (217,4),  (196,2),  (186,2),  (187,6),  (204,6),  (227,6),  (260,6),  (298,6),  (339,6),  (377,6),  (414,6),  (452,6),  (491,6),  (531,1),  (569,1),  (606,1),  (634,1),  (654,0),  (649,4),  (647,3),  (647,1),  (649,7),  (648,5), 
+ (580,0),  (547,0),  (512,0),  (467,0),  (424,0), 
 
 
-[Timing] Time passed: 377.279143 s
-
-Posterior Probability: -183.0674823
-Agreement with demo: 11%
-Current angular diffs: 83'
-
-Selected number of demos: 37
+ - [Timing] Time passed: 117.407689 s
+- Current feature weights:0.006148648649, -6.756756757e-05, -0.004797297297, -0.0001
+ - Posterior Probability: -9.43321
+ - Agreement with demo: 0%
+ - Current angular diffs: 81'
 
 -- Positive Demos --
- (543,6),  (577,6),  (597,2),  (605,2),  (600,4),  (580,0),  (547,0),  (512,0),  (467,0),  (424,0),  (381,0),  (336,0),  (294,0),  (249,4),  (217,4),  (196,2),  (186,2),  (187,6),  (204,6),  (227,6),  (260,6),  (298,6),  (339,6),  (377,6),  (414,6),  (452,6),  (491,6),  (531,1),  (569,1),  (606,1),  (634,1),  (654,0),  (649,4),  (647,3),  (647,1),  (649,7),  (648,5), 
+ (381,0),  (336,0),  (294,0),  (249,4),  (217,4),  (196,2),  (186,2),  (187,6), 
 
 
-[Timing] Time passed: 358.770851 s
-
-Posterior Probability: -261.5960674
-Agreement with demo: 11%
-Current angular diffs: 85'
-
-Selected number of demos: 37
+ - [Timing] Time passed: 124.053879 s
+- Current feature weights:0.001391891892, -0.00477027027, -0.004635135135, -0.0001
+ - Posterior Probability: -16.3201
+ - Agreement with demo: 12.5%
+ - Current angular diffs: 95.625'
 
 -- Positive Demos --
- (543,6),  (577,6),  (597,2),  (605,2),  (600,4),  (580,0),  (547,0),  (512,0),  (467,0),  (424,0),  (381,0),  (336,0),  (294,0),  (249,4),  (217,4),  (196,2),  (186,2),  (187,6),  (204,6),  (227,6),  (260,6),  (298,6),  (339,6),  (377,6),  (414,6),  (452,6),  (491,6),  (531,1),  (569,1),  (606,1),  (634,1),  (654,0),  (649,4),  (647,3),  (647,1),  (649,7),  (648,5), 
+ (204,6), 
 
 
-[Timing] Time passed: 325.676243 s
-
-Posterior Probability: -172.246032
-Agreement with demo: 4.4%
-Current angular diffs: 97'
-
-Selected number of demos: 17
+ - [Timing] Time passed: 103.735395 s
+- Current feature weights:0.0008108108108, -0.005412162162, -0.004358108108, -0.0001
+ - Posterior Probability: -1.46141
+ - Agreement with demo: 0%
+ - Current angular diffs: 180'
 
 -- Positive Demos --
- (597,2),  (600,4),  (580,0),  (467,0),  (381,0),  (336,0),  (217,4),  (196,2),  (186,2),  (227,6),  (298,6),  (377,6),  (491,6),  (606,1),  (634,1),  (649,4),  (649,7), 
+ (227,6),  (260,6),  (298,6),  (339,6), 
 
 
-[Timing] Time passed: 362.875699 s
-
-Posterior Probability: -97.58341961
-Agreement with demo: 11%
-Current angular diffs: 86'
-
-Selected number of demos: 37
+ - [Timing] Time passed: 124.921838 s
+- Current feature weights:-0.004675675676, -0.007574324324, -0.00125, -0.0001
+ - Posterior Probability: -6.93635
+ - Agreement with demo: 25%
+ - Current angular diffs: 67.5'
 
 -- Positive Demos --
- (543,6),  (577,6),  (597,2),  (605,2),  (600,4),  (580,0),  (547,0),  (512,0),  (467,0),  (424,0),  (381,0),  (336,0),  (294,0),  (249,4),  (217,4),  (196,2),  (186,2),  (187,6),  (204,6),  (227,6),  (260,6),  (298,6),  (339,6),  (377,6),  (414,6),  (452,6),  (491,6),  (531,1),  (569,1),  (606,1),  (634,1),  (654,0),  (649,4),  (647,3),  (647,1),  (649,7),  (648,5), 
+ (377,6), 
 
 
-[Timing] Time passed: 333.130967 s
-
-Posterior Probability: -118.4921744
-Agreement with demo: 18%
-Current angular diffs: 77'
-
-Selected number of demos: 17
+ - [Timing] Time passed: 121.938238 s
+- Current feature weights:-0.006033783784, -0.007601351351, -0.0001756756757, -0.0001
+ - Posterior Probability: -0.288152
+ - Agreement with demo: 100%
+ - Current angular diffs: 0'
 
 -- Positive Demos --
- (597,2),  (605,2),  (547,0),  (467,0),  (381,0),  (249,4),  (186,2),  (187,6),  (260,6),  (339,6),  (414,6),  (452,6),  (491,6),  (606,1),  (634,1),  (647,3),  (649,7), 
+ (414,6),  (452,6),  (491,6),  (531,1),  (569,1),  (606,1),  (634,1),  (654,0), 
 
 
-[Timing] Time passed: 315.402999 s
+ - [Timing] Time passed: 113.78785 s
+- Current feature weights:-0.01160135135, -0.008790540541, 0.001716216216, -0.0001
+ - Posterior Probability: -19.2421
+ - Agreement with demo: 0%
+ - Current angular diffs: 101.25'
 
-Posterior Probability: -44.78354554
-Agreement with demo: 18%
-Current angular diffs: 82'
+-- Positive Demos --
+ (649,4),  (647,3),  (647,1),  (649,7),  (648,5), 
+
+
+ - [Timing] Time passed: 105.536309 s
+- Current feature weights:-0.01552027027, -0.0095, 0.002222972973, -0.0001
+ - Posterior Probability: -10.7349
+ - Agreement with demo: 20%
+ - Current angular diffs: 99'
 
 -----------------------------
-Avg angular diffs: 76'
+Avg angular diffs: 88.7838'
+Total agreement with demo: 16.2162%
 -- learned weights --
-Feature Weights: 0.3105, 0.417, 0.033, -0.1, 
+Final feature weights:-0.0155203, -0.0095, 0.00222297, -0.0001
