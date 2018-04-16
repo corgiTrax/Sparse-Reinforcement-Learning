@@ -24,7 +24,8 @@ int main(int argc, char** argv) {
 	unsigned int trial = atoi(argv[2]);
 	unsigned int task = atoi(argv[3]);
 
-	string feature_file_name = "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_domain_features.txt";
+	//string feature_file_name = "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_domain_features.txt";
+	string feature_file_name = "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_objects.txt";
 	string demo_file_name    =  "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_demonstrations.txt";
 
 	map<unsigned int, float> angle_map;
@@ -42,21 +43,21 @@ int main(int argc, char** argv) {
 	const double min_r = -1.0;
 	const double max_r = 1.0;
 	const double step  = 0.00025;
-	const double alpha = 50;
-	const unsigned int chain_length = 5000 ; 
+	const double alpha = 60;
+	const unsigned int chain_length = 1500 ; 
 
 	//test arrays to get features
 	const int numFeatures = 4;  // target, obstacle, pathpoint, None
 	const int numStates = grid_width * grid_height;
-	double gamma = 0.4;
+	double gamma = 0.7;
 
-	double featureWeights[numFeatures] = {0,0,0,-0.1};
-	double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);
+	double featureWeights[numFeatures] = {0,0,0,-0.0001};
+        double learnedWeights[numFeatures] = {0,0,0,-0.0001};
 
 	vector<unsigned int> initStates = {};
 	vector<unsigned int> termStates = {};
 
-	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
+	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, feature_file_name, gamma);
 	cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
 	cout << "    Num states: " << mdp.getNumStates() << endl;
 	cout << "    Num actions: " << mdp.getNumActions() << endl;
@@ -100,46 +101,57 @@ int main(int argc, char** argv) {
 	double posterior = -1000;
 	FeatureGridMDP* mapMDP;
 	FeatureGridMDP* bestMDP = mdp.deepcopy();
-	FeatureBIRL birl(&mdp, min_r, max_r, chain_length, step, alpha);
+	
 	unsigned int num_itr = 0;
-	double err = 180;
+	double err = 0.0;
+        double agreement = 0.0;
+        float curr_agreement = 0;
+	float curr_err = 0;
+		
 
-	while( posterior < -50 && num_itr < 50 )
-	{
-		// randomly sample a subset of the original demonstrations
-		vector<pair<unsigned int,unsigned int> > selected_demos;
-		unsigned int skip = 1 + rand()%3;
-		for(unsigned int d = rand()%skip; d < good_demos.size(); d += (1 + rand()%skip)) selected_demos.push_back(good_demos[d]);
-		cout << "\nSelected number of demos: " << selected_demos.size() << endl;
-		birl.addPositiveDemos(selected_demos);
-		birl.displayDemos();
 
+	// randomly sample a subset of the original demonstrations
+	vector<pair<unsigned int,unsigned int> > selected_demos;
+	unsigned int skip = 1;
+	for(unsigned int d = rand()%skip; d < good_demos.size(); d += (1 + rand()%skip)) selected_demos.push_back(good_demos[d]);
+	cout << "\nSelected number of demos: " << selected_demos.size() << endl;
+        vector<pair<unsigned int,unsigned int> > current_demos;
+        FeatureBIRL birl(&mdp, min_r, max_r, chain_length, step, alpha);
+
+        for(pair<unsigned int,unsigned int> demo: selected_demos)
+        {
+		current_demos.push_back(demo);
+                if(!mdp.updateObjects(demo)) continue;
+        
+                birl.addPositiveDemos(current_demos);
+                birl.displayDemos();
 		//run birl MCMC
 		clock_t c_start = clock();
 		birl.run();
 		clock_t c_end = clock();
-		cout << "\n[Timing] Time passed: "
-			<< (c_end-c_start)*1.0 / CLOCKS_PER_SEC << " s\n";
-		mapMDP = birl.getMAPmdp();
+		cout << "\n - [Timing] Time passed: " << (c_end-c_start)*1.0 / CLOCKS_PER_SEC << " s\n";
+                mapMDP = birl.getMAPmdp();
+                
+                for(unsigned int ft=0; ft < numFeatures - 1; ft++) learnedWeights[ft] += mapMDP->getFeatureWeights()[ft]*current_demos.size()/selected_demos.size();
+		cout << "- Current feature weights:";
+		for(unsigned int ft=0; ft < numFeatures - 1; ft++) cout << learnedWeights[ft] <<", " ;
+		cout  << learnedWeights[numFeatures - 1]  << endl;
 
-		cout.precision(10);
-		cout << "\nPosterior Probability: " << birl.getMAPposterior() << endl;
-		cout.precision(2);
 		posterior = birl.getMAPposterior();
-		birl.removeAllDemostrations();
-
+		cout.precision(6);
+		cout << " - Posterior Probability: " << birl.getMAPposterior() << endl;
+	
 		vector<unsigned int> map_policy (mdp.getNumStates());
 		mapMDP->valueIteration(0.0005);
 		mapMDP->deterministicPolicyIteration(map_policy);
 		unsigned int correct_actions = 0;
 		double angle_diffs = 0.0;
-		for(unsigned int si = 0; si < demos.size(); si++)
+		for(unsigned int si = 0; si < current_demos.size(); si++)
 		{
-			if(map_policy[demos[si].first] == demos[si].second) correct_actions += 1;
-			else
-			{
-				float angle1 = angle_map[demos[si].second];
-				float angle2 = angle_map[map_policy[demos[si].first]];
+			if(map_policy[current_demos[si].first] == current_demos[si].second) correct_actions += 1;
+			else{
+				float angle1 = angle_map[current_demos[si].second];
+				float angle2 = angle_map[map_policy[current_demos[si].first]];
 				float angle = 0;
 				if( angle1 > angle2) angle = angle1 - angle2;
 				else angle = angle2 - angle1;
@@ -147,30 +159,31 @@ int main(int argc, char** argv) {
 				angle_diffs += angle;
 			}
 		}
-		float agreement = float(correct_actions)/demos.size()*100;
-		float curr_err = float(angle_diffs)/demos.size();
-		cout << "Agreement with demo: " << agreement << "%" << endl;
-		cout << "Current angular diffs: " << curr_err << "'" << endl;
-		if(curr_err < err) 
-		{
-			err = curr_err;
-			delete bestMDP;
-			bestMDP = mapMDP->deepcopy();
-		}
-		num_itr++;
-	}
+		float curr_agreement = float(correct_actions)/current_demos.size()*100;
+		float curr_err = float(angle_diffs)/current_demos.size();
+		cout << " - Agreement with demo: " << curr_agreement << "%" << endl;
+		cout << " - Current angular diffs: " << curr_err << "'" << endl;
+		agreement += float(correct_actions);
+                err += float(angle_diffs);
+		birl.removeAllDemostrations();
+                birl.updateMDP(&mdp);
+                current_demos.clear();
+        }
+		
 	cout << "\n-----------------------------" << endl;
-	cout << "Avg angular diffs: " << err << "'" << endl;
-	cout << "-- learned weights --" << endl;
-	bestMDP->displayFeatureWeights();
+	cout << "Avg angular diffs: " << err/selected_demos.size() << "'" << endl;
+        cout << "Total agreement with demo: " << agreement/selected_demos.size()*100 << "%" << endl;
+	cout << "-- learned weights --\nFinal feature weights:";
+        for(unsigned int ft=0; ft < numFeatures - 1; ft++) cout << learnedWeights[ft] <<", " ;
+        cout  << learnedWeights[numFeatures - 1]  << endl;
 	delete bestMDP;
 
 	//clean up memory
-	for(unsigned int s1 = 0; s1 < numStates; s1++)
-	{
-		delete[] stateFeatures[s1];
-	}
-	delete[] stateFeatures;
+	/*for(unsigned int s1 = 0; s1 < numStates; s1++)
+	  {
+	  delete[] stateFeatures[s1];
+	  }
+	  delete[] stateFeatures;*/
 
 	return 0;
 }

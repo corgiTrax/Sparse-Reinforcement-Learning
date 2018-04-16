@@ -14,7 +14,8 @@ for subj in subjects:
                 print "task ",i," file:", file
                 trial_number = file.split("_")[1]
                 parser = HumanDataParser('./data/subj'+str(subj)+"/"+file)
-                parser.ProcessData()
-                parser.OutputDomainFeatures(str(subj)+"_"+trial_number+"_"+str(i))
-                parser.OutputDemonstrations(str(subj)+"_"+trial_number+"_"+str(i))
-                parser.Visualize(str(subj)+"_"+trial_number+"_"+str(i))
+                prefix = str(subj)+"_"+trial_number+"_"+str(i)
+                parser.ProcessData(prefix)
+                parser.OutputDomainFeatures(prefix)
+                parser.OutputDemonstrations(prefix)
+                parser.Visualize(prefix)

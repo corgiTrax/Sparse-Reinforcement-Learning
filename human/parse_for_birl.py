@@ -120,10 +120,15 @@ class HumanDataParser():
             traj_y.append(state_y+0.15-0.1*random.random()+action[1])
         plt.plot(traj_x,traj_y,color='g',alpha=0.2, linewidth=0.18)
 
-    def ProcessData(self):      
+    def ProcessData(self, prefix="test"):      
         self.targets = self.plotObjects(self.data[1].targets,'darkblue',0.2134, self.ax)
         self.obstacles = self.plotObjects(self.data[1].obstacles,'darkred',0.1753, self.ax, rectangle=True)
         self.path = self.plotObjects(self.data[1].pathpoints,'tab:gray', 0.05, self.ax)
+        outfile = open("birl_data/"+prefix+"_objects.txt","w")
+        outfile.write("targets: "+",".join([str(target) for target in self.data[1].targets])+'\n')
+        outfile.write("obstacles: "+",".join([str(obstacle) for obstacle in self.data[1].obstacles])+'\n')
+        outfile.write("path: "+",".join([str(pathpoint) for pathpoint in self.data[1].pathpoints])+'\n')
+        outfile.close()
         
     def Visualize(self,prefix="test"):
         fig = plt.gcf()

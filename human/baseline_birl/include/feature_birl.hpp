@@ -69,10 +69,8 @@ class FeatureBIRL { // BIRL process
         double** sfeatures = init_mdp -> getStateFeatures();
         double gamma = init_mdp -> getDiscount();
         
-        
         //copy init_mdp
         mdp = new FeatureGridMDP(grid_width, grid_height, initStates, termStates, nfeatures, fweights, sfeatures, gamma);
-        
         
         MAPmdp = new FeatureGridMDP(grid_width, grid_height, initStates, termStates, nfeatures, fweights, sfeatures, gamma);
         AVGmdp = new FeatureGridMDP(grid_width, grid_height, initStates, termStates, nfeatures, fweights, sfeatures, gamma);
@@ -90,6 +88,33 @@ class FeatureBIRL { // BIRL process
         iteration = 0;
         
        }; 
+
+      void updateMDP(FeatureGridMDP* init_mdp){
+ 	unsigned int grid_height = init_mdp -> getGridHeight();
+        unsigned int grid_width = init_mdp -> getGridWidth();
+        bool* initStates = init_mdp -> getInitialStates();
+        bool* termStates = init_mdp -> getTerminalStates();
+        unsigned int nfeatures = init_mdp -> getNumFeatures();
+        double* fweights = init_mdp -> getFeatureWeights();
+        double** sfeatures = init_mdp -> getStateFeatures();
+        double gamma = init_mdp -> getDiscount();
+        
+        if(R_chain != nullptr) {
+          for(unsigned int i=0; i<chain_length; i++) if(R_chain[i] != nullptr) delete R_chain[i];
+        }
+        
+        delete mdp; 
+
+	//update to new features, retain MAPmdp feature weights
+        mdp = new FeatureGridMDP(grid_width, grid_height, initStates, termStates, nfeatures, MAPmdp-> getFeatureWeights(), sfeatures, gamma);
+        
+	delete MAPmdp;
+        delete AVGmdp;
+        MAPmdp = new FeatureGridMDP(grid_width, grid_height, initStates, termStates, nfeatures, mdp->getFeatureWeights(), sfeatures, gamma);
+        AVGmdp = new FeatureGridMDP(grid_width, grid_height, initStates, termStates, nfeatures, mdp->getFeatureWeights(), sfeatures, gamma);
+        
+        
+      };
        
       FeatureGridMDP* getMAPmdp(){return MAPmdp;}
       FeatureGridMDP* getAVGmdp(){return AVGmdp;}
@@ -139,7 +164,7 @@ void FeatureBIRL::run()
     double posterior;
     double new_posterior;
     
-    initializeMDP(); //set weights to (r_min+r_max)/2
+    //initializeMDP(); //set weights to (r_min+r_max)/2
     
     mdp->valueIteration(0.001);      
     posterior = calculatePosterior(mdp);

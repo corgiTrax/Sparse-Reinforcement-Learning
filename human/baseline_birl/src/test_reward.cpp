@@ -67,9 +67,9 @@ int main(int argc, char** argv) {
 	vector<unsigned int> termStates = {};
 
 	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
-	 cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
-	 cout << "    Num states: " << mdp.getNumStates() << endl;
-	 cout << "    Num actions: " << mdp.getNumActions() << endl;
+	cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
+	cout << "    Num states: " << mdp.getNumStates() << endl;
+	cout << "    Num actions: " << mdp.getNumActions() << endl;
 
 	srand (time(NULL));
 
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 	{
 		string line;
 		while(getline(demo_file,line))
-                {
+		{
 			demo_ct += 1;
 			if(demo_ct > 5) // skip first 5
 			{
@@ -114,9 +114,9 @@ int main(int argc, char** argv) {
 	else{
 		return 1;
 	}   
-        for(pair<unsigned int,unsigned int> demo: good_demos)
-            cout << "(" << demo.first << "," << demo.second << ")";
-        cout << endl;
+	for(pair<unsigned int,unsigned int> demo: good_demos)
+		cout << "(" << demo.first << "," << demo.second << ")";
+	cout << endl;
 
 	// cout << "BIRL Actions:";
 	for(unsigned int i=0; i < good_demos.size(); i++)
@@ -158,29 +158,43 @@ int main(int argc, char** argv) {
 	}
 	cout << endl;
 	// cout << "BIRL Trajectories:" << endl;
-        double visited_features[numFeatures] = {0.0,0.0,0.0,1.0}; 
-	for(unsigned int traj_ct = 0; traj_ct < 200; traj_ct++)
+	double visited_features[numFeatures] = {0.0,0.0,0.0,1.0}; 
+	for(unsigned int traj_ct = 0; traj_ct < 1; traj_ct++)
 	{
-                FeatureGridMDP* fmdp = mdp.deepcopy();
-                
+		FeatureGridMDP* fmdp = mdp.deepcopy();
+
 		cout << "[" ;
 		unsigned int curr_state = good_demos[rand()%5].first;
 		unsigned int prev_state;
 		for(unsigned int i=0; i < good_demos.size(); i++)
 		{
-                        fmdp->valueIteration(0.0005);
-	                fmdp->calculateQValues();
+			fmdp->valueIteration(0.0005);
+			fmdp->calculateQValues();
 			prev_state = curr_state;
 			vector<unsigned int> curr_actions = fmdp->getValidActions(curr_state);
+			double max_q = 0.0;
 			double total_q = 0.0;
-			for(unsigned int a: curr_actions) total_q += 0.1*exp(10*fmdp->getQValue(curr_state,a));
+			double curr_q;
+			for(unsigned int a: curr_actions){
+				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
+				if(curr_q > max_q) max_q = curr_q;
+			}
+
+			for(unsigned int a: curr_actions){
+				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
+				if(curr_q == max_q)
+					total_q += curr_q;
+			}
 			vector<double> probabilities;
 			for(unsigned int a: curr_actions) 
 			{
-				if(probabilities.size() > 0)
-					probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q + probabilities.back());
-				else
-					probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q );
+				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
+				if(curr_q == max_q){
+					if(probabilities.size() > 0)
+						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q + probabilities.back());
+					else
+						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q );
+				}
 				//cout << a << ":" << probabilities.back() << endl;
 			}
 			double rand_num = rand()%1000/1000.0;
@@ -196,31 +210,31 @@ int main(int argc, char** argv) {
 			cout << "(" << curr_state;
 			cout << "," << curr_actions[selected_idx] << "),";
 			fmdp->setFeatureAtState(curr_state, visited_features);
-                        if(curr_state % grid_width + 1 < grid_width ){
-                               fmdp->setFeatureAtState(curr_state + 1, visited_features);
-                               if(curr_state > grid_width - 1) fmdp->setFeatureAtState(curr_state - grid_width + 1, visited_features);
-                               if(curr_state + grid_width + 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width + 1, visited_features);
-                        }
-                        if(curr_state % grid_width > 1){
-                               fmdp->setFeatureAtState(curr_state-1, visited_features);
-                               if(curr_state > grid_width + 1) fmdp->setFeatureAtState(curr_state - grid_width - 1, visited_features);
-                               if(curr_state + grid_width - 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width - 1, visited_features);
-                        }
-                        if(curr_state > grid_width) fmdp->setFeatureAtState(curr_state - grid_width, visited_features);
-                        if((curr_state + grid_width) < numStates) fmdp->setFeatureAtState(curr_state + grid_width, visited_features);
-                        fmdp->computeCachedRewards();
+			if(curr_state % grid_width + 1 < grid_width ){
+				fmdp->setFeatureAtState(curr_state + 1, visited_features);
+				if(curr_state > grid_width - 1) fmdp->setFeatureAtState(curr_state - grid_width + 1, visited_features);
+				if(curr_state + grid_width + 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width + 1, visited_features);
+			}
+			if(curr_state % grid_width > 1){
+				fmdp->setFeatureAtState(curr_state-1, visited_features);
+				if(curr_state > grid_width + 1) fmdp->setFeatureAtState(curr_state - grid_width - 1, visited_features);
+				if(curr_state + grid_width - 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width - 1, visited_features);
+			}
+			if(curr_state > grid_width) fmdp->setFeatureAtState(curr_state - grid_width, visited_features);
+			if((curr_state + grid_width) < numStates) fmdp->setFeatureAtState(curr_state + grid_width, visited_features);
+			fmdp->computeCachedRewards();
 
-                        curr_state = fmdp->getNextState(curr_state, curr_actions[selected_idx]);
-                        
+			curr_state = fmdp->getNextState(curr_state, curr_actions[selected_idx]);
+
 			//if(curr_state == prev_state) break;
 		}
 		cout << "]" << endl;
 	}
 	float policy_overlap = float(correct_actions) / total_actions * 100;
 	float avg_ang_err = angle_diffs / total_actions;
-	 cout << "Total actions tested : " << total_actions << endl;
-	 cout << "Correct actions (%) : " << policy_overlap << endl;
-	 cout << "Avg angular diffs   : " << avg_ang_err << endl;
+	cout << "Total actions tested : " << total_actions << endl;
+	cout << "Correct actions (%) : " << policy_overlap << endl;
+	cout << "Avg angular diffs   : " << avg_ang_err << endl;
 
 	//clean up memory
 	for(unsigned int s1 = 0; s1 < numStates; s1++)
