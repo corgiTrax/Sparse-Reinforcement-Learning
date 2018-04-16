@@ -25,7 +25,7 @@ for subj in subjects:
                 for line in output_file:
                     line = line.strip()
                     line = line.rstrip(',')
-                    if "Weights" in line:
+                    if "Final" in line:
                         weights_found = True
                         weights = [ float(x) if len(x) > 0 else 0 for x in line.split(":")[1].split(",") ]
                 if weights_found:

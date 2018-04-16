@@ -31,8 +31,9 @@ int main(int argc, char** argv) {
 	float weight4 = atof(argv[7]);
 
 	cout << "arguments: " << subj << " " << trial << " " << task << " " << weight1 << " " << weight2 << " " << weight3 << " " <<  weight4 << endl;
-	string feature_file_name = "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_domain_features.txt";
+	//string feature_file_name = "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_domain_features.txt";
 	string demo_file_name    =  "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_demonstrations.txt";
+       string feature_file_name = "../birl_data/" + string(argv[1]) + "_" + string(argv[2]) + "_" + string(argv[3]) + "_objects.txt";
 
 	srand (time(NULL) + rand());
 
@@ -53,7 +54,7 @@ int main(int argc, char** argv) {
 	const int numFeatures = 4; // target, obstacle, pathpoint, None (to introduce negative living reward)
 	const int numStates = grid_width * grid_height;
 
-	double gamma = 0.5;
+	double gamma = 0.6;
 	double featureWeights[numFeatures];
 
 	featureWeights[0] = weight1;
@@ -61,12 +62,13 @@ int main(int argc, char** argv) {
 	featureWeights[2] = weight3;
 	featureWeights[3] = weight4;
 
-	double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);
+	//double** stateFeatures = initFeaturesDiscreteDomain(numStates, numFeatures, feature_file_name);
 
 	vector<unsigned int> initStates = {};
 	vector<unsigned int> termStates = {};
+        
 
-	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
+	FeatureGridMDP mdp(grid_width, grid_height, initStates, termStates, numFeatures, featureWeights, feature_file_name, gamma);
 	cout << "\nInitializing gridworld of size " << grid_width << " by " << grid_height << ".." << endl;
 	cout << "    Num states: " << mdp.getNumStates() << endl;
 	cout << "    Num actions: " << mdp.getNumActions() << endl;
@@ -99,7 +101,7 @@ int main(int argc, char** argv) {
 		while(getline(demo_file,line))
 		{
 			demo_ct += 1;
-			if(demo_ct > 5) // skip first 5
+			if(demo_ct > 10) // skip first 10
 			{
 				vector<string> results;
 				split(line,',', results);
@@ -114,9 +116,9 @@ int main(int argc, char** argv) {
 	else{
 		return 1;
 	}   
-	for(pair<unsigned int,unsigned int> demo: good_demos)
+	/*for(pair<unsigned int,unsigned int> demo: good_demos)
 		cout << "(" << demo.first << "," << demo.second << ")";
-	cout << endl;
+	cout << endl;*/
 
 	// cout << "BIRL Actions:";
 	for(unsigned int i=0; i < good_demos.size(); i++)
@@ -157,44 +159,46 @@ int main(int argc, char** argv) {
 		}
 	}
 	cout << endl;
-	// cout << "BIRL Trajectories:" << endl;
-	double visited_features[numFeatures] = {0.0,0.0,0.0,1.0}; 
-	for(unsigned int traj_ct = 0; traj_ct < 1; traj_ct++)
+	cout << "BIRL Trajectories:" << endl; 
+        FeatureGridMDP* fmdp;
+
+	for(unsigned int traj_ct = 0; traj_ct < 200; traj_ct++)
 	{
-		FeatureGridMDP* fmdp = mdp.deepcopy();
+                fmdp = mdp.deepcopy();
+		fmdp->valueIteration(0.0005);
+		fmdp->calculateQValues();
 
 		cout << "[" ;
 		unsigned int curr_state = good_demos[rand()%5].first;
 		unsigned int prev_state;
 		for(unsigned int i=0; i < good_demos.size(); i++)
 		{
-			fmdp->valueIteration(0.0005);
-			fmdp->calculateQValues();
+			
 			prev_state = curr_state;
 			vector<unsigned int> curr_actions = fmdp->getValidActions(curr_state);
 			double max_q = 0.0;
 			double total_q = 0.0;
 			double curr_q;
-			for(unsigned int a: curr_actions){
+			/*for(unsigned int a: curr_actions){
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
 				if(curr_q > max_q) max_q = curr_q;
-			}
+			}*/
 
 			for(unsigned int a: curr_actions){
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				if(curr_q == max_q)
+				//if(curr_q == max_q)
 					total_q += curr_q;
 			}
 			vector<double> probabilities;
 			for(unsigned int a: curr_actions) 
 			{
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				if(curr_q == max_q){
+				//if(curr_q == max_q){
 					if(probabilities.size() > 0)
 						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q + probabilities.back());
 					else
 						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q );
-				}
+				//}
 				//cout << a << ":" << probabilities.back() << endl;
 			}
 			double rand_num = rand()%1000/1000.0;
@@ -209,20 +213,12 @@ int main(int argc, char** argv) {
 			}
 			cout << "(" << curr_state;
 			cout << "," << curr_actions[selected_idx] << "),";
-			fmdp->setFeatureAtState(curr_state, visited_features);
-			if(curr_state % grid_width + 1 < grid_width ){
-				fmdp->setFeatureAtState(curr_state + 1, visited_features);
-				if(curr_state > grid_width - 1) fmdp->setFeatureAtState(curr_state - grid_width + 1, visited_features);
-				if(curr_state + grid_width + 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width + 1, visited_features);
-			}
-			if(curr_state % grid_width > 1){
-				fmdp->setFeatureAtState(curr_state-1, visited_features);
-				if(curr_state > grid_width + 1) fmdp->setFeatureAtState(curr_state - grid_width - 1, visited_features);
-				if(curr_state + grid_width - 1 < numStates) fmdp->setFeatureAtState(curr_state + grid_width - 1, visited_features);
-			}
-			if(curr_state > grid_width) fmdp->setFeatureAtState(curr_state - grid_width, visited_features);
-			if((curr_state + grid_width) < numStates) fmdp->setFeatureAtState(curr_state + grid_width, visited_features);
-			fmdp->computeCachedRewards();
+			if(fmdp->updateObjects(make_pair(curr_state, curr_actions[selected_idx])))
+                         {
+  				//cout << "updated" << endl;
+				fmdp->valueIteration(0.0005);
+				fmdp->calculateQValues();
+                           }
 
 			curr_state = fmdp->getNextState(curr_state, curr_actions[selected_idx]);
 
@@ -237,11 +233,11 @@ int main(int argc, char** argv) {
 	cout << "Avg angular diffs   : " << avg_ang_err << endl;
 
 	//clean up memory
-	for(unsigned int s1 = 0; s1 < numStates; s1++)
+	/*for(unsigned int s1 = 0; s1 < numStates; s1++)
 	{
 		delete[] stateFeatures[s1];
 	}
-	delete[] stateFeatures;
+	delete[] stateFeatures;*/
 
 	return 0;
 }

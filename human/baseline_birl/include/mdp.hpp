@@ -467,6 +467,12 @@ class FeatureGridMDP: public GridMDP{
 	};
 		FeatureGridMDP* deepcopy(){
 			FeatureGridMDP* copy = new FeatureGridMDP(gridWidth, gridHeight, initialStates, terminalStates, numFeatures, featureWeights, stateFeatures, discount);
+                        for(pair<float,float> target: targets) copy->targets.push_back(target);
+			for(pair<float,float> target: obstacles) copy->obstacles.push_back(target);
+			for(pair<float,float> target: path) copy->path.push_back(target);
+			for(pair<float,float> target: state_centers) copy->state_centers.push_back(target);
+			copy->updateFeatures();
+		        copy->computeCachedRewards();
 			//copy -> setVValues(V);
 			//copy -> setQValues(Q);
 			return copy;
