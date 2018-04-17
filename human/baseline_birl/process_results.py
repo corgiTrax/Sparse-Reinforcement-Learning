@@ -35,11 +35,11 @@ for subj in subjects:
                     print "Error ! No weights found for ", filename
 
     for i in range(1,tasks+1): # Tasks
-        #print "Task", i
+        print "Task", i
         for idx in range(len(data[subj][i])): # trials
             weights = data[subj][i][idx]
             total_weight = 0
-            #print idx, weights
+            print idx, weights
             for j in range(4):
                 total_weight += abs(weights[j])
             if total_weight != 0.0:
@@ -70,25 +70,25 @@ for subj in subjects:
                 for w in range(4): # iterate through weights
                     weights[w] /= ct
 
-                #submit_file = open("test_"+str(subj)+"_"+str(base_trial_number)+"_"+str(i)+".submit", "w")
-                #submit_file.write('+Group = "Grad"\n')
-                #submit_file.write('+Project = "AI_ROBOTICS"\n')
-                #submit_file.write('+ProjectDescription = "simulation of reward learning using bayesian inverse reinforcement learning algorithm"\n')
+                submit_file = open("test_submit/test_"+str(subj)+"_"+str(base_trial_number)+"_"+str(i)+".submit", "w")
+                submit_file.write('+Group = "Grad"\n')
+                submit_file.write('+Project = "AI_ROBOTICS"\n')
+                submit_file.write('+ProjectDescription = "simulation of reward learning using bayesian inverse reinforcement learning algorithm"\n')
 
                 output_file = './trajectories/'+str(subj)+"_"+str(base_trial_number)+"_"+str(i)+".out"
                 log_file = './log/'+str(subj)+"_"+str(base_trial_number)+"_"+str(i)
 
                 arguments = str(subj)+ " " + str(base_trial_number)+  " " +str(i)+ " " + str(weights[0])+ " " + str(weights[1])+ " " + str(weights[2])+ " " + str(weights[3])
 
-                #submit_file.write('Executable = test_reward \n')
-                #submit_file.write('arguments = '+ arguments +' \n')
-                #submit_file.write('Output = '+ output_file + ' \n')
-                #submit_file.write('Log = '+ log_file +'.log \n')
-                #submit_file.write('Error = '+ log_file +'.err \n')
-                #submit_file.write('\nQueue 1 \n ')
+                submit_file.write('Executable = test_reward \n')
+                submit_file.write('arguments = '+ arguments +' \n')
+                submit_file.write('Output = '+ output_file + ' \n')
+                submit_file.write('Log = '+ log_file +'.log \n')
+                submit_file.write('Error = '+ log_file +'.err \n')
+                submit_file.write('\nQueue 1 \n ')
 
-                output_file = open('./trajectories/'+str(subj)+"_"+str(base_trial_number)+"_"+str(i)+".out", "w")
-                p = Popen(['./test_reward', str(subj), str(base_trial_number), str(i), str(weights[0]), str(weights[1]), str(weights[2]), str(weights[3])],stdout=PIPE, stderr=PIPE)
-                out, err = p.communicate()
-                output_file.write(out)
-                output_file.close()
+                #output_file = open('./trajectories/'+str(subj)+"_"+str(base_trial_number)+"_"+str(i)+".out", "w")
+                #p = Popen(['./test_reward', str(subj), str(base_trial_number), str(i), str(weights[0]), str(weights[1]), str(weights[2]), str(weights[3])],stdout=PIPE, stderr=PIPE)
+                #out, err = p.communicate()
+                #output_file.write(out)
+                #output_file.close()

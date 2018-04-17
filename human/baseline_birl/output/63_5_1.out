@@ -4,192 +4,174 @@ Initializing gridworld of size 32 by 24..
     Num states: 768
     Num actions: 8
 
-Total number of demos: 99
+Total number of demos: 119
 
-Selected number of demos: 99
+Total number of good demos: 81
+
+Selected number of demos: 81
 
 -- Positive Demos --
  (166,6), 
 
 
- - [Timing] Time passed: 343.467225 s
-- Current feature weights:0.0001262626263, 7.575757576e-06, 7.828282828e-05, -0.0001
- - Posterior Probability: -1.49814
- - Agreement with demo: 100%
- - Current angular diffs: 0'
+ - [Timing] Time passed: 262.922389 s
+- Current feature weights:-0.0007160493827, -0.001592592593, 0.0008024691358, -0.0001
+ - Posterior Probability: -2.07944
+ - Agreement with demo: 0%
+ - Current angular diffs: 180'
 
 -- Positive Demos --
  (176,1),  (196,1),  (217,1),  (236,1),  (263,1), 
 
 
- - [Timing] Time passed: 316.115 s
-- Current feature weights:6.313131313e-05, 0.000398989899, 5.303030303e-05, -0.0001
- - Posterior Probability: -10.3695
- - Agreement with demo: 0%
- - Current angular diffs: 54'
+ - [Timing] Time passed: 252.172319 s
+- Current feature weights:-0.008061728395, -0.007827160494, -0.0003086419753, -0.0001
+ - Posterior Probability: -10.3972
+ - Agreement with demo: 20%
+ - Current angular diffs: 90'
 
 -- Positive Demos --
- (286,1),  (311,1),  (340,1), 
+ (311,1),  (340,1), 
 
 
- - [Timing] Time passed: 309.344488 s
-- Current feature weights:0.000154040404, 0.0007853535354, 0.0001060606061, -0.0001
- - Posterior Probability: -5.57957
- - Agreement with demo: 33.3333%
- - Current angular diffs: 90'
+ - [Timing] Time passed: 241.649796 s
+- Current feature weights:-0.01055555556, -0.01101234568, -0.005296296296, -0.0001
+ - Posterior Probability: -4.15888
+ - Agreement with demo: 0%
+ - Current angular diffs: 157.5'
 
 -- Positive Demos --
  (364,1),  (392,1), 
 
 
- - [Timing] Time passed: 287.383523 s
-- Current feature weights:0.000148989899, 0.001027777778, 0.0001515151515, -0.0001
- - Posterior Probability: -3.87177
+ - [Timing] Time passed: 229.822988 s
+- Current feature weights:-0.01067901235, -0.01365432099, -0.007765432099, -0.0001
+ - Posterior Probability: -4.15888
  - Agreement with demo: 0%
- - Current angular diffs: 135'
+ - Current angular diffs: 112.5'
 
 -- Positive Demos --
  (418,1),  (440,1),  (470,1), 
 
 
- - [Timing] Time passed: 286.279472 s
-- Current feature weights:0.0004217171717, 0.0007398989899, 0.0008333333333, -0.0001
- - Posterior Probability: -5.972
- - Agreement with demo: 0%
+ - [Timing] Time passed: 243.309561 s
+- Current feature weights:-0.01116049383, -0.01917283951, -0.01480246914, -0.0001
+ - Posterior Probability: -6.23832
+ - Agreement with demo: 33.3333%
  - Current angular diffs: 45'
 
 -- Positive Demos --
  (497,1), 
 
 
- - [Timing] Time passed: 291.155676 s
-- Current feature weights:0.0003156565657, 0.0007878787879, 0.0009621212121, -0.0001
- - Posterior Probability: -2.65097
+ - [Timing] Time passed: 205.173774 s
+- Current feature weights:-0.01171604938, -0.02155555556, -0.01808641975, -0.0001
+ - Posterior Probability: -2.07944
  - Agreement with demo: 0%
- - Current angular diffs: 180'
+ - Current angular diffs: 135'
 
 -- Positive Demos --
  (517,6),  (539,1),  (559,1),  (580,1),  (606,1),  (626,6),  (639,6),  (648,2),  (653,2),  (656,6),  (664,6),  (669,4),  (665,4),  (650,4),  (634,4),  (618,4),  (602,4),  (587,0),  (569,0),  (546,0),  (529,4),  (514,4),  (501,4),  (488,4),  (471,4),  (460,4),  (447,4),  (436,0), 
 
 
- - [Timing] Time passed: 377.200144 s
-- Current feature weights:-0.005411616162, 0.005171717172, -0.003916666667, -0.0001
- - Posterior Probability: -53.1814
- - Agreement with demo: 10.7143%
+ - [Timing] Time passed: 255.094444 s
+- Current feature weights:-0.03038271605, -0.0817037037, -0.1128024691, -0.0001
+ - Posterior Probability: -58.2244
+ - Agreement with demo: 17.8571%
  - Current angular diffs: 81.9643'
 
 -- Positive Demos --
- (420,0),  (393,0), 
+ (420,0),  (372,0),  (354,4),  (314,4),  (298,0), 
 
 
- - [Timing] Time passed: 387.928464 s
-- Current feature weights:-0.006401515152, 0.005333333333, -0.003724747475, -0.0001
- - Posterior Probability: -3.44146
- - Agreement with demo: 50%
- - Current angular diffs: 67.5'
-
--- Positive Demos --
- (372,0),  (354,4),  (332,4),  (314,4),  (298,0), 
-
-
- - [Timing] Time passed: 359.110171 s
-- Current feature weights:-0.009015151515, 0.005446969697, -0.00327020202, -0.0001
- - Posterior Probability: -10.2261
- - Agreement with demo: 40%
+ - [Timing] Time passed: 277.381266 s
+- Current feature weights:-0.03643209877, -0.08577777778, -0.132308642, -0.0001
+ - Posterior Probability: -10.3972
+ - Agreement with demo: 20%
  - Current angular diffs: 81'
 
 -- Positive Demos --
  (280,0), 
 
 
- - [Timing] Time passed: 362.666231 s
-- Current feature weights:-0.009525252525, 0.00546969697, -0.003196969697, -0.0001
- - Posterior Probability: -2.18639
- - Agreement with demo: 0%
- - Current angular diffs: 45'
+ - [Timing] Time passed: 282.690581 s
+- Current feature weights:-0.03859259259, -0.08525925926, -0.1374320988, -0.0001
+ - Posterior Probability: -2.07944
+ - Agreement with demo: 100%
+ - Current angular diffs: 0'
 
 -- Positive Demos --
  (259,4),  (245,4), 
 
 
- - [Timing] Time passed: 348.677074 s
-- Current feature weights:-0.009813131313, 0.005984848485, -0.004070707071, -0.0001
- - Posterior Probability: -2.36603
- - Agreement with demo: 50%
- - Current angular diffs: 45'
+ - [Timing] Time passed: 206.194303 s
+- Current feature weights:-0.04291358025, -0.08422222222, -0.1476790123, -0.0001
+ - Posterior Probability: -2.07944
+ - Agreement with demo: 0%
+ - Current angular diffs: 112.5'
 
 -- Positive Demos --
- (234,2),  (228,2),  (227,4),  (222,4),  (218,2),  (222,6), 
+ (228,2),  (227,4),  (218,2),  (232,2),  (238,6),  (257,6),  (274,6), 
 
 
- - [Timing] Time passed: 327.17023 s
-- Current feature weights:-0.01114646465, 0.007636363636, -0.006207070707, -0.0001
- - Posterior Probability: -12.3924
- - Agreement with demo: 0%
+ - [Timing] Time passed: 243.82782 s
+- Current feature weights:-0.0599382716, -0.09295061728, -0.1853580247, -0.0001
+ - Posterior Probability: -14.5561
+ - Agreement with demo: 28.5714%
  - Current angular diffs: 90'
 
 -- Positive Demos --
- (230,6), 
+ (299,6), 
 
 
- - [Timing] Time passed: 305.395193 s
-- Current feature weights:-0.01114393939, 0.00778030303, -0.006818181818, -0.0001
- - Posterior Probability: -2.04271
- - Agreement with demo: 100%
- - Current angular diffs: 0'
+ - [Timing] Time passed: 220.097359 s
+- Current feature weights:-0.06279012346, -0.09502469136, -0.1908271605, -0.0001
+ - Posterior Probability: -2.07944
+ - Agreement with demo: 0%
+ - Current angular diffs: 135'
 
 -- Positive Demos --
- (234,2),  (232,2),  (230,6),  (238,6),  (257,6),  (274,6), 
+ (312,6),  (357,1),  (375,6),  (412,6), 
 
 
- - [Timing] Time passed: 276.824259 s
-- Current feature weights:-0.01165909091, 0.007901515152, -0.009727272727, -0.0001
- - Posterior Probability: -12.6495
- - Agreement with demo: 0%
- - Current angular diffs: 165'
-
--- Positive Demos --
- (286,6),  (299,6),  (312,6),  (332,1),  (357,1),  (375,6),  (393,6),  (412,6), 
-
-
- - [Timing] Time passed: 214.640947 s
-- Current feature weights:-0.01248737374, 0.006507575758, -0.01182828283, -0.0001
- - Posterior Probability: -18.2034
- - Agreement with demo: 0%
- - Current angular diffs: 129.375'
+ - [Timing] Time passed: 172.547985 s
+- Current feature weights:-0.07938271605, -0.1074691358, -0.2118641975, -0.0001
+ - Posterior Probability: -8.31777
+ - Agreement with demo: 25%
+ - Current angular diffs: 78.75'
 
 -- Positive Demos --
  (429,1),  (450,1),  (475,6),  (495,6),  (516,6),  (534,6),  (553,1),  (574,1),  (595,6),  (612,6),  (630,6), 
 
 
- - [Timing] Time passed: 187.004194 s
-- Current feature weights:-0.01448737374, 0.008118686869, -0.01516161616, -0.0001
- - Posterior Probability: -20.8014
- - Agreement with demo: 18.1818%
- - Current angular diffs: 85.9091'
+ - [Timing] Time passed: 233.435815 s
+- Current feature weights:-0.1217530864, -0.1313703704, -0.2420123457, -0.0001
+ - Posterior Probability: -22.8739
+ - Agreement with demo: 0%
+ - Current angular diffs: 126.818'
 
 -- Positive Demos --
  (645,6), 
 
 
- - [Timing] Time passed: 149.645323 s
-- Current feature weights:-0.01486111111, 0.008608585859, -0.01506565657, -0.0001
- - Posterior Probability: -1.10774
- - Agreement with demo: 100%
- - Current angular diffs: 0'
+ - [Timing] Time passed: 245.348225 s
+- Current feature weights:-0.1262222222, -0.1345061728, -0.2459382716, -0.0001
+ - Posterior Probability: -2.07944
+ - Agreement with demo: 0%
+ - Current angular diffs: 45'
 
 -- Positive Demos --
  (659,1),  (678,1),  (694,1), 
 
 
- - [Timing] Time passed: 137.167141 s
-- Current feature weights:-0.01555808081, 0.009494949495, -0.01480050505, -0.0001
- - Posterior Probability: -6.49469
+ - [Timing] Time passed: 207.591654 s
+- Current feature weights:-0.1372962963, -0.1435802469, -0.2559382716, -0.0001
+ - Posterior Probability: -6.23832
  - Agreement with demo: 0%
- - Current angular diffs: 120'
+ - Current angular diffs: 60'
 
 -----------------------------
-Avg angular diffs: 80.4545'
-Total agreement with demo: 13.1313%
+Avg angular diffs: 87.2222'
+Total agreement with demo: 14.8148%
 -- learned weights --
-Final feature weights:-0.0155581, 0.00949495, -0.0148005, -0.0001
+Final feature weights:-0.137296, -0.14358, -0.255938, -0.0001
