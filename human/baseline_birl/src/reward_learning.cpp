@@ -40,16 +40,16 @@ int main(int argc, char** argv) {
 
 	const unsigned int grid_width = 32;
 	const unsigned int grid_height = 24;
-	const double min_r = -1.0;
-	const double max_r = 1.0;
-	const double step  = 0.00025;
+	const double min_r = -5.0;
+	const double max_r = 5.0;
+	const double step  = 0.001;
 	const double alpha = 60;
 	const unsigned int chain_length = 1500 ; 
 
 	//test arrays to get features
 	const int numFeatures = 4;  // target, obstacle, pathpoint, None
 	const int numStates = grid_width * grid_height;
-	double gamma = 0.7;
+	double gamma = 0.4;
 
 	double featureWeights[numFeatures] = {0,0,0,-0.0001};
         double learnedWeights[numFeatures] = {0,0,0,-0.0001};
@@ -62,6 +62,7 @@ int main(int argc, char** argv) {
 	cout << "    Num states: " << mdp.getNumStates() << endl;
 	cout << "    Num actions: " << mdp.getNumActions() << endl;
 	srand (time(NULL));
+        //mdp.displayRewards();
 	//read in demos
 	vector<pair<unsigned int,unsigned int> > demos;
 	vector<pair<unsigned int,unsigned int> > good_demos;
@@ -92,11 +93,12 @@ int main(int argc, char** argv) {
 	else{
 		return 1;
 	}   
+        cout << "\nTotal number of demos: " << demos.size() << endl;
 	for(unsigned int d = 0; d < demos.size(); d++) 
 	{
-		if(demo_freq[demos[d].first] < 3) good_demos.push_back(demos[d]);
+		if(demo_freq[demos[d].first] < 2) good_demos.push_back(demos[d]);
 	}
-	cout << "\nTotal number of demos: " << good_demos.size() << endl;
+	cout << "\nTotal number of good demos: " << good_demos.size() << endl;
 
 	double posterior = -1000;
 	FeatureGridMDP* mapMDP;

@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 	const int numFeatures = 4; // target, obstacle, pathpoint, None (to introduce negative living reward)
 	const int numStates = grid_width * grid_height;
 
-	double gamma = 0.6;
+	double gamma = 0.4;
 	double featureWeights[numFeatures];
 
 	featureWeights[0] = weight1;
@@ -81,7 +81,9 @@ int main(int argc, char** argv) {
 
 	unsigned int demo_ct = 0;
 	//mdp.displayRewards();
+   
 	vector<unsigned int> opt_policy (mdp.getNumStates());
+        mdp.displayRewards();
 	mdp.valueIteration(0.0005);
 	mdp.calculateQValues();
 	mdp.deterministicPolicyIteration(opt_policy);
@@ -101,15 +103,15 @@ int main(int argc, char** argv) {
 		while(getline(demo_file,line))
 		{
 			demo_ct += 1;
-			if(demo_ct > 10) // skip first 10
-			{
+			//if(demo_ct > 10) // skip first 10
+			//{
 				vector<string> results;
 				split(line,',', results);
 				unsigned int state = stoi(results[0]);
 				unsigned int action = stoi(results[1]);
 				good_demos.push_back(make_pair(state,action));
 				demo_freq[state] += 1;
-			}
+			//}
 		}
 		demo_file.close();
 	}
@@ -125,7 +127,7 @@ int main(int argc, char** argv) {
 	{
 		unsigned int state = good_demos[i].first;
 		unsigned int action = good_demos[i].second;
-		if( demo_freq[state] < 2)
+		if( demo_freq[state] < 3)
 		{
 			total_actions += 1;
 			// cout << "(" << state << "," ;
@@ -162,7 +164,7 @@ int main(int argc, char** argv) {
 	cout << "BIRL Trajectories:" << endl; 
         FeatureGridMDP* fmdp;
 
-	for(unsigned int traj_ct = 0; traj_ct < 200; traj_ct++)
+	for(unsigned int traj_ct = 0; traj_ct < 20; traj_ct++)
 	{
                 fmdp = mdp.deepcopy();
 		fmdp->valueIteration(0.0005);
@@ -179,26 +181,26 @@ int main(int argc, char** argv) {
 			double max_q = 0.0;
 			double total_q = 0.0;
 			double curr_q;
-			/*for(unsigned int a: curr_actions){
+			for(unsigned int a: curr_actions){
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
 				if(curr_q > max_q) max_q = curr_q;
-			}*/
+			}
 
 			for(unsigned int a: curr_actions){
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				//if(curr_q == max_q)
+				if(curr_q == max_q)
 					total_q += curr_q;
 			}
 			vector<double> probabilities;
 			for(unsigned int a: curr_actions) 
 			{
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				//if(curr_q == max_q){
+				if(curr_q == max_q){
 					if(probabilities.size() > 0)
 						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q + probabilities.back());
 					else
 						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q );
-				//}
+				}else probabilities.push_back(0.0);
 				//cout << a << ":" << probabilities.back() << endl;
 			}
 			double rand_num = rand()%1000/1000.0;

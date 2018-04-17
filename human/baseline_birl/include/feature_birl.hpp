@@ -239,7 +239,7 @@ void FeatureBIRL::run()
       //frequency[sample_length] += 1;
     }
     MAPmdp->computeCachedRewards();
-           MAPmdp->calculateQValues();
+    MAPmdp->calculateQValues();
 }
 
 
@@ -302,11 +302,7 @@ void FeatureBIRL::modifyFeatureWeightsRandomly(FeatureGridMDP * gmdp, double ste
        gmdp->setFeatureWeight(feat, weight);
        count--;
    }
-   //normalize feature weights
-   /*double total_weight = 0;
-   for(unsigned int idx = 0; idx < gmdp->getNumFeatures(); idx++) total_weight += abs(gmdp->getWeight(idx));
-   for(unsigned int idx = 0; idx < gmdp->getNumFeatures(); idx++) gmdp->setFeatureWeight(idx,gmdp->getWeight(idx)/total_weight*abs(r_max-r_min) + r_min);*/
-   
+    
 }
 
 void FeatureBIRL::removeAllDemostrations()

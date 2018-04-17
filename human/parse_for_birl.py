@@ -118,7 +118,7 @@ class HumanDataParser():
             #ax.arrow(state_x+0.1,state_y+0.1, action[0],action[1], width=0.05, head_width=0.08, head_length=0.08, color=color)
             traj_x.append(state_x+0.15-0.1*random.random()+action[0])
             traj_y.append(state_y+0.15-0.1*random.random()+action[1])
-        plt.plot(traj_x,traj_y,color='g',alpha=0.2, linewidth=0.18)
+        plt.plot(traj_x,traj_y,color='g',alpha=0.3, linewidth=0.28)
 
     def ProcessData(self, prefix="test"):      
         self.targets = self.plotObjects(self.data[1].targets,'darkblue',0.2134, self.ax)

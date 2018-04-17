@@ -20,7 +20,7 @@
 #define GRID_CELL_SIZE 0.2
 #define GRID_LENGTH 32
 #define GRID_HEIGHT 24
-#define TARGET_RADIUS 0.2134 
+#define TARGET_RADIUS 0.2134
 #define OBSTACLE_RADIUS 0.1753
 #define PATH_RADIUS 0.2 
 
@@ -562,7 +562,7 @@ class FeatureGridMDP: public GridMDP{
 				{  
 					pair<float, float> state_center = state_centers[i];
 					float dist = sqrt(pow(state_center.first - target.first,2) + pow(state_center.second - target.second,2));
-					stateFeatures[i][0] += max(0.0,(TARGET_RADIUS-dist)/TARGET_RADIUS * 5);
+					stateFeatures[i][0] += max(0.0,(TARGET_RADIUS-dist)/TARGET_RADIUS * 50);
 				}  
 			}
 			for(pair<float,float> target: obstacles)
@@ -571,7 +571,7 @@ class FeatureGridMDP: public GridMDP{
 				{  
 					pair<float, float> state_center = state_centers[i];
 					float dist = sqrt(pow(state_center.first - target.first,2) + pow(state_center.second - target.second,2));
-					stateFeatures[i][1] += max(0.0,(OBSTACLE_RADIUS-dist)/OBSTACLE_RADIUS * 5);
+					stateFeatures[i][1] += max(0.0,(OBSTACLE_RADIUS-dist)/OBSTACLE_RADIUS * 50);
 				}  
 			}
 			for(pair<float,float> target: path)
@@ -580,7 +580,7 @@ class FeatureGridMDP: public GridMDP{
 				{  
 					pair<float, float> state_center = state_centers[i];
 					float dist = sqrt(pow(state_center.first - target.first,2) + pow(state_center.second - target.second,2));
-					stateFeatures[i][2] += max(0.0,(PATH_RADIUS-dist)/PATH_RADIUS * 5);
+					stateFeatures[i][2] += max(0.0,(PATH_RADIUS-dist)/PATH_RADIUS * 50);
 				}  
 			}
 			
@@ -1203,7 +1203,7 @@ void MDP::displayRewards(unsigned int width){
 	{
 		if(s % width == 0) cout << endl;
 		cout << setiosflags(ios::fixed)
-			<< setprecision(2)
+			<< setprecision(5)
 			<< R[s] << ", ";
 	}
 	cout  << endl;
@@ -1221,7 +1221,7 @@ void GridMDP::displayRewards()
 		{
 			unsigned int state = r*gridWidth + c;
 			cout << setiosflags(ios::fixed)
-				<< setprecision(2)
+				<< setprecision(5)
 				<< R[state] << ", ";
 		}
 		cout << endl ;
