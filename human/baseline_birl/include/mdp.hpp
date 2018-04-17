@@ -437,6 +437,7 @@ class FeatureGridMDP: public GridMDP{
 		}
 		ifstream f_file (feature_file);
 		cout << "processing file :" << feature_file << endl;
+                pair<float, float> destination;
 		if(f_file.is_open())
 		{
 			string line;
@@ -458,9 +459,11 @@ class FeatureGridMDP: public GridMDP{
 					if (line_ct == 1)  targets.push_back(make_pair(stof(xy[0]),stof(xy[1])));
 					else if (line_ct == 2)	obstacles.push_back(make_pair(stof(xy[0]),stof(xy[1])));
 					else if (line_ct == 3)	path.push_back(make_pair(stof(xy[0]),stof(xy[1])));
+                                        else if (line_ct == 4)  destination = make_pair(stof(xy[0]),stof(xy[1]));
 				}
 			}
 		}
+                if(path[path.size()-1] == destination) reverse(path.begin(), path.end());
 		updateFeatures();
 		computeCachedRewards();
 
@@ -574,13 +577,16 @@ class FeatureGridMDP: public GridMDP{
 					stateFeatures[i][1] += max(0.0,(OBSTACLE_RADIUS-dist)/OBSTACLE_RADIUS * 50);
 				}  
 			}
+
+			unsigned int pathpoint_ct= 0;
 			for(pair<float,float> target: path)
 			{
+				pathpoint_ct += 1;
 				for(unsigned int i=0; i<numStates; i++)
 				{  
 					pair<float, float> state_center = state_centers[i];
 					float dist = sqrt(pow(state_center.first - target.first,2) + pow(state_center.second - target.second,2));
-					stateFeatures[i][2] += max(0.0,(PATH_RADIUS-dist)/PATH_RADIUS * 50);
+					stateFeatures[i][2] += max(0.0,(PATH_RADIUS-dist)/PATH_RADIUS * 50 * pathpoint_ct);
 				}  
 			}
 			

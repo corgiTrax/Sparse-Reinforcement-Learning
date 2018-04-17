@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 	//test arrays to get features
 	const int numFeatures = 4;  // target, obstacle, pathpoint, None
 	const int numStates = grid_width * grid_height;
-	double gamma = 0.4;
+	double gamma = 0.6;
 
 	double featureWeights[numFeatures] = {0,0,0,-0.0001};
         double learnedWeights[numFeatures] = {0,0,0,-0.0001};
@@ -78,15 +78,15 @@ int main(int argc, char** argv) {
 		while(getline(demo_file,line))
 		{
 			demo_ct += 1;
-			if(demo_ct > 10)
-			{
+			//if(demo_ct > 10)
+			//{
 				vector<string> results;
 				split(line,',', results);
 				unsigned int state = stoi(results[0]);
 				unsigned int action = stoi(results[1]);
 				demos.push_back(make_pair(state,action));
 				demo_freq[state] += 1;
-			}
+			//}
 		}
 		demo_file.close();
 	}

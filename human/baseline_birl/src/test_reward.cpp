@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 	const int numFeatures = 4; // target, obstacle, pathpoint, None (to introduce negative living reward)
 	const int numStates = grid_width * grid_height;
 
-	double gamma = 0.4;
+	double gamma = 0.6;
 	double featureWeights[numFeatures];
 
 	featureWeights[0] = weight1;
@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
 	cout << "BIRL Trajectories:" << endl; 
         FeatureGridMDP* fmdp;
 
-	for(unsigned int traj_ct = 0; traj_ct < 20; traj_ct++)
+	for(unsigned int traj_ct = 0; traj_ct < 50; traj_ct++)
 	{
                 fmdp = mdp.deepcopy();
 		fmdp->valueIteration(0.0005);

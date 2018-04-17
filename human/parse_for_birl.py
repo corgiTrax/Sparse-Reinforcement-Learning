@@ -128,6 +128,7 @@ class HumanDataParser():
         outfile.write("targets: "+",".join([str(target) for target in self.data[1].targets])+'\n')
         outfile.write("obstacles: "+",".join([str(obstacle) for obstacle in self.data[1].obstacles])+'\n')
         outfile.write("path: "+",".join([str(pathpoint) for pathpoint in self.data[1].pathpoints])+'\n')
+        outfile.write("destination: "+ str(self.destination)+'\n')
         outfile.close()
         
     def Visualize(self,prefix="test"):
