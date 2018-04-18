@@ -44,12 +44,12 @@ int main(int argc, char** argv) {
 	const double max_r = 5.0;
 	const double step  = 0.001;
 	const double alpha = 60;
-	const unsigned int chain_length = 1500 ; 
+	const unsigned int chain_length = 3000 ; 
 
 	//test arrays to get features
 	const int numFeatures = 4;  // target, obstacle, pathpoint, None
 	const int numStates = grid_width * grid_height;
-	double gamma = 0.6;
+	double gamma = 0.5;
 
 	double featureWeights[numFeatures] = {0,0,0,-0.0001};
         double learnedWeights[numFeatures] = {0,0,0,-0.0001};

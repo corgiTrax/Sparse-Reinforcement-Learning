@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 	const int numFeatures = 4; // target, obstacle, pathpoint, None (to introduce negative living reward)
 	const int numStates = grid_width * grid_height;
 
-	double gamma = 0.6;
+	double gamma = 0.5;
 	double featureWeights[numFeatures];
 
 	featureWeights[0] = weight1;
