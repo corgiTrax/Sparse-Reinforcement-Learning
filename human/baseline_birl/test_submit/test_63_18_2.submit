@@ -2,7 +2,7 @@
 +Project = "AI_ROBOTICS"
 +ProjectDescription = "simulation of reward learning using bayesian inverse reinforcement learning algorithm"
 Executable = test_reward 
-arguments = 63 18 2 -0.0502006696498 0.0554985769171 -0.0479297041638 -0.000346635569098 
+arguments = 63 18 2 -0.068455334521 -0.128340994635 0.322354846604 -0.000298250878005 
 Output = ./trajectories/63_18_2.out 
 Log = ./log/63_18_2.log 
 Error = ./log/63_18_2.err 
