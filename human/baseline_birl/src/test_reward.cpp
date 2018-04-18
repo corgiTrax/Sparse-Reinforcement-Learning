@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
 	cout << "BIRL Trajectories:" << endl; 
         FeatureGridMDP* fmdp;
 
-	for(unsigned int traj_ct = 0; traj_ct < 50; traj_ct++)
+	for(unsigned int traj_ct = 0; traj_ct < 200; traj_ct++)
 	{
                 fmdp = mdp.deepcopy();
 		fmdp->valueIteration(0.0005);
@@ -183,24 +183,24 @@ int main(int argc, char** argv) {
 			double curr_q;
 			for(unsigned int a: curr_actions){
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				if(curr_q > max_q) max_q = curr_q;
+				//if(curr_q > max_q) max_q = curr_q;
 			}
 
 			for(unsigned int a: curr_actions){
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				if(curr_q == max_q)
+				//if(curr_q == max_q)
 					total_q += curr_q;
 			}
 			vector<double> probabilities;
 			for(unsigned int a: curr_actions) 
 			{
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				if(curr_q == max_q){
+				//if(curr_q == max_q){
 					if(probabilities.size() > 0)
 						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q + probabilities.back());
 					else
 						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q );
-				}else probabilities.push_back(0.0);
+				//}else probabilities.push_back(0.0);
 				//cout << a << ":" << probabilities.back() << endl;
 			}
 			double rand_num = rand()%1000/1000.0;
