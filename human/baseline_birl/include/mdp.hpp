@@ -493,7 +493,7 @@ class FeatureGridMDP: public GridMDP{
 			{
 				pair<float, float> state_center = state_centers[next_state];
 				float dist = sqrt(pow(state_center.first - target.first,2) + pow(state_center.second - target.second,2));
-				if (dist < TARGET_RADIUS)
+				if (dist < TARGET_RADIUS+0.14)
                                 {
 					updated = true;
                                         to_delete.push_back(index);
@@ -514,7 +514,7 @@ class FeatureGridMDP: public GridMDP{
 			{
 				pair<float, float> state_center = state_centers[next_state];
 				float dist = sqrt(pow(state_center.first - target.first,2) + pow(state_center.second - target.second,2));
-				if (dist < OBSTACLE_RADIUS)
+				if (dist < OBSTACLE_RADIUS+0.14)
                                 {
 					updated = true;
                                         to_delete.push_back(index);
@@ -535,7 +535,7 @@ class FeatureGridMDP: public GridMDP{
 			{
 				pair<float, float> state_center = state_centers[next_state];
 				float dist = sqrt(pow(state_center.first - target.first,2) + pow(state_center.second - target.second,2));
-				if (dist < PATH_RADIUS)
+				if (dist < PATH_RADIUS+0.14)
                                 {
 					updated = true;
                                         to_delete.push_back(index);

@@ -81,7 +81,7 @@ class HumanDataParser():
                 ax.add_artist(circle2)
             state_idx = (state_0[1]-state_y)/GRID_CELL_SIZE * GRID_LENGTH + (state_x - state_0[0]) / GRID_CELL_SIZE
             if state_idx >= 0 and state_idx < GRID_LENGTH*GRID_HEIGHT:
-                traj.append(int(state_idx))
+                traj.append(int(state_idx)) 
         return traj
     
     def getAction(self, action):
@@ -107,6 +107,8 @@ class HumanDataParser():
     def plotActions(self, points, color, size, ax):
         traj_x = []
         traj_y = []
+        targets_collected = {}
+        obstacles_collected = {}
         for point in points:
             state_x = point[0] % GRID_LENGTH * GRID_CELL_SIZE + state_0[0]
             state_y = - point[0] // GRID_LENGTH * GRID_CELL_SIZE + state_0[1]
@@ -118,7 +120,14 @@ class HumanDataParser():
             #ax.arrow(state_x+0.1,state_y+0.1, action[0],action[1], width=0.05, head_width=0.08, head_length=0.08, color=color)
             traj_x.append(state_x+0.15-0.1*random.random()+action[0])
             traj_y.append(state_y+0.15-0.1*random.random()+action[1])
-        plt.plot(traj_x,traj_y,color='g',alpha=0.3, linewidth=0.28)
+            for target in self.data[1].targets:
+                if math.sqrt((state_x - target[0])**2 + (state_y - target[1])**2) <= 0.2134+0.14:
+			targets_collected[target] = 1
+            for target in self.data[1].obstacles:
+                if math.sqrt((state_x - target[0])**2 + (state_y - target[1])**2) <= 0.1753+0.14:
+			obstacles_collected[target] = 1
+        #plt.plot(traj_x,traj_y,color='g',alpha=0.2, linewidth=0.28)
+        return len(targets_collected), len(obstacles_collected)
 
     def ProcessData(self, prefix="test"):      
         self.targets = self.plotObjects(self.data[1].targets,'darkblue',0.2134, self.ax)
@@ -145,18 +154,13 @@ class HumanDataParser():
         plt.savefig("birl_data/"+prefix+"_configuration.png", bbox_inches='tight')
 
     def PlotTrajectory(self, trajs, prefix='test' , show=False):
-        fig = plt.gcf()
-        ax = fig.gca()
-        #ax.xaxis.set_ticks(np.arange(-2.8, 3.0, GRID_CELL_SIZE))
-        #ax.yaxis.set_ticks(np.arange(-2.4, 2.4, GRID_CELL_SIZE))
-        # change default range so that new circles will work
-        # ax.set_xlim((-3.0, 3.0))
-        # ax.set_ylim((-2.8, 2.6))
-        ax.xaxis.set_visible(False)
-        ax.yaxis.set_visible(False)
-        #ax.grid(color='g', linestyle='-', linewidth=1)
-        circle = plt.Circle((self.destination[0], self.destination[1]), 0.3, color='y', alpha=0.8)
-        ax.add_artist(circle)
+        #fig = plt.gcf()
+        #ax = fig.gca()
+       
+        #ax.xaxis.set_visible(False)
+        #ax.yaxis.set_visible(False)
+        #circle = plt.Circle((self.destination[0], self.destination[1]), 0.3, color='y', alpha=0.8)
+        #ax.add_artist(circle)
         
         trajectory_x = []
         trajectory_y = []
@@ -164,14 +168,19 @@ class HumanDataParser():
             trajectory_x.append(point[0])
             trajectory_y.append(point[1])
         #self.plotObjects(self.trajectory,'k', 0.05, self.ax )
-        plt.plot(trajectory_x,trajectory_y, color='k')
+        #plt.plot(trajectory_x,trajectory_y, color='k')
+        targets = 0
+        obstacles = 0
         for traj in trajs:
-            self.plotActions(traj,'y', 0.05, self.ax )
-        if show:
-            plt.show()
-        else:
-            plt.axis('off')
-            plt.savefig("birl_data/"+prefix+"_traj.png", bbox_inches='tight', format='png', dpi=200)
+            curr_targets, curr_obstacles = self.plotActions(traj,'y', 0.05, self.ax )
+            targets += curr_targets
+            obstacles += curr_obstacles
+        #if show:
+            #plt.show()
+        #else:
+            #plt.axis('off')
+            #plt.savefig("birl_data/"+prefix+"_traj.png", bbox_inches='tight', format='png', dpi=200)
+        return targets/len(trajs), obstacles/len(trajs)
         
 
     def OutputDomainFeatures(self,prefix="test"):

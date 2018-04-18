@@ -6,6 +6,8 @@ from parse_for_birl import *
 subjects = {26,27,28,31,32,33,34,35,36,37,38,39,42,43,44,45,46,47,48,54,56,59,61,63,64} #60,62,65
 tasks = 4
 
+
+outfile = open('object_counts.txt','w')
 for subj in subjects:
     print "processing subject ", subj
     for file in os.listdir('./data/subj'+str(subj)):
@@ -21,4 +23,8 @@ for subj in subjects:
                     line = line.strip()
                     if line.startswith("["):
                         trajectories.append(eval(line))
-                parser.PlotTrajectory(trajectories,str(subj)+'_'+str(trial_number)+'_'+str(i))
+                targets, obstacles = parser.PlotTrajectory(trajectories,str(subj)+'_'+str(trial_number)+'_'+str(i))
+                outfile.write('Subject '+str(subj)+' Task ' + str(i) + ' Trial '+ str(trial_number) + '\n')
+                outfile.write('x x '+str(targets)+' x ' + str(obstacles) + ' x\n')
+
+outfile.close()
