@@ -183,24 +183,24 @@ int main(int argc, char** argv) {
 			double curr_q;
 			for(unsigned int a: curr_actions){
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				//if(curr_q > max_q) max_q = curr_q;
+				if(curr_q > max_q) max_q = curr_q;
 			}
 
 			for(unsigned int a: curr_actions){
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				//if(curr_q == max_q)
+				if(curr_q == max_q)
 					total_q += curr_q;
 			}
 			vector<double> probabilities;
 			for(unsigned int a: curr_actions) 
 			{
 				curr_q = 0.1*exp(10*fmdp->getQValue(curr_state,a));
-				//if(curr_q == max_q){
+				if(curr_q == max_q){
 					if(probabilities.size() > 0)
 						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q + probabilities.back());
 					else
 						probabilities.push_back(0.1*exp(10*fmdp->getQValue(curr_state,a))/total_q );
-				//}else probabilities.push_back(0.0);
+				}else probabilities.push_back(0.0);
 				//cout << a << ":" << probabilities.back() << endl;
 			}
 			double rand_num = rand()%1000/1000.0;
@@ -224,7 +224,7 @@ int main(int argc, char** argv) {
 
 			curr_state = fmdp->getNextState(curr_state, curr_actions[selected_idx]);
 
-			//if(curr_state == prev_state) break;
+			if(curr_state == prev_state) break;
 		}
 		cout << "]" << endl;
 	}
