@@ -126,7 +126,7 @@ class HumanDataParser():
             for target in self.data[1].obstacles:
                 if math.sqrt((state_x - target[0])**2 + (state_y - target[1])**2) <= 0.1753+0.14:
 			obstacles_collected[target] = 1
-        #plt.plot(traj_x,traj_y,color='g',alpha=0.2, linewidth=0.28)
+        plt.plot(traj_x,traj_y,color='g',alpha=0.2, linewidth=0.28)
         return len(targets_collected), len(obstacles_collected)
 
     def ProcessData(self, prefix="test"):      
@@ -154,13 +154,13 @@ class HumanDataParser():
         plt.savefig("birl_data/"+prefix+"_configuration.png", bbox_inches='tight')
 
     def PlotTrajectory(self, trajs, prefix='test' , show=False):
-        #fig = plt.gcf()
-        #ax = fig.gca()
+        fig = plt.gcf()
+        ax = fig.gca()
        
-        #ax.xaxis.set_visible(False)
-        #ax.yaxis.set_visible(False)
-        #circle = plt.Circle((self.destination[0], self.destination[1]), 0.3, color='y', alpha=0.8)
-        #ax.add_artist(circle)
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+        circle = plt.Circle((self.destination[0], self.destination[1]), 0.3, color='y', alpha=0.8)
+        ax.add_artist(circle)
         
         trajectory_x = []
         trajectory_y = []
@@ -168,18 +168,18 @@ class HumanDataParser():
             trajectory_x.append(point[0])
             trajectory_y.append(point[1])
         #self.plotObjects(self.trajectory,'k', 0.05, self.ax )
-        #plt.plot(trajectory_x,trajectory_y, color='k')
+        plt.plot(trajectory_x,trajectory_y, color='k')
         targets = 0
         obstacles = 0
         for traj in trajs:
             curr_targets, curr_obstacles = self.plotActions(traj,'y', 0.05, self.ax )
             targets += curr_targets
             obstacles += curr_obstacles
-        #if show:
-            #plt.show()
-        #else:
-            #plt.axis('off')
-            #plt.savefig("birl_data/"+prefix+"_traj.png", bbox_inches='tight', format='png', dpi=200)
+        if show:
+            plt.show()
+        else:
+            plt.axis('off')
+            plt.savefig("birl_data/"+prefix+"_traj.png", bbox_inches='tight', format='png', dpi=200)
         return targets/len(trajs), obstacles/len(trajs)
         
 
